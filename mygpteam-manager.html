@@ -187,12 +187,14 @@
     <h2><span class="dot"></span>Backup &amp; trasferimento dati (PC ↔ iPhone)</h2>
     <p class="hint">I dati sono salvati per dispositivo. Per spostarli: <b>Esporta</b>, copia/trasferisci il testo, poi <b>Importa</b> sull'altro dispositivo.</p>
     <div class="row">
+      <div style="flex:none"><button onclick="syncNow()">↻ Sincronizza ora</button></div>
       <div style="flex:none"><button onclick="exportData()">Esporta</button></div>
       <div style="flex:none"><button class="ghost" onclick="copyIO()">Copia</button></div>
       <div style="flex:none"><button class="ghost" onclick="downloadData()">Scarica .json</button></div>
       <div style="flex:none"><button onclick="importData()">Importa</button></div>
     </div>
     <textarea id="ioBox" rows="6" placeholder="Premi Esporta per generare qui i dati. Per importare, incolla qui il testo e premi Importa." style="width:100%;margin-top:10px;background:var(--bg3);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px;font-family:monospace;font-size:12px"></textarea>
+    <div style="margin-top:8px"><label>Oppure importa direttamente un file .json (scaricato o trasferito)</label><input type="file" accept=".json,application/json" onchange="importFile(this)"></div>
   </div>
 </section>
 
@@ -1437,6 +1439,33 @@ function loadReal(){ if(confirm("Caricare i dati reali del Bronte Racing Team (s
 function exportData(){ if(el("ioBox")) el("ioBox").value=JSON.stringify(S,null,2); }
 function copyIO(){ var t=el("ioBox"); if(!t)return; t.focus(); t.select(); try{ document.execCommand("copy"); }catch(e){} }
 function downloadData(){ var blob=new Blob([JSON.stringify(S)],{type:"application/json"}); var url=URL.createObjectURL(blob); var a=document.createElement("a"); a.href=url; a.download="mygpteam-dati.json"; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function(){ URL.revokeObjectURL(url); },1000); }
+function importFile(inp){
+  var f=inp.files&&inp.files[0]; if(!f){ return; }
+  var rd=new FileReader();
+  rd.onload=function(){
+    try{
+      var obj=JSON.parse(rd.result);
+      if(!obj||!obj.team) throw new Error("manca il campo team");
+      if(confirm("Importare i dati dal file "+f.name+"? Sovrascrive i dati attuali.")){
+        if(obj.engineers)ENGINEERS=obj.engineers; if(obj.staff)STAFF=obj.staff; if(obj.facilities)FACILITIES=obj.facilities;
+        S=Object.assign(def(),obj); save(); boot(); alert("Dati importati dal file.");
+      }
+    }catch(e){ alert("File JSON non valido: "+e.message); }
+    inp.value="";
+  };
+  rd.readAsText(f);
+}
+async function syncNow(){
+  try{
+    var r=await fetch("data.json?t="+Date.now(),{cache:"no-store"});
+    if(!r.ok){ alert("data.json non raggiungibile (sei online? l'app deve girare dal sito, non da file locale)."); return; }
+    var d=await r.json(); if(!d||!d.pushedAt){ alert("data.json non valido."); return; }
+    if(d.engineers)ENGINEERS=d.engineers; if(d.staff)STAFF=d.staff; if(d.facilities)FACILITIES=d.facilities;
+    if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season;
+    S.dataVersion=d.pushedAt; save(); boot();
+    alert("Sincronizzato. Dati aggiornati al "+new Date(d.pushedAt).toLocaleString("it-IT"));
+  }catch(e){ alert("Errore sync: "+e.message); }
+}
 function importData(){ var t=el("ioBox"); if(!t)return; var txt=(t.value||"").trim(); if(!txt){ alert("Incolla prima i dati nel riquadro."); return; } var obj; try{ obj=JSON.parse(txt); }catch(e){ alert("Dati non validi (JSON errato)."); return; } if(!obj||!obj.team){ alert("Formato non riconosciuto."); return; } if(confirm("Importare questi dati? Sovrascrive i dati attuali del dispositivo.")){ S=Object.assign(def(),obj); save(); boot(); alert("Dati importati."); } }
 
 function boot(){
