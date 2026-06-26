@@ -1,0 +1,44 @@
+{
+  "pushedAt": 1782460000000,
+  "team": {"name":"Bronte Racing Team","formula":"F4","cash":2795,"bank":413557,"avail":-66285},
+  "drivers": [
+    {"name":"Anders Malmstrom","age":22,"exp":5,"cour":1,"judg":3,"cool":1,"con":1,"sal":759,"brake":5,"gear":3,"accel":4,"traj":4},
+    {"name":"Gerard Corona","age":22,"exp":6,"cour":3,"judg":2,"cool":1,"con":1,"sal":871,"brake":5,"gear":3,"accel":2,"traj":1},
+    {"name":"Luis Poppmeier","age":18,"exp":4,"cour":4,"judg":2,"cool":0,"con":1,"sal":2152,"brake":9,"gear":2,"accel":4,"traj":4},
+    {"name":"Robert Hare","age":18,"exp":3,"cour":3,"judg":0,"cool":4,"con":1,"sal":614,"brake":1,"gear":3,"accel":1,"traj":4}
+  ],
+  "budget": {"iSpon":55281,"iTv":0,"iPub":0,"iPrize":0,"iMerch":0,"eDrv":16361,"eEng":21000,"eRes":36000,"eOth":51000},
+  "labs": [
+    ["Motore","Francisco Russo",5000,4],
+    ["Freni","Cipta Amin",5000,4],
+    ["Trasmissione","Melik Ulusu",5000,1],
+    ["Sospensioni","Juha-Matti Eerola",5000,4],
+    ["Aerodinamica","Jhonatan Devonold",5000,3],
+    ["Elettronica","Kevin Donnelly",5000,1],
+    ["Gomme","Jhonatan Owen",5000,3]
+  ],
+  "research": {"engine":2,"brakes":2,"transmission":2,"suspensions":2,"aerodynamic":2,"electronics":2,"tyres":2,"scout":1},
+  "engineers": [
+    {"name":"Jhonatan Devonold","age":50,"comp":"Aerodinamica","brav":5,"mecc":7,"innov":6},
+    {"name":"Francisco Russo","age":37,"comp":"Motore","brav":6,"mecc":9,"innov":4},
+    {"name":"Cipta Amin","age":37,"comp":"Freni","brav":6,"mecc":4,"innov":4},
+    {"name":"Melik Ulusu","age":38,"comp":"Trasmissione","brav":6,"mecc":9,"innov":11},
+    {"name":"Juha-Matti Eerola","age":36,"comp":"Sospensioni","brav":6,"mecc":5,"innov":7},
+    {"name":"Kevin Donnelly","age":55,"comp":"Elettronica","brav":6,"mecc":4,"innov":4},
+    {"name":"Jhonatan Owen","age":34,"comp":"Gomme","brav":6,"mecc":9,"innov":4}
+  ],
+  "staff": {"lavoroGruppo":"eccezionale [9]","meccanici":6,"tecnici":5,"pubblicitari":2,"osservatori":2,"preparatori":3,"manutentori":3},
+  "facilities": [
+    {"name":"Strutture tifosi","level":0},
+    {"name":"Progettazione/CAD","level":6},
+    {"name":"Simulatori avanzati","level":7},
+    {"name":"Banche dati","level":3},
+    {"name":"Banco prova motori","level":5},
+    {"name":"Carboceramiche (freni)","level":2},
+    {"name":"Titanio (trasmissione)","level":2},
+    {"name":"Banco prova sospensioni","level":1},
+    {"name":"Galleria del vento (aero)","level":3},
+    {"name":"Nanotecnologie (elettronica)","level":1},
+    {"name":"Tracciato test (gomme)","level":4}
+  ]
+}
