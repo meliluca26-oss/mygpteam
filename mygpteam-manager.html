@@ -323,7 +323,12 @@
     <button class="ghost sm" style="margin-top:6px" onclick="copySetup()">Copia negli appunti</button>
   </div>
   <div class="card" style="margin-top:14px">
-    <h2><span class="dot"></span>Ordini ai piloti — 5 fasi di gara</h2>
+    <h2><span class="dot"></span>🧠 Comportamento piloti in gara (auto)</h2>
+    <p class="hint">Generato per ogni pilota dal suo carattere + i dati pista del setup qui sopra. Si aggiorna premendo "Genera setup pronto".</p>
+    <div id="behaviorOut"></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Ordini ai piloti — 5 fasi (manuale)</h2>
     <p class="hint">"Aggressivo" = più velocità e sorpassi ma più errori/rischio ritiro; "Lento" = il contrario.</p>
     <div class="scrollx"><table>
       <thead><tr><th>Fase</th><th>Quota gara</th><th>Pilota 1</th><th>Pilota 2</th></tr></thead>
@@ -967,8 +972,7 @@ function genSetup(){
   for(var i=0;i<stints;i++){ plan.push(base+(i<rem?1:0)); }
   var pits=[], acc=0; for(var j=0;j<plan.length-1;j++){ acc+=plan[j]; pits.push(acc); }
   var noTyre=Math.ceil(0.85*C.laps);
-  var risky = (C.cond<30)||urban||(C.curve>70);
-  var ords = risky? ["Lento","Normale","Normale","Normale","Aggressivo"] : ["Normale","Normale","Normale","Aggressivo","Aggressivo"];
+  var ords = driverBehavior(d,{cond:C.cond,urban:urban,curve:C.curve}).phases;
   function rowF(lab,qv,rv){ return '<tr><td>'+lab+'</td><td class="center">'+qv+'</td><td class="center">'+rv+'</td></tr>'; }
   el("setupOut").innerHTML='<div class="out"><div class="small" style="margin-bottom:6px">Pilota: <b>'+d.name+'</b> · '+name+' ('+C.curve+'% curve, '+C.disl+'% disl, '+C.laps+' giri, cond. '+C.cond+'%)</div>'+
     '<table><thead><tr><th>Regolazione</th><th class="center">Qualifica · '+wxLbl(wxQ)+'</th><th class="center">Gara · '+wxLbl(wxR)+'</th></tr></thead><tbody>'+
@@ -987,8 +991,45 @@ function genSetup(){
   cp+="[GARA — "+wxLbl(wxR)+"]\nCoppia "+r.coppia+" | Freni "+r.freni+"% | Cambio "+r.cambio+" | Sospensioni "+r.sosp+"% | Aero "+r.aero+" | Pressione "+r.press+"\nGomme: "+r.gomme+"\n";
   cp+="Strategia: "+stops+" pit — stint "+plan.join("/")+", pit ai giri "+(pits.join(", ")||"—")+" (niente gomme dopo giro "+noTyre+")\n1° pit / carburante di partenza: ~"+plan[0]+" giri\nOrdini: "+ords.join(" / ")+"\n";
   el("setupCopy").value=cp;
+  genBehavior();
 }
 function copySetup(){ var t=el("setupCopy"); if(!t)return; t.select(); try{ document.execCommand("copy"); }catch(e){} }
+function driverBehavior(d,C){
+  var cour=d.cour||0, judg=d.judg||0, cool=d.cool||0, exp=(d.exp||0);
+  var circuitRisk=(C.cond<30?2:0)+(C.urban?1:0)+(C.curve>70?1:0);
+  var risk=cour+(cool>=4?1:0)+(judg>=4?1:0)+(exp<=4?1:0)+circuitRisk;
+  var phases;
+  if(risk>=6) phases=["Lento","Normale","Normale","Normale",(C.cond<20?"Normale":"Aggressivo")];
+  else if(risk>=4) phases=["Normale","Normale","Normale","Aggressivo","Aggressivo"];
+  else if(cour<=1) phases=["Normale","Aggressivo","Aggressivo","Aggressivo","Aggressivo"];
+  else phases=["Normale","Normale","Aggressivo","Aggressivo","Aggressivo"];
+  var why=[];
+  if(cour>=3) why.push("carattere spavaldo → tienilo calmo all'avvio per non rischiare l'incidente");
+  if(cour<=1) why.push("poco propenso al sorpasso → ordini aggressivi per spingerlo");
+  if(C.cond<30) why.push("pista a "+C.cond+"% di condizione → molti errori/usura, prudenza iniziale");
+  if(C.urban) why.push("circuito urbano → più rischio di errore");
+  if(exp<=4) why.push("poca esperienza → non strafare presto");
+  if(judg>=4) why.push("guida folle → consuma la macchina, evita aggressività prolungata");
+  if(cool>=4) why.push("molto freddo → rischia di più, occhio all'affidabilità");
+  if(!why.length) why.push("profilo equilibrato → spingi nella seconda metà per le posizioni");
+  return {phases:phases, why:why.join("; ")};
+}
+function genBehavior(){
+  if(!el("behaviorOut")) return;
+  var C={cond:+el("cCond").value||50, urban:el("cUrban").value==="1", curve:+el("cCurve").value||0};
+  if(!S.drivers.length){ el("behaviorOut").innerHTML='<p class="note">Aggiungi piloti nella scheda Piloti per generare il comportamento.</p>'; return; }
+  var rows="";
+  for(var i=0;i<S.drivers.length;i++){
+    var d=S.drivers[i], b=driverBehavior(d,C), cells="";
+    for(var p=0;p<b.phases.length;p++){
+      var ph=b.phases[p], cls=ph==="Aggressivo"?"p-bad":(ph==="Lento"?"p-warn":"p-mut");
+      cells+='<span class="pill '+cls+'" title="'+RACE_PHASES[p]+'">'+ph.charAt(0)+'</span> ';
+    }
+    rows+='<tr><td><b>'+d.name+'</b><div class="small">'+COURAGE_IT[d.cour]+' · '+JUDG_IT[d.judg]+' · '+COOL_IT[d.cool]+'</div></td><td style="white-space:nowrap">'+cells+'</td><td class="small">'+b.why+'</td></tr>';
+  }
+  el("behaviorOut").innerHTML='<div class="scrollx"><table><thead><tr><th>Pilota</th><th>5 fasi (start→fine)</th><th>Perché</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<p class="note" style="margin:8px 0 0"><b>N</b>=Normale · <b>L</b>=Lento · <b>A</b>=Aggressivo (passa sopra per la fase). "Aggressivo" = più sorpassi e velocità ma più errori/ritiri; "Lento" = il contrario. Le posizioni si decidono soprattutto nell\'ultimo 20%. <span class="tag">VERIFICATO</span> Adattato al carattere di ogni pilota e alla pista; regola in base alla griglia di partenza. <span class="tag inf">INFERITO</span></p>';
+}
 function calcFuel(){
   var laps=+el("fLaps").value||0, stops=Math.max(1,Math.min(4,+el("fStops").value||1));
   var maxStint=Math.floor(0.57*laps);
