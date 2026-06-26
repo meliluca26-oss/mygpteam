@@ -910,7 +910,7 @@ function renderBoard(){
 /* ---------- AI BYOK (chiave dell'utente, salvata solo in locale) ---------- */
 var AIKEY="mygpteam_ai_cfg";
 function loadAI(){ try{ return JSON.parse(localStorage.getItem(AIKEY))||{}; }catch(e){ return {}; } }
-function defModel(p){ return p==="anthropic"?"claude-3-5-haiku-latest":(p==="gemini"?"gemini-1.5-flash":"gpt-4o-mini"); }
+function defModel(p){ return p==="anthropic"?"claude-opus-4-8":(p==="gemini"?"gemini-1.5-flash":"gpt-4o-mini"); }
 function aiStatusHTML(c){ return c.key?'<span class="pill p-ok">configurato</span> '+c.provider+" · "+(c.model||defModel(c.provider)+" (default)"):'<span class="pill p-warn">nessuna chiave</span> — incolla la tua e premi Salva'; }
 function saveAI(){ var c={provider:el("aiProvider").value, key:(el("aiKey").value||"").trim(), model:(el("aiModel").value||"").trim()}; localStorage.setItem(AIKEY, JSON.stringify(c)); el("aiStatus").innerHTML=aiStatusHTML(c); }
 function bootAI(){ if(!el("aiProvider"))return; var c=loadAI(); if(c.provider)el("aiProvider").value=c.provider; if(c.key)el("aiKey").value=c.key; if(c.model)el("aiModel").value=c.model; el("aiStatus").innerHTML=aiStatusHTML(c); }
