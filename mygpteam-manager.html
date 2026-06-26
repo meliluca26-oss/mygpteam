@@ -268,6 +268,7 @@
     <h2><span class="dot"></span>🤖 Parla col Consiglio</h2>
     <p class="hint">Chatta coi direttori (Sportivo, Economico, Tecnico) per una visione d'insieme. Configura l'AI nel riquadro qui sotto.</p>
     <div class="chatquick">
+      <button class="ghost sm" onclick="agentSend('board','Analisi completa di tutta la scuderia: priorità e azioni ottimali di ogni reparto, con numeri')">🔍 Analisi completa</button>
       <button class="ghost sm" onclick="agentSend('board','Qual è la priorità numero uno della squadra adesso?')">Priorità #1</button>
       <button class="ghost sm" onclick="agentSend('board','Dammi un piano per le prossime 3 settimane')">Piano 3 settimane</button>
     </div>
@@ -322,6 +323,7 @@
     <h2><span class="dot"></span>🤖 Agente Stratega gara</h2>
     <p class="hint">Chiedi assetto, gomme, pit e ordini per la gara/contest in corso. Usa l'AI configurata in Consiglio direzione (consuma credito per messaggio).</p>
     <div class="chatquick">
+      <button class="ghost sm" onclick="agentSend('strategist','Analisi completa della tua area: tutte le azioni ottimali ordinate per priorità, con numeri')">🔍 Analisi completa</button>
       <button class="ghost sm" onclick="agentSend('strategist','Dammi il setup migliore per la prossima gara con numeri e perché')">Setup gara</button>
       <button class="ghost sm" onclick="agentSend('strategist','Qual è la strategia pit ottimale per questa gara?')">Strategia pit</button>
       <button class="ghost sm" onclick="agentSend('strategist','Che ordini dare ai piloti nelle 5 fasi e perché?')">Ordini piloti</button>
@@ -381,6 +383,7 @@
     <h2><span class="dot"></span>🤖 Agente Direttore Tecnico</h2>
     <p class="hint">Budget per laboratori, strutture e circuito; valutazione ingegneri. Usa l'AI configurata in Consiglio direzione.</p>
     <div class="chatquick">
+      <button class="ghost sm" onclick="agentSend('technical','Analisi completa della tua area: tutte le azioni ottimali ordinate per priorità, con numeri')">🔍 Analisi completa</button>
       <button class="ghost sm" onclick="agentSend('technical','Come distribuisco il budget tra i laboratori questa settimana?')">Budget lab</button>
       <button class="ghost sm" onclick="agentSend('technical','I miei ingegneri vanno bene o ne sostituisco qualcuno?')">Ingegneri</button>
       <button class="ghost sm" onclick="agentSend('technical','Conviene investire in strutture o circuito ora?')">Strutture/circuito</button>
@@ -432,6 +435,7 @@
     <h2><span class="dot"></span>🤖 Agente Direttore Generale</h2>
     <p class="hint">Bilancio, contratti piloti e sponsor, staff e merchandising. Usa l'AI configurata in Consiglio direzione.</p>
     <div class="chatquick">
+      <button class="ghost sm" onclick="agentSend('manager','Analisi completa della tua area: tutte le azioni ottimali ordinate per priorità, con numeri')">🔍 Analisi completa</button>
       <button class="ghost sm" onclick="agentSend('manager','Come sistemo il bilancio settimanale in perdita?')">Bilancio</button>
       <button class="ghost sm" onclick="agentSend('manager','Quali contratti piloti rinnovo prima della settimana 11?')">Contratti piloti</button>
       <button class="ghost sm" onclick="agentSend('manager','Come miglioro sponsor e merchandising?')">Sponsor/merch</button>
@@ -1098,7 +1102,7 @@ async function agentSend(id, preset){
   CHATS[id].push({role:"user", content:msg});
   CHATS[id].push({role:"assistant", content:"…", pending:true});
   renderChat(id);
-  var a=AGENTS[id], sys=a.sys+"\n\nDATI ATTUALI DELLA SCUDERIA:\n"+fullContext()+"\n\nRispondi in italiano, conciso e concreto.";
+  var a=AGENTS[id], sys=a.sys+"\n\nDATI ATTUALI DELLA SCUDERIA:\n"+fullContext()+"\n\nISTRUZIONI: copri in modo COMPLETO tutta la tua area, senza lasciare nulla di non analizzato; proponi le azioni OTTIMALI concrete, ordinate per priorita, con numeri precisi (importi, livelli, fasce d'investimento) e una riga di perche per ciascuna; se un dato manca dillo e indica cosa servirebbe leggere dal gioco. Rispondi in italiano, strutturato ma sintetico.";
   var hist=CHATS[id].filter(function(m){return !m.pending;}).map(function(m){return {role:m.role, content:m.content};});
   try{
     var reply=await callLLMChat(sys, hist);
