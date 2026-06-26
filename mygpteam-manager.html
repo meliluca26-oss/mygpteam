@@ -129,6 +129,7 @@
 <nav class="tabs" id="tabs">
   <button data-v="dash" class="active">Cruscotto</button>
   <button data-v="plan">Sviluppo scuderia</button>
+  <button data-v="board">Consiglio direzione</button>
   <button data-v="strat">Strategia gara</button>
   <button data-v="dev">Sviluppo &amp; ricerca</button>
   <button data-v="eco">Bilancio &amp; stagione</button>
@@ -247,6 +248,50 @@
     <h2><span class="dot"></span>Checklist sviluppo <span id="planProg" class="pill p-mut" style="margin-left:6px"></span></h2>
     <p class="hint">Spunta le azioni completate: lo stato resta salvato.</p>
     <div id="planChecklist"></div>
+  </div>
+</section>
+
+<!-- ============ CONSIGLIO DI DIREZIONE ============ -->
+<section class="view" id="v-board">
+  <div class="banner warn"><span>I "direttori" danno consigli <b>basati su regole</b> sui tuoi dati. Con la <b>configurazione AI (BYOK)</b> qui sotto puoi farli <b>ragionare dal vivo</b> con la TUA chiave API. <span class="tag inf">INFERITO</span></span></div>
+  <div class="card">
+    <h2><span class="dot"></span>⚙️ Configurazione AI (BYOK — la tua chiave)</h2>
+    <p class="hint">Collega la tua chiave API per l'analisi ragionata dal vivo. La chiave resta <b>solo sul tuo dispositivo</b> (non viene esportata né inserita nel file pubblico).</p>
+    <div class="row">
+      <div><label>Provider</label><select id="aiProvider"><option value="openai">OpenAI</option><option value="anthropic">Anthropic (Claude)</option><option value="gemini">Google Gemini</option></select></div>
+      <div style="flex:2;min-width:200px"><label>API key</label><input id="aiKey" type="password" placeholder="incolla qui la tua chiave"></div>
+      <div><label>Modello (opzionale)</label><input id="aiModel" placeholder="default automatico"></div>
+      <div style="flex:none"><label>&nbsp;</label><button onclick="saveAI()">Salva</button></div>
+    </div>
+    <div id="aiStatus" class="small" style="margin-top:8px"></div>
+    <p class="note" style="margin-top:8px">Ogni analisi consuma credito sul tuo account del provider. Non condividere la chiave. Se un provider blocca le chiamate dal browser (errore CORS), passa a un altro. Non posso testarla io: la verifichi tu con la tua chiave. <span class="tag inf">INFERITO</span></p>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Sintesi del team</h2>
+    <div id="boardSummary"></div>
+  </div>
+  <div class="grid g3" style="margin-top:14px">
+    <div class="card">
+      <h2><span class="dot"></span>🏁 Direttore Sportivo</h2>
+      <p class="hint">Piloti, contratti, gare, vivaio.</p>
+      <div id="boardSport"></div>
+      <button class="ghost sm" style="margin-top:8px" onclick="aiDirector('sport')">🧠 Approfondisci con AI</button>
+      <div id="aiSport"></div>
+    </div>
+    <div class="card">
+      <h2><span class="dot"></span>💶 Direttore Economico</h2>
+      <p class="hint">Bilancio, banca, ricavi, soglie.</p>
+      <div id="boardEco"></div>
+      <button class="ghost sm" style="margin-top:8px" onclick="aiDirector('eco')">🧠 Approfondisci con AI</button>
+      <div id="aiEco"></div>
+    </div>
+    <div class="card">
+      <h2><span class="dot"></span>🔧 Direttore Tecnico</h2>
+      <p class="hint">Ricerca, laboratori, magazzino.</p>
+      <div id="boardTech"></div>
+      <button class="ghost sm" style="margin-top:8px" onclick="aiDirector('tech')">🧠 Approfondisci con AI</button>
+      <div id="aiTech"></div>
+    </div>
   </div>
 </section>
 
@@ -808,6 +853,92 @@ function renderPlan(){
   for(var k=0;k<cks.length;k++){ cks[k].onchange=function(){ if(!S.plan)S.plan={}; S.plan[this.getAttribute("data-k")]=this.checked; save(); renderPlan(); }; }
 }
 
+/* ---------- Consiglio di direzione (assistenti basati su regole) ---------- */
+function boardCard(state,diag,acts){
+  var pill=state==="bad"?'<span class="pill p-bad">attenzione</span>':(state==="warn"?'<span class="pill p-warn">da curare</span>':'<span class="pill p-ok">ok</span>');
+  var li=""; for(var i=0;i<acts.length;i++){ li+='<li>'+acts[i]+'</li>'; }
+  return '<div style="margin-bottom:8px">'+pill+' <span class="small">'+diag+'</span></div><ul class="note" style="line-height:1.6;padding-left:18px;margin:0">'+li+'</ul>';
+}
+function renderBoard(){
+  if(!el("boardSport")) return;
+  var b=S.budget||{}, inc=(b.iSpon||0)+(b.iTv||0)+(b.iPub||0)+(b.iPrize||0)+(b.iMerch||0);
+  var exp=(b.eDrv||0)+(b.eEng||0)+(b.eRes||0)+(b.eOth||0), net=inc-exp;
+  var bank=S.team.bank||0, runway=(net<0)?Math.floor(bank/(-net)):null;
+  var avail=(S.team.avail!=null)?S.team.avail:((S.team.cash||0)+bank);
+  var ex=[["Stipendi",b.eDrv||0],["Staff",b.eEng||0],["Ricerca",b.eRes||0],["Strutture/merch/altro",b.eOth||0]].sort(function(a,c){return c[1]-a[1];});
+  var ecoActs=[];
+  if(net<0) ecoActs.push("Saldo settimanale <b>"+eur(net)+"</b>: la voce più alta è <b>"+ex[0][0]+"</b> ("+eur(ex[0][1])+") — verifica se è ricorrente.");
+  if(runway!=null) ecoActs.push("Autonomia ~<b>"+runway+" settimane</b> con la banca bloccata ("+eur(bank)+").");
+  if((b.iTv||0)===0&&(b.iPub||0)===0) ecoActs.push("Ricavi quasi solo da sponsor: cresci con <b>premi</b>, <b>merchandising</b> e <b>tribune</b>.");
+  if(avail<0) ecoActs.push("Disponibilità prevista <b>"+eur(avail)+"</b>: resta sopra −100k per fare offerte.");
+  if(!ecoActs.length) ecoActs.push("Conti in equilibrio: mantieni la rotta.");
+  el("boardEco").innerHTML=boardCard(net<0?"bad":"ok","Entrate "+eur(inc)+" · Uscite "+eur(exp)+" · Saldo "+eur(net),ecoActs);
+  var ds=S.drivers||[]; var expiring=ds.filter(function(d){return d.con===1;});
+  var avgAge=ds.length?Math.round(ds.reduce(function(a,d){return a+(d.age||0);},0)/ds.length):0;
+  function pval(d){return (d.brake||0)+(d.gear||0)+(d.accel||0)+(d.traj||0)+(d.exp||0);}
+  var sorted=ds.slice().sort(function(a,c){return pval(c)-pval(a);});
+  var best=sorted[0], worst=sorted[sorted.length-1];
+  var young=ds.filter(function(d){return (d.age||99)<=20;}).map(function(d){return d.name;});
+  var spActs=[];
+  if(expiring.length) spActs.push("<b>"+expiring.length+"</b> contratti a 1 stagione in scadenza (sett. 11): rinnova almeno "+(best?("<b>"+best.name+"</b>"):"i migliori")+" a lungo.");
+  if(young.length) spActs.push("Allena i giovani ("+young.join(", ")+"): crescono più in fretta.");
+  if(((S.research&&S.research.scout)||0)<=1) spActs.push("Talent scout basso: alza l'investimento e attiva il <b>baby-kart</b> per il ricambio.");
+  if(worst&&best&&worst.name!==best.name) spActs.push("Più debole: <b>"+worst.name+"</b> — valuta cessione per fare cassa se non rientra nei piani.");
+  if(!spActs.length) spActs.push("Rosa solida: concentra gli allenamenti sui ruoli chiave.");
+  el("boardSport").innerHTML=boardCard(expiring.length?"warn":"ok",ds.length+" piloti · età media "+avgAge+" · "+expiring.length+" in scadenza",spActs);
+  var labs=S.labs||[]; var weak=labs.filter(function(l){return l[3]<=2;}).map(function(l){return l[0];});
+  var mid=labs.filter(function(l){return l[3]===3;}).map(function(l){return l[0];});
+  var techActs=[];
+  if(weak.length) techActs.push("Laboratori <b>critici</b>: "+weak.join(", ")+" — priorità di ricerca/progetti.");
+  if(mid.length) techActs.push("Da rinforzare: "+mid.join(", ")+".");
+  techActs.push("Investimenti a 5.000 €/comp. (tetto <b>ottimo</b>): per la F3 valuta di alzare i lab chiave.");
+  techActs.push("Tieni i componenti sotto il tetto magazzino: oltre, penale 15.000 €/giorno.");
+  el("boardTech").innerHTML=boardCard(weak.length?"bad":"ok",labs.length+" laboratori · "+weak.length+" critici",techActs);
+  var top;
+  if(expiring.length) top='<span class="pill p-bad">Priorità #1</span> <b>Contratti</b>: rinnova entro settimana 11 o perdi '+expiring.length+' piloti (incluso il migliore).';
+  else if(net< -50000) top='<span class="pill p-bad">Priorità #1</span> <b>Finanze</b>: bruci '+eur(-net)+'/sett — taglia la voce più alta ('+ex[0][0]+').';
+  else if(weak.length) top='<span class="pill p-warn">Priorità #1</span> <b>Tecnica</b>: porta '+weak.join(" e ")+' fuori dal livello critico.';
+  else top='<span class="pill p-ok">I tre reparti sono allineati.</span>';
+  el("boardSummary").innerHTML='<div class="out">'+top+'<p class="note" style="margin:8px 0 0">I direttori condividono gli stessi dati e convergono su: blindare i contratti (Sportivo), fermare il rosso settimanale (Economico), sbloccare trasmissione/elettronica (Tecnico). <span class="tag">VERIFICATO dai tuoi dati</span></p></div>';
+}
+
+/* ---------- AI BYOK (chiave dell'utente, salvata solo in locale) ---------- */
+var AIKEY="mygpteam_ai_cfg";
+function loadAI(){ try{ return JSON.parse(localStorage.getItem(AIKEY))||{}; }catch(e){ return {}; } }
+function defModel(p){ return p==="anthropic"?"claude-3-5-haiku-latest":(p==="gemini"?"gemini-1.5-flash":"gpt-4o-mini"); }
+function aiStatusHTML(c){ return c.key?'<span class="pill p-ok">configurato</span> '+c.provider+" · "+(c.model||defModel(c.provider)+" (default)"):'<span class="pill p-warn">nessuna chiave</span> — incolla la tua e premi Salva'; }
+function saveAI(){ var c={provider:el("aiProvider").value, key:(el("aiKey").value||"").trim(), model:(el("aiModel").value||"").trim()}; localStorage.setItem(AIKEY, JSON.stringify(c)); el("aiStatus").innerHTML=aiStatusHTML(c); }
+function bootAI(){ if(!el("aiProvider"))return; var c=loadAI(); if(c.provider)el("aiProvider").value=c.provider; if(c.key)el("aiKey").value=c.key; if(c.model)el("aiModel").value=c.model; el("aiStatus").innerHTML=aiStatusHTML(c); }
+function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function teamContext(){
+  var b=S.budget||{};
+  var dr=(S.drivers||[]).map(function(d){return d.name+" (eta "+d.age+", contratto "+d.con+" stag, primarie Fr"+(d.brake+1)+"/Ca"+(d.gear+1)+"/Ac"+(d.accel+1)+"/Tr"+(d.traj+1)+"/20, stip "+d.sal+")";}).join("; ");
+  var lb=(S.labs||[]).map(function(l){return l[0]+" liv"+l[3]+"/20 (invest "+l[2]+")";}).join("; ");
+  return "Team "+(S.team.name||"")+", Formula "+(S.team.formula||"")+". Cassa "+(S.team.cash||0)+", banca "+(S.team.bank||0)+", disponibilita prevista "+(S.team.avail!=null?S.team.avail:"?")+" EUR.\nBilancio/sett: sponsor "+(b.iSpon||0)+", merch "+(b.iMerch||0)+"; uscite stipendi "+(b.eDrv||0)+", staff "+(b.eEng||0)+", ricerca "+(b.eRes||0)+", strutture/merch/altro "+(b.eOth||0)+".\nPiloti: "+dr+".\nLaboratori: "+lb+".";
+}
+async function callLLM(sys,usr){
+  var c=loadAI(); if(!c.key) throw new Error("Nessuna chiave API: configurala sopra e premi Salva.");
+  var model=c.model||defModel(c.provider), r, j;
+  if(c.provider==="anthropic"){
+    r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":c.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:model,max_tokens:1024,system:sys,messages:[{role:"user",content:usr}]})});
+    j=await r.json(); if(!r.ok) throw new Error((j.error&&j.error.message)||("HTTP "+r.status)); return j.content[0].text;
+  }
+  if(c.provider==="gemini"){
+    r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+model+":generateContent?key="+encodeURIComponent(c.key),{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({systemInstruction:{parts:[{text:sys}]},contents:[{role:"user",parts:[{text:usr}]}]})});
+    j=await r.json(); if(!r.ok) throw new Error((j.error&&j.error.message)||("HTTP "+r.status)); return j.candidates[0].content.parts[0].text;
+  }
+  r=await fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+c.key},body:JSON.stringify({model:model,messages:[{role:"system",content:sys},{role:"user",content:usr}]})});
+  j=await r.json(); if(!r.ok) throw new Error((j.error&&j.error.message)||("HTTP "+r.status)); return j.choices[0].message.content;
+}
+var AI_ROLES={sport:"Sei il Direttore Sportivo di una scuderia su MyGPTeam (manager di Formula 1): piloti, contratti, allenamenti, strategia di gara, vivaio.",eco:"Sei il Direttore Economico di una scuderia su MyGPTeam: bilancio, banca, sponsor, premi, merchandising, soglie finanziarie.",tech:"Sei il Direttore Tecnico/Logistico di una scuderia su MyGPTeam: ricerca nei laboratori, componenti, magazzino, circuito."};
+async function aiDirector(domain){
+  var out=el(domain==="sport"?"aiSport":(domain==="eco"?"aiEco":"aiTech")); if(!out)return;
+  var sys=(AI_ROLES[domain]||"")+" Rispondi in italiano, conciso e concreto: una diagnosi in 1 frase e 3 azioni prioritarie con il perche. Usa solo i dati forniti; se un dato manca, dillo.";
+  out.innerHTML='<div class="out"><span class="small">L\'AI sta ragionando…</span></div>';
+  try{ var txt=await callLLM(sys, teamContext()+"\n\nDammi l'analisi del tuo reparto."); out.innerHTML='<div class="out"><div class="small" style="white-space:pre-wrap">'+esc(txt)+'</div></div>'; }
+  catch(e){ out.innerHTML='<div class="out" style="border-left-color:var(--bad)"><span class="small">Errore: '+esc(e.message)+'</span><div class="note" style="margin-top:6px">Controlla chiave/modello. Se è CORS o rete, prova un altro provider.</div></div>'; }
+}
+
 /* ---------- Calcolatori strategia ---------- */
 function band(v,lo,hi){ return Math.max(lo,Math.min(hi,Math.round(v))); }
 function wxLbl(w){ return w==="sun"?"sole":(w==="drizzle"?"pioggia lieve":"pioggia battente"); }
@@ -900,7 +1031,7 @@ function calcBudget(){
     '<div class="b"><div class="v"><span class="'+cls+'" style="padding:0">'+eur(net)+'</span></div><div class="l">Saldo settimanale</div></div>'+
     '<div class="b"><div class="v">'+eur(proj)+'</div><div class="l">Cassa proiettata</div></div>'+
     '</div><div style="margin-top:10px">'+risk+'</div></div>';
-  save(); refreshDash(); renderPlan();
+  save(); refreshDash(); renderPlan(); renderBoard();
 }
 function calcBank(){
   var amt=+el("bankAmt").value||0, interest=Math.min(100000, Math.round(amt*0.025));
@@ -1085,7 +1216,7 @@ function importData(){ var t=el("ioBox"); if(!t)return; var txt=(t.value||"").tr
 
 function boot(){
   fillSkillSelects(); buildOrders(); buildResearch(); buildSeats(); buildRefs();
-  renderSeason(); renderDrivers(); refreshDash(); renderPlan();
+  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI();
   el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
   if(S.team.cash!=null) el("bCash").value=S.team.cash;
   if(S.team.bank!=null) el("bBank").value=S.team.bank;
