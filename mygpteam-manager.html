@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MyGPTeam">
+<meta name="theme-color" content="#0d1117">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='38' fill='%23e10600'/><text x='90' y='122' font-size='86' font-family='Arial,sans-serif' font-weight='bold' text-anchor='middle' fill='%23ffffff'>GP</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23e10600'/><text x='32' y='45' font-size='32' font-family='Arial,sans-serif' font-weight='bold' text-anchor='middle' fill='%23ffffff'>GP</text></svg>">
+<title>MyGPTeam Manager</title>
+<style>
+  :root{
+    --red:#e10600; --red2:#ff2d20; --bg:#0d1117; --bg2:#161b22; --bg3:#1f2630;
+    --line:#2a3340; --txt:#e6edf3; --mut:#8b98a8; --ok:#2ea043; --warn:#d29922; --bad:#f85149;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,Arial,sans-serif;background:var(--bg);color:var(--txt);font-size:14px}
+  header{background:linear-gradient(90deg,#000,#1a0000 40%,#3a0000);border-bottom:3px solid var(--red);padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  header h1{font-size:18px;margin:0;letter-spacing:.5px}
+  header .badge{background:var(--red);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+  header .team{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  input,select{background:var(--bg3);color:var(--txt);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:13px}
+  input:focus,select:focus{outline:none;border-color:var(--red)}
+  label{display:block;font-size:12px;color:var(--mut);margin-bottom:3px}
+  button{background:var(--red);color:#fff;border:none;border-radius:6px;padding:7px 12px;font-weight:600;cursor:pointer;font-size:13px}
+  button:hover{background:var(--red2)}
+  button.ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}
+  button.ghost:hover{border-color:var(--red)}
+  button.sm{padding:4px 8px;font-size:12px}
+  nav.tabs{display:flex;gap:2px;background:var(--bg2);padding:0 12px;border-bottom:1px solid var(--line);overflow-x:auto}
+  nav.tabs button{background:transparent;color:var(--mut);border:none;border-bottom:3px solid transparent;border-radius:0;padding:12px 14px;font-weight:600;white-space:nowrap}
+  nav.tabs button.active{color:var(--txt);border-bottom-color:var(--red)}
+  main{padding:18px;max-width:1150px;margin:0 auto}
+  .view{display:none}
+  .view.active{display:block;animation:f .2s}
+  @keyframes f{from{opacity:0}to{opacity:1}}
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:780px){.g2,.g3{grid-template-columns:1fr}}
+  .card{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .card h2{margin:0 0 4px;font-size:15px;display:flex;align-items:center;gap:8px}
+  .card h2 .dot{width:8px;height:8px;border-radius:50%;background:var(--red)}
+  .card .hint{color:var(--mut);font-size:12px;margin:0 0 12px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+  .row > div{flex:1;min-width:120px}
+  .out{background:var(--bg3);border:1px solid var(--line);border-left:3px solid var(--red);border-radius:8px;padding:12px;margin-top:12px}
+  .out .big{font-size:24px;font-weight:800;color:#fff}
+  .kpi{display:flex;gap:10px;flex-wrap:wrap}
+  .kpi .b{flex:1;min-width:130px;background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:10px}
+  .kpi .b .v{font-size:20px;font-weight:800}
+  .kpi .b .l{font-size:11px;color:var(--mut)}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+  th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.3px}
+  tr:hover td{background:rgba(255,255,255,.02)}
+  .pill{display:inline-block;padding:1px 7px;border-radius:20px;font-size:11px;font-weight:600}
+  .p-ok{background:rgba(46,160,67,.18);color:#56d364}
+  .p-warn{background:rgba(210,153,34,.18);color:#e3b341}
+  .p-bad{background:rgba(248,81,73,.18);color:#ff7b72}
+  .p-mut{background:var(--bg3);color:var(--mut)}
+  .note{font-size:11.5px;color:var(--mut);line-height:1.5}
+  .tag{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;background:#10341a;color:#56d364;vertical-align:middle}
+  .tag.inf{background:#3a2e10;color:#e3b341}
+  .small{font-size:11px;color:var(--mut)}
+  .sep{height:1px;background:var(--line);margin:12px 0}
+  .right{text-align:right}
+  .center{text-align:center}
+  .scrollx{overflow-x:auto}
+  .add-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;align-items:end}
+  .foot{color:var(--mut);font-size:11px;text-align:center;padding:18px}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--mut);margin-top:8px}
+  .banner{background:#0c2a16;border:1px solid #1d5a32;border-radius:8px;padding:10px 12px;font-size:12px;color:#7ee2a0;margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .banner.warn{background:#2a1a00;border-color:#5a3a00;color:#e3b341}
+  .prio{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .prio:last-child{border-bottom:none}
+  .prio .n{font-size:18px;font-weight:800;min-width:26px;text-align:center}
+  .prio .b{flex:1}
+  .prio .b .t{font-weight:700;margin-bottom:2px}
+  .chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}
+  .chk:last-child{border-bottom:none}
+  .chk input{margin-top:2px;width:16px;height:16px;accent-color:var(--red)}
+  .chk label{color:var(--txt);font-size:13px;margin:0;cursor:pointer}
+  .phase{border-left:2px solid var(--red);padding:2px 0 2px 12px;margin:10px 0}
+  .phase .h{font-weight:700;font-size:13px}
+  .phase ul{margin:4px 0 0;padding-left:18px}
+  .phase li{margin:3px 0}
+  html{-webkit-text-size-adjust:100%}
+  /* ---- Mobile / iPhone ---- */
+  @media(max-width:520px){
+    header{padding:10px 12px;gap:8px}
+    header h1{font-size:16px}
+    header .badge{font-size:10px}
+    header .team{margin-left:0;width:100%}
+    header .team > div{flex:1}
+    header .team input{width:100%!important}
+    main{padding:12px}
+    .card{padding:13px;border-radius:12px}
+    nav.tabs{position:sticky;top:0;z-index:5;padding:0 8px}
+    nav.tabs button{padding:11px 12px}
+    input,select,textarea,button{font-size:16px}
+    button{padding:11px 14px}
+    button.sm{font-size:13px;padding:7px 10px}
+    .kpi .b{min-width:46%}
+    .row > div{min-width:46%}
+    .add-row{grid-template-columns:1fr 1fr}
+    .out .big{font-size:22px}
+    h2{line-height:1.25}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏁 MyGPTeam <span class="badge">MANAGER</span></h1>
+  <div class="team">
+    <div><label>Team</label><input id="teamName" placeholder="Nome team" style="width:160px"></div>
+    <div><label>Formula</label>
+      <select id="teamFormula">
+        <option>F1</option><option>F2</option><option>F3</option><option>F4</option><option>F5</option><option>F6</option>
+      </select>
+    </div>
+    <button class="ghost sm" onclick="resetAll()">Reset dati</button>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button data-v="dash" class="active">Cruscotto</button>
+  <button data-v="plan">Sviluppo scuderia</button>
+  <button data-v="strat">Strategia gara</button>
+  <button data-v="dev">Sviluppo &amp; ricerca</button>
+  <button data-v="eco">Bilancio &amp; stagione</button>
+  <button data-v="drv">Piloti &amp; contratti</button>
+  <button data-v="circ">Circuito</button>
+  <button data-v="merch">Merchandising</button>
+  <button data-v="market">Mercato</button>
+  <button data-v="ref">Riferimenti</button>
+</nav>
+
+<main>
+
+<!-- ============ DASHBOARD ============ -->
+<section class="view active" id="v-dash">
+  <div class="banner" id="realBanner">
+    <span>✓ Dati reali del <b>Bronte Racing Team</b> caricati — snapshot 25-06-2026 (Formula 4, Girone 19). Tutti i piloti e i laboratori letti dal vivo.</span>
+    <button class="sm" onclick="loadReal()">Ricarica dati reali</button>
+  </div>
+  <div class="banner warn">⏰ <b>Urgente:</b> i 4 piloti hanno tutti contratto a <b>1 stagione</b> e Gerard ha già disputato 10 GP. Al rinnovo di <b>settimana 11</b> chi non è rinnovato lascia la squadra — Luis compreso. Vai alla scheda <b>Sviluppo scuderia</b>.</div>
+  <div class="kpi" style="margin-bottom:14px">
+    <div class="b"><div class="v" id="kCash">€0</div><div class="l">Cassa</div></div>
+    <div class="b"><div class="v" id="kBank">€0</div><div class="l">Banca (bloccata)</div></div>
+    <div class="b"><div class="v" id="kAvail">€0</div><div class="l">Disponibilità prevista</div></div>
+    <div class="b"><div class="v" id="kDrv">0</div><div class="l">Piloti</div></div>
+    <div class="b"><div class="v" id="kPts">0</div><div class="l">Punti costruttori</div></div>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <h2><span class="dot"></span>Stato finanziario</h2>
+      <p class="hint">La banca è bloccata: la "disponibilità prevista" è la cifra che il gioco controlla per le soglie.</p>
+      <div id="dashFin"></div>
+    </div>
+    <div class="card">
+      <h2><span class="dot"></span>Promemoria settimana</h2>
+      <ul class="note" style="line-height:1.7;padding-left:18px">
+        <li><b>1° pit-stop</b>: entro <b>1 h prima delle qualifiche</b> (decide il carburante di partenza).</li>
+        <li>Altri 3 pit e ordini ai piloti: <b>fino a 1 h prima della gara</b>.</li>
+        <li><b>Rinnovi contratti</b>: impossibili in settimana 12; agisci prima della 11.</li>
+        <li>Più di <b>6 piloti</b> all'update: −5 affiatamento, −1 ricerca talent scout.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Backup &amp; trasferimento dati (PC ↔ iPhone)</h2>
+    <p class="hint">I dati sono salvati per dispositivo. Per spostarli: <b>Esporta</b>, copia/trasferisci il testo, poi <b>Importa</b> sull'altro dispositivo.</p>
+    <div class="row">
+      <div style="flex:none"><button onclick="exportData()">Esporta</button></div>
+      <div style="flex:none"><button class="ghost" onclick="copyIO()">Copia</button></div>
+      <div style="flex:none"><button class="ghost" onclick="downloadData()">Scarica .json</button></div>
+      <div style="flex:none"><button onclick="importData()">Importa</button></div>
+    </div>
+    <textarea id="ioBox" rows="6" placeholder="Premi Esporta per generare qui i dati. Per importare, incolla qui il testo e premi Importa." style="width:100%;margin-top:10px;background:var(--bg3);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px;font-family:monospace;font-size:12px"></textarea>
+  </div>
+</section>
+
+<!-- ============ SVILUPPO SCUDERIA (piano) ============ -->
+<section class="view" id="v-plan">
+  <div class="banner"><span>🧠 Piano di sviluppo generato dall'analisi dei tuoi dati reali + meccaniche ufficiali. È <b>consultivo</b>: le decisioni e le azioni nel gioco restano tue. <span class="tag">VERIFICATO</span> Alcune voci sono valutazioni con incognite (es. cosa stai costruendo con "Strutture"). <span class="tag inf">INFERITO</span></span></div>
+
+  <div class="card">
+    <h2><span class="dot"></span>Diagnosi</h2>
+    <div id="planDiag"></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Priorità</h2>
+    <div class="prio"><div class="n">🔴</div><div class="b"><div class="t">1 · Blinda i contratti entro settimana 11</div><div class="note">Tutti e 4 a 1 stagione: senza rinnovo lasciano la squadra. Rinnova <b>Luis</b> a lungo (2-3 stagioni: 18 anni, di gran lunga il migliore) e decidi su Gerard/Anders/Robert. Un solo rinnovo per pilota a stagione; vietato in settimana 12.</div></div></div>
+    <div class="prio"><div class="n">🔴</div><div class="b"><div class="t">2 · Ferma l'emorragia (−69k/sett.)</div><div class="note">Spendi 124k e incassi 55k. La voce più aggredibile è <b>Strutture 50.000 €/sett.</b>: se è una costruzione una tantum, a fine progetto il saldo migliora di colpo. La banca (413k bloccata) ti dà ossigeno per ~6 settimane, non di più.</div></div></div>
+    <div class="prio"><div class="n">🟠</div><div class="b"><div class="t">3 · Sblocca trasmissione ed elettronica</div><div class="note">Sono a <b>catastrofico[1]</b>: zavorrano affidabilità e bonus assetto. Stanno già salendo verso il tetto "ottimo" (5.000 €); valuta priorità o più giorni-progetto nei lab più indietro.</div></div></div>
+    <div class="prio"><div class="n">🟠</div><div class="b"><div class="t">4 · Allena i giovani</div><div class="note">Luis e Robert hanno 18 anni: crescono in fretta. Max 4 piloti/settimana in allenamento, focalizzato sulle primarie deboli per i tuoi circuiti.</div></div></div>
+    <div class="prio"><div class="n">🟡</div><div class="b"><div class="t">5 · Prepara la promozione in F3</div><div class="note">Stai dominando l'F4: in F3 premi e sponsor salgono (vittoria gara 80k vs 70k, mondiale 1M vs 500k) ma anche costi e avversari. Arrivaci con auto e conti più solidi.</div></div></div>
+    <div class="prio"><div class="n">🟡</div><div class="b"><div class="t">6 · Rinforza il vivaio</div><div class="note">Talent scout a <b>pessimo[2]</b> (1.000 €/sett., tetto "mediocre"): per trovare giovani migliori alza l'investimento e <b>attiva il baby-kart</b> dalla pagina circuito.</div></div></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card">
+      <h2><span class="dot"></span>Piano per fasi</h2>
+      <div class="phase"><div class="h">Questa settimana</div><ul class="note">
+        <li>Apri ogni scheda pilota e avvia i <b>rinnovi</b> (priorità Luis).</li>
+        <li>Controlla la voce <b>Strutture</b> nel bilancio: capisci se è ricorrente.</li>
+        <li>Imposta l'<b>allenamento</b> su chi non corre / sui più giovani.</li>
+      </ul></div>
+      <div class="phase"><div class="h">Entro settimana 11</div><ul class="note">
+        <li>Chiudi tutti i rinnovi che vuoi tenere (dopo è troppo tardi).</li>
+        <li>Cedi sul mercato chi non rientra nel progetto (fai cassa).</li>
+      </ul></div>
+      <div class="phase"><div class="h">Verso la promozione (F3)</div><ul class="note">
+        <li>Porta trasmissione/elettronica almeno a "mediocre"; poi alza i lab chiave.</li>
+        <li>Stabilizza il bilancio prima del salto di categoria.</li>
+      </ul></div>
+      <div class="phase"><div class="h">Lungo termine</div><ul class="note">
+        <li>Investi nel talent scout e nel baby-kart per il ricambio (Gerard/Anders hanno 22 anni).</li>
+        <li>Espandi tribune → più pubblico e tetto merchandising più alto.</li>
+      </ul></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="dot"></span>Sviluppo piloti</h2>
+      <div class="scrollx"><table>
+        <thead><tr><th>Pilota</th><th>Ruolo &amp; mossa</th></tr></thead>
+        <tbody id="planDrivers"></tbody>
+      </table></div>
+      <p class="note" style="margin-top:8px">Robert ha primarie grezze ma <b>conoscenze meccaniche eccezionali[9]</b> e carattere freddo/calcolatore: ottimo progetto di sviluppo (o, da regolamento, convertibile in ingegnere).</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Stato laboratori (dal tuo account)</h2>
+    <div class="scrollx"><table>
+      <thead><tr><th>Componente</th><th>Ingegnere</th><th class="right">Investimento</th><th>Livello attuale</th><th>Tetto col tuo investimento</th></tr></thead>
+      <tbody id="planLabs"></tbody>
+    </table></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Checklist sviluppo <span id="planProg" class="pill p-mut" style="margin-left:6px"></span></h2>
+    <p class="hint">Spunta le azioni completate: lo stato resta salvato.</p>
+    <div id="planChecklist"></div>
+  </div>
+</section>
+
+<!-- ============ STRATEGIA ============ -->
+<section class="view" id="v-strat">
+  <div class="card">
+    <h2><span class="dot"></span>Setup auto — pronto da ricopiare</h2>
+    <p class="hint">Pre-caricato con la prossima gara reale (Paesello Racing Autodrome, sab/dom). Genera i <b>6 valori esatti del gioco</b> per qualifica e gara + gomme, carburante e ordini. Solo la coppia ha formula ufficiale; il resto sono stime di partenza da affinare con le prove. <span class="tag inf">INFERITO</span></p>
+    <div class="row">
+      <div><label>Circuito</label><input id="cName" value="Paesello Racing Autodrome"></div>
+      <div><label>Curve %</label><input id="cCurve" type="number" value="92" min="0" max="100"></div>
+      <div><label>Dislivelli %</label><input id="cDisl" type="number" value="11" min="0" max="100"></div>
+      <div><label>Giri</label><input id="cLaps" type="number" value="56" min="5" max="120"></div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <div><label>Pitlane m</label><input id="cPit" type="number" value="600"></div>
+      <div><label>Condizioni %</label><input id="cCond" type="number" value="1" min="0" max="100"></div>
+      <div><label>Tracciato</label><select id="cUrban"><option value="0" selected>Campagna</option><option value="1">Urbano</option></select></div>
+      <div><label>Pilota</label><select id="cDrv"></select></div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <div><label>Meteo qualifica</label><select id="cWxQ"><option value="sun">Sole</option><option value="drizzle" selected>Pioggia lieve</option><option value="rain">Pioggia battente</option></select></div>
+      <div><label>Meteo gara</label><select id="cWxR"><option value="sun" selected>Sole</option><option value="drizzle">Pioggia lieve</option><option value="rain">Pioggia battente</option></select></div>
+      <div style="flex:2;min-width:200px"><label>&nbsp;</label><button onclick="genSetup()">Genera setup pronto</button></div>
+    </div>
+    <div id="setupOut"></div>
+    <label style="margin-top:10px">Blocco copia-incolla</label>
+    <textarea id="setupCopy" rows="13" readonly style="width:100%;background:var(--bg3);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px;font-family:monospace;font-size:12px"></textarea>
+    <button class="ghost sm" style="margin-top:6px" onclick="copySetup()">Copia negli appunti</button>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Ordini ai piloti — 5 fasi di gara</h2>
+    <p class="hint">"Aggressivo" = più velocità e sorpassi ma più errori/rischio ritiro; "Lento" = il contrario.</p>
+    <div class="scrollx"><table>
+      <thead><tr><th>Fase</th><th>Quota gara</th><th>Pilota 1</th><th>Pilota 2</th></tr></thead>
+      <tbody id="ordersBody"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ SVILUPPO & RICERCA ============ -->
+<section class="view" id="v-dev">
+  <div class="card">
+    <h2><span class="dot"></span>Pianificatore ricerca &amp; investimenti</h2>
+    <p class="hint">Pre-caricato col tuo laboratorio reale: 5.000 €/componente (tetto "ottimo") e 1.000 € talent scout.</p>
+    <div class="scrollx"><table>
+      <thead><tr><th>Settore</th><th>Investimento target</th><th>Livello max</th><th class="right">€/settimana</th></tr></thead>
+      <tbody id="resBody"></tbody>
+      <tfoot><tr><th>Totale</th><th></th><th></th><th class="right" id="resTotal">€0</th></tr></tfoot>
+    </table></div>
+    <p class="note" style="margin-top:10px">Abbassare un investimento fa <b>scendere</b> il livello. Per aumentarlo la disponibilità prevista non deve scendere sotto <b>−200.000 €</b>. <span class="tag">VERIFICATO</span></p>
+  </div>
+
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card">
+      <h2><span class="dot"></span>Limiti magazzino</h2>
+      <p class="hint">Oltre il tetto: €15.000/giorno per pezzo in eccesso e −1 livello ricerca nel settore.</p>
+      <div class="row">
+        <div><label>Livello ricerca del settore</label><select class="sk" id="whLvl"></select></div>
+        <div><label>Tipo componente</label><select id="whType"><option value="comp">Componente standard</option><option value="tyre">Gomme</option></select></div>
+      </div>
+      <div id="whOut"></div>
+    </div>
+    <div class="card">
+      <h2><span class="dot"></span>Direzioni di assetto per componente</h2>
+      <p class="hint">Logica ufficiale: come muovere ogni regolazione.</p>
+      <div class="scrollx"><table>
+        <thead><tr><th>Componente</th><th>Regolazione</th><th>Direzione</th></tr></thead>
+        <tbody id="compDirBody"></tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BILANCIO ============ -->
+<section class="view" id="v-eco">
+  <div class="grid g2">
+    <div class="card">
+      <h2><span class="dot"></span>Bilancio settimanale</h2>
+      <p class="hint">Pre-caricato col tuo bilancio reale (settimana corrente).</p>
+      <div class="row">
+        <div><label>Cassa attuale (€)</label><input id="bCash" type="number" value="0"></div>
+        <div><label>In banca (€)</label><input id="bBank" type="number" value="0"></div>
+      </div>
+      <div class="sep"></div>
+      <div class="g2 grid">
+        <div>
+          <div class="small" style="margin-bottom:6px;color:var(--ok)">ENTRATE / sett.</div>
+          <label>Sponsor</label><input id="iSpon" type="number" value="0">
+          <label>TV</label><input id="iTv" type="number" value="0">
+          <label>Pubblico (tribune)</label><input id="iPub" type="number" value="0">
+          <label>Premi gara</label><input id="iPrize" type="number" value="0">
+          <label>Merchandising</label><input id="iMerch" type="number" value="0">
+        </div>
+        <div>
+          <div class="small" style="margin-bottom:6px;color:var(--bad)">USCITE / sett.</div>
+          <label>Stipendi (piloti + ing.)</label><input id="eDrv" type="number" value="0">
+          <label>Staff</label><input id="eEng" type="number" value="0">
+          <label>Ricerca (piloti + pezzi)</label><input id="eRes" type="number" value="0">
+          <label>Strutture / merch / altro</label><input id="eOth" type="number" value="0">
+        </div>
+      </div>
+      <button style="margin-top:12px" onclick="calcBudget()">Calcola</button>
+      <div id="budgetOut"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="dot"></span>Calcolatore banca</h2>
+      <p class="hint">Interesse 2,5%/sett., tetto interessi €100.000. Prelievo: penale fissa €25.000.</p>
+      <div class="row">
+        <div><label>Importo in banca (€)</label><input id="bankAmt" type="number" value="413557"></div>
+      </div>
+      <div id="bankOut"></div>
+      <div class="sep"></div>
+      <h2 style="font-size:13px"><span class="dot"></span>Soglie critiche</h2>
+      <ul class="note" style="line-height:1.7;padding-left:18px">
+        <li>Offerte pezzi/piloti: disponibilità + offerte pendenti mai sotto <b>−100.000 €</b>.</li>
+        <li>Altre spese (staff, ricerca, circuito): mai sotto <b>−200.000 €</b>.</li>
+        <li><b>Fallimento</b> sotto <b>−350.000 €</b> non sanato entro l'update.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Registro stagione</h2>
+    <p class="hint">Punti F1: 25-18-15-12-10-8-6-4-2-1 (top 10). Pole = 1 punto. 10 gare a stagione.</p>
+    <div class="add-row">
+      <div><label>Round</label><input id="rRound" type="number" value="1" min="1" max="10"></div>
+      <div><label>Circuito</label><input id="rCirc" placeholder="es. Botown"></div>
+      <div><label>Pos. Pilota 1</label><input id="rP1" type="number" min="1" max="20" placeholder="—"></div>
+      <div><label>Pos. Pilota 2</label><input id="rP2" type="number" min="1" max="20" placeholder="—"></div>
+      <div><label>Pole?</label><select id="rPole"><option value="0">No</option><option value="1">Sì</option></select></div>
+      <div><button onclick="addRace()">+ Aggiungi</button></div>
+    </div>
+    <div class="scrollx" style="margin-top:12px"><table>
+      <thead><tr><th>R</th><th>Circuito</th><th class="center">P1</th><th class="center">P2</th><th class="center">Pole</th><th class="right">Punti</th><th></th></tr></thead>
+      <tbody id="seasonBody"></tbody>
+      <tfoot><tr><th colspan="5">Totale costruttori</th><th class="right" id="seasonTot">0</th><th></th></tr></tfoot>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ PILOTI ============ -->
+<section class="view" id="v-drv">
+  <div class="card">
+    <h2><span class="dot"></span>Aggiungi pilota</h2>
+    <p class="hint">Carattere (3 tratti fissi) e abilità sulla scala a 20 livelli del gioco.</p>
+    <div class="add-row">
+      <div><label>Nome</label><input id="dName" placeholder="Nome"></div>
+      <div><label>Età</label><input id="dAge" type="number" value="20" min="16" max="40"></div>
+      <div><label>Esperienza (liv.)</label><input id="dExp" type="number" value="1" min="1" max="20"></div>
+      <div><label>Coraggio</label><select id="dCour"></select></div>
+      <div><label>Giudizio</label><select id="dJudg"></select></div>
+      <div><label>Freddezza</label><select id="dCool"></select></div>
+    </div>
+    <div class="add-row" style="margin-top:8px">
+      <div><label>Contratto (stag.)</label><select id="dCon"><option>1</option><option>2</option><option>3</option></select></div>
+      <div><label>Stipendio €/sett.</label><input id="dSal" type="number" value="0"></div>
+      <div><label>Frenata</label><select class="sk" id="dkBrake"></select></div>
+      <div><label>Cambio</label><select class="sk" id="dkGear"></select></div>
+      <div><label>Accel.</label><select class="sk" id="dkAccel"></select></div>
+      <div><label>Traiett.</label><select class="sk" id="dkTraj"></select></div>
+    </div>
+    <button style="margin-top:12px" onclick="addDriver()">+ Aggiungi pilota</button>
+    <div id="drvWarn"></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Rosa &amp; contratti</h2>
+    <div class="scrollx"><table>
+      <thead><tr><th>Nome</th><th class="center">Età</th><th class="center">Exp</th><th>Carattere</th><th>Primarie (Fr/Ca/Ac/Tr)</th><th class="center">Contratto</th><th class="right">Stip.</th><th></th></tr></thead>
+      <tbody id="drvBody"></tbody>
+    </table></div>
+    <div class="legend">
+      <span>Rinnovi: 1→ +1/+2/+3 · 2→ +1/+2 · 3→ +1 stagione (uno per stagione)</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CIRCUITO ============ -->
+<section class="view" id="v-circ">
+  <div class="grid g2">
+    <div class="card">
+      <h2><span class="dot"></span>Tribune &amp; capienza</h2>
+      <p class="hint">Posti iniziali 5.000. Inserisci gli attuali e quanti aggiungerne per stimare costo e incasso a pieno.</p>
+      <div class="scrollx"><table>
+        <thead><tr><th>Settore</th><th>Attuali</th><th>Aggiungi</th><th class="right">Prezzo/biglietto</th></tr></thead>
+        <tbody id="seatBody"></tbody>
+      </table></div>
+      <button style="margin-top:12px" onclick="calcSeats()">Calcola</button>
+      <div id="seatOut"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="dot"></span>Costo modifica circuito / pitlane</h2>
+      <p class="hint">Modifiche tracciato: max 2 a stagione, vietate da 5 giorni prima di una gara in casa.</p>
+      <div class="row">
+        <div><label>% Curve attuale → nuova</label><input id="cB0" type="number" value="40"></div>
+        <div><input id="cB1" type="number" value="40"></div>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <div><label>% Dislivelli attuale → nuova</label><input id="cI0" type="number" value="10"></div>
+        <div><input id="cI1" type="number" value="10"></div>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <div><label>Lunghezza m attuale → nuova</label><input id="cL0" type="number" value="4750"></div>
+        <div><input id="cL1" type="number" value="4750"></div>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <div><label>Pitlane m attuale → nuova (400–700)</label><input id="cP0" type="number" value="500"></div>
+        <div><input id="cP1" type="number" value="500"></div>
+      </div>
+      <button style="margin-top:12px" onclick="calcCircuit()">Calcola costo</button>
+      <div id="circOut"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Note circuito</h2>
+    <ul class="note" style="line-height:1.7;padding-left:18px">
+      <li>Costruzione posti: Prato 52€ · Tribune curva 122€ · Tribune rettilineo 245€ · VIP 350€ (cadauno).</li>
+      <li>Pitlane default 500 m (range 400–700): più è lunga, più lungo è il pit-stop. La velocità in pitlane dipende anche dall'incoscienza del pilota.</li>
+      <li>Circuito <b>urbano</b> = più difficile sorpassare e più rischio di errore rispetto a uno di campagna.</li>
+      <li>Asfalto e tribune si <b>deteriorano</b> a ogni uso: più usura componenti e meno pubblico.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ MERCHANDISING ============ -->
+<section class="view" id="v-merch">
+  <div class="grid g2">
+    <div class="card">
+      <h2><span class="dot"></span>Livello effettivo &amp; gadget sbloccati</h2>
+      <p class="hint">Il livello è limitato dal <b>minore</b> tra investimento e capienza dell'impianto.</p>
+      <div class="row">
+        <div><label>Investimento /sett.</label><select id="mInvest"></select></div>
+        <div><label>Posti totali impianto</label><input id="mSeats" type="number" value="5000"></div>
+      </div>
+      <button style="margin-top:12px" onclick="calcMerch()">Calcola</button>
+      <div id="merchOut"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="dot"></span>Ricarico &amp; profitto</h2>
+      <p class="hint">Il prezzo di vendita può essere 2×, 3× o 4× il costo di produzione.</p>
+      <div class="row">
+        <div><label>Costo produzione/pezzo (€)</label><input id="mpCost" type="number" value="1"></div>
+        <div><label>Ricarico</label><select id="mpMk"><option value="2">2×</option><option value="3" selected>3×</option><option value="4">4×</option></select></div>
+        <div><label>Quantità</label><input id="mpQty" type="number" value="10000"></div>
+      </div>
+      <button style="margin-top:12px" onclick="calcMerchProfit()">Calcola</button>
+      <div id="merchProfitOut"></div>
+      <p class="note" style="margin-top:10px">Le vendite reali dipendono da classe, prezzo, n° addetti (0 = nessuna vendita), affiatamento, livello catena e Formula. <span class="tag">VERIFICATO</span></p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Classi gadget per livello</h2>
+    <div class="scrollx"><table>
+      <thead><tr><th>Livello (it / en)</th><th class="center">Classe max sbloccata</th></tr></thead>
+      <tbody id="merchClassBody"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ MERCATO ============ -->
+<section class="view" id="v-market">
+  <div class="grid g2">
+    <div class="card">
+      <h2><span class="dot"></span>Plusvalenza in vendita</h2>
+      <p class="hint">Vendendo pilota/componente con guadagno, una multa colpisce la plusvalenza in base ai giorni in squadra.</p>
+      <div class="row">
+        <div><label>Prezzo d'acquisto (€)</label><input id="mkBuy" type="number" value="0"></div>
+        <div><label>Prezzo di vendita (€)</label><input id="mkSell" type="number" value="0"></div>
+        <div><label>Giorni in squadra</label><input id="mkDays" type="number" value="10"></div>
+      </div>
+      <button style="margin-top:12px" onclick="calcCapGain()">Calcola</button>
+      <div id="capGainOut"></div>
+      <p class="note" style="margin-top:10px">Multa 0% se: oltre 42 giorni in squadra, oppure pezzo/pilota dal proprio laboratorio/osservatori, oppure nessuna plusvalenza. <span class="tag">VERIFICATO</span></p>
+    </div>
+
+    <div class="card">
+      <h2><span class="dot"></span>Rilancio minimo asta</h2>
+      <p class="hint">Rilancio min = €1.000 se l'offerta ≤ €50.000, altrimenti 2% dell'offerta.</p>
+      <div class="row">
+        <div><label>Offerta corrente (€)</label><input id="mkCur" type="number" value="20000"></div>
+      </div>
+      <button style="margin-top:12px" onclick="calcMinRaise()">Calcola</button>
+      <div id="minRaiseOut"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Regole del mercato</h2>
+    <ul class="note" style="line-height:1.7;padding-left:18px">
+      <li>Asta dura <b>2 giorni</b>; offerte nell'ultimo minuto la prolungano di 1 minuto. Passaggi ogni ~30 min.</li>
+      <li>Per offrire: disponibilità + offerte pendenti mai sotto <b>−100.000 €</b>.</li>
+      <li>Annullamento asta entro <b>15 min</b> e solo senza offerte (richiede crediti).</li>
+      <li>Vendi un componente del tuo laboratorio direttamente a MyGPTeam a <b>metà</b> del prezzo di costruzione.</li>
+      <li>Vendi un pilota non scoperto dai tuoi scout → chi l'ha scoperto prende <b>+5%</b>. Componente costruito da altri → al costruttore <b>+2%</b>.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ RIFERIMENTI ============ -->
+<section class="view" id="v-ref">
+  <div class="banner"><span>✓ Le scale qui sotto sono i <b>termini reali</b> letti dal tuo client italiano, affiancati all'inglese della guida. <span class="tag">VERIFICATO</span></span></div>
+  <div class="grid g2">
+    <div class="card">
+      <h2><span class="dot"></span>Scala abilità (20 livelli)</h2>
+      <p class="hint">Vale per piloti, ingegneri, componenti e ricerca.</p>
+      <div id="skillScale" class="scrollx"></div>
+    </div>
+    <div class="card">
+      <h2><span class="dot"></span>Investimento → livello max</h2>
+      <div class="scrollx"><table>
+        <thead><tr><th>Investimento /sett.</th><th>Livello massimo</th></tr></thead>
+        <tbody id="invRef"></tbody>
+      </table></div>
+      <div class="sep"></div>
+      <h2 style="font-size:13px"><span class="dot"></span>Carattere &amp; talento</h2>
+      <div class="note" id="charRef"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Premi gara per formula (€)</h2>
+    <div class="scrollx"><table id="prizeRace">
+      <thead><tr><th>Formula</th><th>1°</th><th>2°</th><th>3°</th><th>4°</th><th>5°</th><th>6°</th><th>7°</th><th>8°</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div class="legend"><span>Pole: F1 40k → F6 15k</span><span>Giro veloce: F1 35k → F6 10k</span><span>Abbonamento TV/GP: F1 30€ … F6 16€ a spettatore · min TV 30.000€/sett.</span></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2><span class="dot"></span>Premi di fine stagione — Mondiale Costruttori (€)</h2>
+    <div class="scrollx"><table id="prizeChamp">
+      <thead><tr><th>Formula</th><th>1°</th><th>2°</th><th>3°</th><th>4°</th><th>5°</th><th>6°</th><th>7°</th><th>8°</th><th>9°</th><th>10°</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <p class="note" style="margin-top:8px">Fonte: guida ufficiale MyGPTeam + dati live del tuo account. <span class="tag">VERIFICATO</span></p>
+  </div>
+</section>
+
+</main>
+<div class="foot">MyGPTeam Manager · strumento non ufficiale · dati salvati localmente nel tuo browser</div>
+
+<script>
+"use strict";
+
+/* ---------- Scale reali del gioco (it dal client, en dalla guida) ---------- */
+var SKILLS    = ["disastrous","awful","inadequate","mediocre","insufficient","acceptable","great","very good","phenomenal","peachy","wonderful","magnificent","amazing","portentous","colossal","immense","prodigious","perfect","heroic","insuperable"];
+var SKILLS_IT = ["catastrofico","pessimo","inadeguato","mediocre","insufficiente","passabile","valido","ottimo","eccezionale","fantastico","meraviglioso","grandioso","stupefacente","portentoso","colossale","immenso","prodigioso","perfetto","leggendario","insuperabile"];
+var COURAGE    = ["timorous","temporizer","patient","reckless","daredevil"];
+var COURAGE_IT = ["timoroso","attendista","paziente","spericolato","spavaldo"];
+var JUDG    = ["shrewd","careful","steady","aggressive","crazy"];
+var JUDG_IT = ["calcolatore","attento","equilibrato","aggressivo","folle"];
+var COOL    = ["nervous","impressionable","quiet","impassive","cold"];
+var COOL_IT = ["ansioso","impressionabile","tranquillo","impassibile","freddo"];
+var TALENT    = ["talentless","competent","accomplished","masterful","a future champion"];
+var TALENT_IT = ["senza talento","basso","nella norma","fuori dal comune","un futuro campione"];
+var INVEST = [[0,"disastrous","catastrofico",0],[1000,"mediocre","mediocre",3],[5000,"very good","ottimo",7],[15000,"magnificent","grandioso",11],[25000,"immense","immenso",15],[50000,"insuperable","insuperabile",19]];
+var POINTS = [25,18,15,12,10,8,6,4,2,1];
+var SECTORS = [["engine","Motore"],["brakes","Freni"],["transmission","Trasmissione"],["suspensions","Sospensioni"],["aerodynamic","Aerodinamica"],["electronics","Elettronica"],["tyres","Gomme"],["scout","Talent scout"]];
+var FORMULAS = ["F1","F2","F3","F4","F5","F6"];
+var PRIZE_RACE = {
+  F1:[100000,86000,74000,62000,52000,42000,34000,26000],
+  F2:[90000,77000,66000,55000,46000,37000,30000,23000],
+  F3:[80000,68000,58000,48000,40000,32000,26000,20000],
+  F4:[70000,59000,50000,41000,34000,27000,22000,17000],
+  F5:[60000,50000,42000,34000,28000,22000,18000,14000],
+  F6:[50000,41000,34000,27000,22000,17000,14000,11000]
+};
+var PRIZE_CHAMP = {
+  F1:[4000000,3200000,2600000,2320000,2160000,2000000,1560000,1440000,1320000,1200000],
+  F2:[2000000,1600000,1300000,1160000,1080000,1000000,780000,720000,660000,600000],
+  F3:[1000000,800000,650000,580000,540000,500000,390000,360000,330000,300000],
+  F4:[500000,400000,325000,290000,270000,250000,195000,180000,165000,150000],
+  F5:[250000,200000,162500,145000,135000,125000,97500,90000,82500,75000],
+  F6:[125000,100000,81250,72500,67500,62500,48750,45000,41250,0]
+};
+var COMP_DIR = [
+  ["Motore","Coppia","Più curve → più coppia (≈ curve×30). Accel. pilota alta → meno coppia."],
+  ["Trasmissione","Rapporti","Più curve → rapporti corti. Abilità cambio alta → rapporti lunghi."],
+  ["Aerodinamica","Incidenza alettoni","Più curve o pioggia → più carico. Sole/poche curve → scarico. Frenata alta → scarico."],
+  ["Gomme","Pressione","Più dislivelli o sole → pressione bassa. Pioggia → pressione alta. Traiettorie alte → bassa."],
+  ["Freni","Morbidezza pastiglie","Vicino a 0 → giri più veloci ma più usura e rischio guasti."],
+  ["Sospensioni","Rigidità/morbidezza","Più rigide → meglio in gara ma più usura con molti dislivelli."]
+];
+var RACE_PHASES = ["Start → 20%","20% → 40%","40% → 60%","60% → 80%","80% → fine"];
+var ORDERS = ["Normale","Lento","Aggressivo"];
+var SEATS = [["grass","Prato",52,12,2750],["bend","Tribune curva",122,18,1500],["straight","Tribune rettilineo",245,30,500],["vip","VIP",350,45,250]];
+var MCLASS = [1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11];
+
+/* ---------- Piano di sviluppo: voci ruolo pilota + checklist ---------- */
+var PLAN_DRIVERS = [
+  ["Luis Poppmeier","<b>Stella / franchise</b> (18 anni, DPI 6545, frenata fantastico, secondarie altissime). Rinnovo lungo, puntalo per il titolo piloti, allenalo per crescere ancora."],
+  ["Gerard Corona","<b>Capoclassifica piloti</b> (50 pt) ma 22 anni e skill modeste: ottimo per i punti ora, rinnovo breve (1-2 stagioni)."],
+  ["Anders Malmstrom","<b>Gregario</b>, resistenza pessima: allenalo o valuta la cessione per fare cassa se non rientra nei piani."],
+  ["Robert Hare","<b>Progetto</b> (18 anni, rookie 0 GP): primarie grezze ma meccanica eccezionale + carattere freddo/calcolatore. Allenalo o convertilo in ingegnere."]
+];
+var CHECKLIST = [
+  ["renew_luis","Rinnovare il contratto a Luis Poppmeier (≥2 stagioni)"],
+  ["decide_others","Decidere rinnovo o cessione di Gerard, Anders, Robert prima della sett. 11"],
+  ["strutture","Verificare la voce Strutture (50.000 €/sett.) e ridurla se è una tantum"],
+  ["trans_elec","Portare Trasmissione ed Elettronica almeno a 'mediocre'"],
+  ["train","Impostare l'allenamento settimanale su Luis e Robert"],
+  ["scout","Valutare l'aumento dell'investimento talent scout (ora 1.000 €)"],
+  ["babykart","Attivare il baby-kart dalla pagina del circuito"],
+  ["f3","Pianificare la transizione in F3 (premi e sponsor più alti)"]
+];
+
+/* ---------- Dati reali letti dal gioco (snapshot 25-06-2026) ---------- */
+var REAL_SNAPSHOT = {
+  team:{name:"Bronte Racing Team", formula:"F4", cash:2795, bank:413557, avail:-66285},
+  drivers:[
+    {name:"Anders Malmstrom", age:22, exp:5, cour:1, judg:3, cool:1, con:1, sal:759,  brake:5, gear:3, accel:4, traj:4},
+    {name:"Gerard Corona",    age:22, exp:6, cour:3, judg:2, cool:1, con:1, sal:871,  brake:5, gear:3, accel:2, traj:1},
+    {name:"Luis Poppmeier",   age:18, exp:4, cour:4, judg:2, cool:0, con:1, sal:2152, brake:9, gear:2, accel:4, traj:4},
+    {name:"Robert Hare",      age:18, exp:3, cour:3, judg:0, cool:4, con:1, sal:614,  brake:1, gear:3, accel:1, traj:4}
+  ],
+  labs:[
+    ["Motore","Francisco Russo",5000,4],
+    ["Freni","Cipta Amin",5000,4],
+    ["Trasmissione","Melik Ulusu",5000,1],
+    ["Sospensioni","Juha-Matti Eerola",5000,4],
+    ["Aerodinamica","Jhonatan Devonold",5000,3],
+    ["Elettronica","Kevin Donnelly",5000,1],
+    ["Gomme","Jhonatan Owen",5000,3]
+  ],
+  season:[],
+  research:{engine:2,brakes:2,transmission:2,suspensions:2,aerodynamic:2,electronics:2,tyres:2,scout:1},
+  orders:[[0,0],[0,0],[0,0],[0,0],[0,0]],
+  budget:{iSpon:55281, iTv:0, iPub:0, iPrize:0, iMerch:0, eDrv:16361, eEng:21000, eRes:36000, eOth:51000},
+  plan:{}
+};
+
+/* ---------- Stato ---------- */
+var KEY = "mygpteam_manager_v3";
+var S = load();
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function def(){ return {team:{name:"",formula:"F6"}, drivers:[], season:[], research:{}, orders:[[0,0],[0,0],[0,0],[0,0],[0,0]], budget:{}, plan:{}, labs:[]}; }
+function load(){ var raw=localStorage.getItem(KEY); if(!raw) return clone(REAL_SNAPSHOT); try{ return Object.assign(def(), JSON.parse(raw)); }catch(e){ return clone(REAL_SNAPSHOT); } }
+function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
+function eur(n){ n=Math.round(n||0); return "€"+n.toLocaleString("it-IT"); }
+function el(id){ return document.getElementById(id); }
+function optBi(it,en,sel){ var s=""; for(var i=0;i<it.length;i++){ s+='<option value="'+i+'"'+(i===sel?' selected':'')+'>'+(i+1)+" · "+it[i]+" / "+en[i]+"</option>"; } return s; }
+function lvlBi(i){ return SKILLS_IT[i]+" / "+SKILLS[i]; }
+function joinBi(it,en){ var a=[]; for(var i=0;i<it.length;i++){ a.push(it[i]+" / "+en[i]); } return a.join(" → "); }
+
+/* ---------- Init UI ---------- */
+function fillSkillSelects(){
+  var sels=document.querySelectorAll("select.sk");
+  for(var i=0;i<sels.length;i++){ sels[i].innerHTML=optBi(SKILLS_IT,SKILLS,5); }
+  el("dCour").innerHTML=optBi(COURAGE_IT,COURAGE,2);
+  el("dJudg").innerHTML=optBi(JUDG_IT,JUDG,2);
+  el("dCool").innerHTML=optBi(COOL_IT,COOL,2);
+}
+function buildOrders(){
+  var b=el("ordersBody"); b.innerHTML="";
+  for(var i=0;i<5;i++){
+    var tr=document.createElement("tr");
+    tr.innerHTML='<td><b>'+(i+1)+'</b></td><td>'+RACE_PHASES[i]+'</td>'+
+      '<td><select data-ph="'+i+'" data-c="0" class="ordSel"></select></td>'+
+      '<td><select data-ph="'+i+'" data-c="1" class="ordSel"></select></td>';
+    b.appendChild(tr);
+  }
+  var os=document.querySelectorAll(".ordSel");
+  for(var k=0;k<os.length;k++){
+    var ph=+os[k].getAttribute("data-ph"), c=+os[k].getAttribute("data-c"), cur=(S.orders[ph]&&S.orders[ph][c])||0, h="";
+    for(var j=0;j<ORDERS.length;j++){ h+='<option value="'+j+'"'+(j===cur?' selected':'')+'>'+ORDERS[j]+'</option>'; }
+    os[k].innerHTML=h;
+    os[k].onchange=function(){ var p=+this.getAttribute("data-ph"),cc=+this.getAttribute("data-c"); S.orders[p][cc]=+this.value; save(); };
+  }
+}
+function buildResearch(){
+  var b=el("resBody"); b.innerHTML="";
+  for(var i=0;i<SECTORS.length;i++){
+    var key=SECTORS[i][0], cur=S.research[key]||0, sel="";
+    for(var j=0;j<INVEST.length;j++){ sel+='<option value="'+j+'"'+(j===cur?' selected':'')+'>'+eur(INVEST[j][0])+'</option>'; }
+    var tr=document.createElement("tr");
+    tr.innerHTML='<td><b>'+SECTORS[i][1]+'</b></td>'+
+      '<td><select data-k="'+key+'" class="resSel">'+sel+'</select></td>'+
+      '<td><span class="pill p-mut">'+INVEST[cur][2]+' / '+INVEST[cur][1]+'</span></td>'+
+      '<td class="right">'+eur(INVEST[cur][0])+'</td>';
+    b.appendChild(tr);
+  }
+  var rs=document.querySelectorAll(".resSel");
+  for(var k=0;k<rs.length;k++){ rs[k].onchange=function(){ S.research[this.getAttribute("data-k")]=+this.value; save(); buildResearch(); }; }
+  var tot=0; for(var m=0;m<SECTORS.length;m++){ tot+=INVEST[S.research[SECTORS[m][0]]||0][0]; }
+  el("resTotal").textContent=eur(tot);
+}
+function buildSeats(){
+  var b=el("seatBody"); b.innerHTML="";
+  for(var i=0;i<SEATS.length;i++){
+    var tr=document.createElement("tr");
+    tr.innerHTML='<td><b>'+SEATS[i][1]+'</b><div class="small">costr. '+eur(SEATS[i][2])+'/posto</div></td>'+
+      '<td><input type="number" class="seatCur" data-i="'+i+'" value="'+SEATS[i][4]+'" style="width:90px"></td>'+
+      '<td><input type="number" class="seatAdd" data-i="'+i+'" value="0" style="width:90px"></td>'+
+      '<td class="right">'+eur(SEATS[i][3])+'</td>';
+    b.appendChild(tr);
+  }
+}
+function buildRefs(){
+  var h='<table><thead><tr><th>#</th><th>Livello (it / en)</th><th>#</th><th>Livello (it / en)</th></tr></thead><tbody>';
+  for(var i=0;i<10;i++){ h+='<tr><td>'+(i+1)+'</td><td>'+lvlBi(i)+'</td><td>'+(i+11)+'</td><td>'+lvlBi(i+10)+'</td></tr>'; }
+  h+='</tbody></table>'; el("skillScale").innerHTML=h;
+  var inv=""; for(var j=0;j<INVEST.length;j++){ inv+='<tr><td>'+eur(INVEST[j][0])+'</td><td><span class="pill p-mut">'+INVEST[j][2]+' / '+INVEST[j][1]+'</span></td></tr>'; }
+  el("invRef").innerHTML=inv;
+  el("charRef").innerHTML=
+    "<b>Coraggio:</b> "+joinBi(COURAGE_IT,COURAGE)+"<br><b>Giudizio:</b> "+joinBi(JUDG_IT,JUDG)+
+    "<br><b>Freddezza:</b> "+joinBi(COOL_IT,COOL)+"<br><b>Talento (colore):</b> "+joinBi(TALENT_IT,TALENT);
+  var cd=""; for(var c=0;c<COMP_DIR.length;c++){ cd+='<tr><td><b>'+COMP_DIR[c][0]+'</b></td><td>'+COMP_DIR[c][1]+'</td><td class="small">'+COMP_DIR[c][2]+'</td></tr>'; }
+  el("compDirBody").innerHTML=cd;
+  var pr=""; for(var f=0;f<FORMULAS.length;f++){ var a=PRIZE_RACE[FORMULAS[f]]; pr+='<tr><td><b>'+FORMULAS[f]+'</b></td>'; for(var p=0;p<a.length;p++){ pr+='<td>'+(a[p]/1000)+'k</td>'; } pr+='</tr>'; }
+  document.querySelector("#prizeRace tbody").innerHTML=pr;
+  var pc=""; for(var f2=0;f2<FORMULAS.length;f2++){ var a2=PRIZE_CHAMP[FORMULAS[f2]]; pc+='<tr><td><b>'+FORMULAS[f2]+'</b></td>'; for(var p2=0;p2<a2.length;p2++){ pc+='<td>'+(a2[p2]/1000)+'k</td>'; } pc+='</tr>'; }
+  document.querySelector("#prizeChamp tbody").innerHTML=pc;
+  var mc=""; for(var L=0;L<20;L++){ mc+='<tr><td>'+(L+1)+' · '+lvlBi(L)+'</td><td class="center"><b>Classe '+MCLASS[L]+'</b></td></tr>'; }
+  el("merchClassBody").innerHTML=mc;
+}
+
+/* ---------- Piano di sviluppo ---------- */
+function renderPlan(){
+  // Diagnosi calcolata dallo stato
+  var bg=S.budget||{}, inc=(bg.iSpon||0)+(bg.iTv||0)+(bg.iPub||0)+(bg.iPrize||0)+(bg.iMerch||0);
+  var exp=(bg.eDrv||0)+(bg.eEng||0)+(bg.eRes||0)+(bg.eOth||0), net=inc-exp;
+  var bank=S.team.bank||0, runway=(net<0)? Math.floor(bank/(-net)) : null;
+  var expiring=S.drivers.filter(function(d){return d.con===1;}).length;
+  var weak=(S.labs||[]).filter(function(l){return l[3]<=2;}).map(function(l){return l[0];});
+  var diag='<div class="kpi">'+
+    '<div class="b"><div class="v" style="color:#ff7b72">'+eur(net)+'</div><div class="l">saldo settimanale</div></div>'+
+    '<div class="b"><div class="v">'+(runway!=null?(runway+" sett."):"—")+'</div><div class="l">autonomia stimata con la banca</div></div>'+
+    '<div class="b"><div class="v" style="color:#e3b341">'+expiring+'</div><div class="l">contratti in scadenza (sett. 11)</div></div>'+
+    '<div class="b"><div class="v">'+(weak.length)+'</div><div class="l">lab a livello critico</div></div></div>'+
+    '<p class="note" style="margin:10px 0 0">Stai bruciando <b>'+eur(-net)+'/settimana</b>; con la banca bloccata ('+eur(bank)+') hai circa <b>'+(runway!=null?runway:"—")+' settimane</b> di autonomia. <span class="tag inf">INFERITO</span> '+
+    (weak.length? 'Laboratori al minimo: <b>'+weak.join(", ")+'</b>. ':'')+
+    'Campionato F4 dominato → <b>promozione in F3</b> probabile a fine stagione. <span class="tag inf">INFERITO</span></p>';
+  el("planDiag").innerHTML=diag;
+
+  var dr=""; for(var i=0;i<PLAN_DRIVERS.length;i++){ dr+='<tr><td><b>'+PLAN_DRIVERS[i][0]+'</b></td><td class="small">'+PLAN_DRIVERS[i][1]+'</td></tr>'; }
+  el("planDrivers").innerHTML=dr;
+
+  var lb=""; var labs=S.labs||[];
+  for(var j=0;j<labs.length;j++){
+    var L=labs[j], cur=L[3]-1, tetto=INVEST[2][3]; // 5.000 € -> ottimo (idx7)
+    var crit = L[3]<=2? '<span class="pill p-bad">'+lvlBi(cur)+'</span>' : (L[3]<=3? '<span class="pill p-warn">'+lvlBi(cur)+'</span>' : '<span class="pill p-mut">'+lvlBi(cur)+'</span>');
+    lb+='<tr><td><b>'+L[0]+'</b></td><td class="small">'+L[1]+'</td><td class="right">'+eur(L[2])+'</td><td>'+crit+'</td><td class="small">'+lvlBi(tetto)+'</td></tr>';
+  }
+  el("planLabs").innerHTML=lb;
+
+  // Checklist
+  var ck="", done=0;
+  for(var c=0;c<CHECKLIST.length;c++){
+    var key=CHECKLIST[c][0], on=!!(S.plan&&S.plan[key]); if(on)done++;
+    ck+='<div class="chk"><input type="checkbox" id="ck_'+key+'" class="planCk" data-k="'+key+'"'+(on?' checked':'')+'>'+
+        '<label for="ck_'+key+'">'+CHECKLIST[c][1]+'</label></div>';
+  }
+  el("planChecklist").innerHTML=ck;
+  el("planProg").textContent=done+"/"+CHECKLIST.length+" completate";
+  var cks=document.querySelectorAll(".planCk");
+  for(var k=0;k<cks.length;k++){ cks[k].onchange=function(){ if(!S.plan)S.plan={}; S.plan[this.getAttribute("data-k")]=this.checked; save(); renderPlan(); }; }
+}
+
+/* ---------- Calcolatori strategia ---------- */
+function band(v,lo,hi){ return Math.max(lo,Math.min(hi,Math.round(v))); }
+function wxLbl(w){ return w==="sun"?"sole":(w==="drizzle"?"pioggia lieve":"pioggia battente"); }
+function setupSess(C,wx,quali){
+  var coppia=band(C.curve*30 + (6-C.al)*30, 0,3000);
+  var cambio=band((100-C.curve)*30 + (C.gl-6)*30, 0,3000);
+  var aeroWx = wx==="rain"?250:(wx==="drizzle"?100:-150);
+  var aero=band(C.curve*30 + aeroWx + (6-C.bl)*25, 0,3000);
+  var pWx = wx==="rain"?500:(wx==="drizzle"?250:-400);
+  var press=band(1500 + pWx - C.disl*8 + (6-C.tl)*40, 0,3000);
+  var freni = quali? band(12 + (100-C.cond)*0.05, 5,25) : band(30 + (100-C.cond)*0.30 + (C.laps-40)*0.3, 20,80);
+  var sosp = band(20 + C.disl*0.8 + (quali?0:5), 0,80);
+  var gomme = wx==="sun"?"Slick":(wx==="drizzle"?"Intermedie":"Wet");
+  return {coppia:coppia,freni:freni,cambio:cambio,sosp:sosp,aero:aero,press:press,gomme:gomme};
+}
+function genSetup(){
+  if(!el("cDrv")||!S.drivers.length) return;
+  var di=+el("cDrv").value||0, d=S.drivers[di]||S.drivers[0];
+  var C={curve:+el("cCurve").value||0, disl:+el("cDisl").value||0, laps:+el("cLaps").value||50, cond:+el("cCond").value||50,
+         bl:(d.brake+1), gl:(d.gear+1), al:(d.accel+1), tl:(d.traj+1)};
+  var wxQ=el("cWxQ").value, wxR=el("cWxR").value, urban=el("cUrban").value==="1", name=el("cName").value;
+  var q=setupSess(C,wxQ,true), r=setupSess(C,wxR,false);
+  var maxStint=Math.floor(0.57*C.laps), minStops=Math.max(0,Math.ceil(C.laps/maxStint)-1);
+  var stops=Math.min(4, C.cond<30? Math.max(2,minStops): Math.max(1,minStops));
+  var stints=stops+1, base=Math.floor(C.laps/stints), rem=C.laps-base*stints, plan=[];
+  for(var i=0;i<stints;i++){ plan.push(base+(i<rem?1:0)); }
+  var pits=[], acc=0; for(var j=0;j<plan.length-1;j++){ acc+=plan[j]; pits.push(acc); }
+  var noTyre=Math.ceil(0.85*C.laps);
+  var risky = (C.cond<30)||urban||(C.curve>70);
+  var ords = risky? ["Lento","Normale","Normale","Normale","Aggressivo"] : ["Normale","Normale","Normale","Aggressivo","Aggressivo"];
+  function rowF(lab,qv,rv){ return '<tr><td>'+lab+'</td><td class="center">'+qv+'</td><td class="center">'+rv+'</td></tr>'; }
+  el("setupOut").innerHTML='<div class="out"><div class="small" style="margin-bottom:6px">Pilota: <b>'+d.name+'</b> · '+name+' ('+C.curve+'% curve, '+C.disl+'% disl, '+C.laps+' giri, cond. '+C.cond+'%)</div>'+
+    '<table><thead><tr><th>Regolazione</th><th class="center">Qualifica · '+wxLbl(wxQ)+'</th><th class="center">Gara · '+wxLbl(wxR)+'</th></tr></thead><tbody>'+
+    rowF("Coppia motore (0–3000)",q.coppia,r.coppia)+
+    rowF("Freni % (0 morbide–100 dure)",q.freni+"%",r.freni+"%")+
+    rowF("Cambio (0 corti–3000 lunghi)",q.cambio,r.cambio)+
+    rowF("Sospensioni % (0 rigide–100 morb.)",q.sosp+"%",r.sosp+"%")+
+    rowF("Aero (0 scarico–3000 carico)",q.aero,r.aero)+
+    rowF("Pressione gomme (0–3000)",q.press,r.press)+
+    rowF("Gomme",q.gomme,r.gomme)+
+    '</tbody></table>'+
+    '<div class="small" style="margin-top:8px"><b>Gara:</b> '+stops+' pit · stint '+plan.join("/")+' · pit ai giri '+(pits.join(", ")||"—")+' · niente gomme dopo il giro '+noTyre+' · 1° pit (carburante di partenza) ~'+plan[0]+' giri.<br><b>Ordini (5 fasi):</b> '+ords.join(" / ")+'</div>'+
+    '<p class="note" style="margin:8px 0 0">Solo la <b>coppia</b> ha formula ufficiale (curve×30) <span class="tag">VERIFICATO</span>; gli altri sono stime di partenza da affinare con le <b>prove private</b>. <span class="tag inf">INFERITO</span></p></div>';
+  var cp="=== SETUP — "+name+" ("+C.curve+"% curve, "+C.disl+"% disl, "+C.laps+" giri) ===\nPilota: "+d.name+"\n\n";
+  cp+="[QUALIFICA — "+wxLbl(wxQ)+"]\nCoppia "+q.coppia+" | Freni "+q.freni+"% | Cambio "+q.cambio+" | Sospensioni "+q.sosp+"% | Aero "+q.aero+" | Pressione "+q.press+"\nGomme: "+q.gomme+"\n\n";
+  cp+="[GARA — "+wxLbl(wxR)+"]\nCoppia "+r.coppia+" | Freni "+r.freni+"% | Cambio "+r.cambio+" | Sospensioni "+r.sosp+"% | Aero "+r.aero+" | Pressione "+r.press+"\nGomme: "+r.gomme+"\n";
+  cp+="Strategia: "+stops+" pit — stint "+plan.join("/")+", pit ai giri "+(pits.join(", ")||"—")+" (niente gomme dopo giro "+noTyre+")\n1° pit / carburante di partenza: ~"+plan[0]+" giri\nOrdini: "+ords.join(" / ")+"\n";
+  el("setupCopy").value=cp;
+}
+function copySetup(){ var t=el("setupCopy"); if(!t)return; t.select(); try{ document.execCommand("copy"); }catch(e){} }
+function calcFuel(){
+  var laps=+el("fLaps").value||0, stops=Math.max(1,Math.min(4,+el("fStops").value||1));
+  var maxStint=Math.floor(0.57*laps);
+  var minStops=Math.max(0, Math.ceil(laps/maxStint)-1);
+  var noTyre=Math.ceil(0.85*laps);
+  var stints=stops+1, base=Math.floor(laps/stints), rem=laps-base*stints;
+  var plan=[], rows="", stopLap=0, warn=false;
+  for(var i=0;i<stints;i++){ plan.push(base+(i<rem?1:0)); }
+  for(var j=0;j<plan.length;j++){
+    stopLap+=plan[j];
+    var ok=plan[j]<=maxStint; if(!ok)warn=true;
+    var pitInfo = j<plan.length-1? ("pit al giro "+stopLap) : "fino al traguardo";
+    rows+='<tr><td>Stint '+(j+1)+'</td><td>'+plan[j]+' giri</td><td>'+pitInfo+'</td><td>'+(ok?'<span class="pill p-ok">ok</span>':'<span class="pill p-bad">troppo lungo</span>')+'</td></tr>';
+  }
+  var advice = stops<minStops? '<span class="pill p-bad">Servono almeno '+minStops+' pit</span>' : '<span class="pill p-ok">Numero pit sufficiente</span>';
+  el("fuelOut").innerHTML='<div class="out">'+
+    '<div class="kpi"><div class="b"><div class="v">'+maxStint+'</div><div class="l">giri max per stint (57%)</div></div>'+
+    '<div class="b"><div class="v">'+minStops+'</div><div class="l">pit-stop minimi</div></div>'+
+    '<div class="b"><div class="v">'+noTyre+'</div><div class="l">dopo questo giro: niente cambio gomme</div></div></div>'+
+    '<div style="margin:10px 0">'+advice+'</div>'+
+    '<table><thead><tr><th>Stint</th><th>Lunghezza</th><th>Pit</th><th>Esito</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    (warn?'<p class="note" style="color:var(--bad);margin:8px 0 0">Almeno uno stint supera il 57% dei giri: aggiungi un pit o ridistribuisci.</p>':'')+
+    '<p class="note" style="margin:8px 0 0">Tempo pit = pit-lane + carburante da aggiungere + eventuale cambio gomme (vietato nell\'ultimo 15%). Si riduce con più meccanici e affiatamento. <span class="tag">VERIFICATO</span></p></div>';
+}
+function calcBudget(){
+  S.team.cash=+el("bCash").value||0; S.team.bank=+el("bBank").value||0;
+  var b={iSpon:+el("iSpon").value||0,iTv:+el("iTv").value||0,iPub:+el("iPub").value||0,iPrize:+el("iPrize").value||0,iMerch:+el("iMerch").value||0,
+         eDrv:+el("eDrv").value||0,eEng:+el("eEng").value||0,eRes:+el("eRes").value||0,eOth:+el("eOth").value||0};
+  S.budget=b;
+  var inc=b.iSpon+b.iTv+b.iPub+b.iPrize+b.iMerch, exp=b.eDrv+b.eEng+b.eRes+b.eOth;
+  var net=inc-exp, proj=S.team.cash+net, cls=net>=0?"p-ok":"p-bad", risk="";
+  if(proj< -350000) risk='<span class="pill p-bad">Rischio fallimento (&lt; −350k)</span>';
+  else if(proj< -200000) risk='<span class="pill p-warn">Sotto −200k: spese bloccate</span>';
+  else if(proj< -100000) risk='<span class="pill p-warn">Sotto −100k: niente offerte</span>';
+  else if(proj<0) risk='<span class="pill p-warn">Cassa in negativo</span>';
+  else risk='<span class="pill p-ok">Disponibilità ok</span>';
+  el("budgetOut").innerHTML='<div class="out"><div class="kpi">'+
+    '<div class="b"><div class="v" style="color:#56d364">'+eur(inc)+'</div><div class="l">Entrate</div></div>'+
+    '<div class="b"><div class="v" style="color:#ff7b72">'+eur(exp)+'</div><div class="l">Uscite</div></div>'+
+    '<div class="b"><div class="v"><span class="'+cls+'" style="padding:0">'+eur(net)+'</span></div><div class="l">Saldo settimanale</div></div>'+
+    '<div class="b"><div class="v">'+eur(proj)+'</div><div class="l">Cassa proiettata</div></div>'+
+    '</div><div style="margin-top:10px">'+risk+'</div></div>';
+  save(); refreshDash(); renderPlan();
+}
+function calcBank(){
+  var amt=+el("bankAmt").value||0, interest=Math.min(100000, Math.round(amt*0.025));
+  el("bankOut").innerHTML='<div class="out"><div class="kpi">'+
+    '<div class="b"><div class="v">'+eur(interest)+'</div><div class="l">Interesse / sett. (2,5%, max 100k)</div></div>'+
+    '<div class="b"><div class="v">'+eur(25000)+'</div><div class="l">Penale prelievo (fissa)</div></div></div></div>';
+}
+
+/* ---------- Stagione ---------- */
+function racePoints(p){ p=+p; return (p>=1&&p<=10)?POINTS[p-1]:0; }
+function addRace(){
+  var r={round:+el("rRound").value||0, circ:el("rCirc").value||"—", p1:+el("rP1").value||0, p2:+el("rP2").value||0, pole:+el("rPole").value||0};
+  S.season.push(r); save(); el("rCirc").value=""; el("rP1").value=""; el("rP2").value=""; el("rRound").value=Math.min(10,(r.round+1));
+  renderSeason();
+}
+function delRace(i){ S.season.splice(i,1); save(); renderSeason(); }
+function renderSeason(){
+  var b=el("seasonBody"); b.innerHTML=""; var tot=0;
+  for(var i=0;i<S.season.length;i++){
+    var r=S.season[i], pts=racePoints(r.p1)+racePoints(r.p2)+(r.pole?1:0); tot+=pts;
+    var tr=document.createElement("tr");
+    tr.innerHTML='<td>'+r.round+'</td><td>'+r.circ+'</td><td class="center">'+(r.p1||"—")+'</td><td class="center">'+(r.p2||"—")+'</td><td class="center">'+(r.pole?'★':'—')+'</td><td class="right"><b>'+pts+'</b></td>'+
+      '<td class="right"><button class="ghost sm" onclick="delRace('+i+')">✕</button></td>';
+    b.appendChild(tr);
+  }
+  el("seasonTot").textContent=tot; refreshDash();
+}
+
+/* ---------- Piloti ---------- */
+function addDriver(){
+  var name=el("dName").value.trim(); if(!name){ el("dName").focus(); return; }
+  S.drivers.push({name:name, age:+el("dAge").value||20, exp:+el("dExp").value||1,
+    cour:+el("dCour").value, judg:+el("dJudg").value, cool:+el("dCool").value,
+    con:+el("dCon").value, sal:+el("dSal").value||0,
+    brake:+el("dkBrake").value, gear:+el("dkGear").value, accel:+el("dkAccel").value, traj:+el("dkTraj").value});
+  save(); el("dName").value=""; el("dSal").value="0"; el("dExp").value="1"; renderDrivers();
+}
+function delDriver(i){ S.drivers.splice(i,1); save(); renderDrivers(); }
+function renderDrivers(){
+  var b=el("drvBody"); b.innerHTML="";
+  for(var i=0;i<S.drivers.length;i++){
+    var d=S.drivers[i];
+    var prim=SKILLS_IT[d.brake].slice(0,3)+"/"+SKILLS_IT[d.gear].slice(0,3)+"/"+SKILLS_IT[d.accel].slice(0,3)+"/"+SKILLS_IT[d.traj].slice(0,3);
+    var conPill = d.con===1? '<span class="pill p-warn">1 stag.</span>' : '<span class="pill p-ok">'+d.con+' stag.</span>';
+    var charTxt = COURAGE_IT[d.cour]+' · '+JUDG_IT[d.judg]+' · '+COOL_IT[d.cool];
+    var tr=document.createElement("tr");
+    tr.innerHTML='<td><b>'+d.name+'</b></td><td class="center">'+d.age+'</td><td class="center">'+d.exp+'</td>'+
+      '<td class="small">'+charTxt+'</td>'+
+      '<td class="small" title="frenata/cambio/accel/traiett">'+prim+'</td>'+
+      '<td class="center">'+conPill+'</td><td class="right">'+eur(d.sal)+'</td>'+
+      '<td class="right"><button class="ghost sm" onclick="delDriver('+i+')">✕</button></td>';
+    b.appendChild(tr);
+  }
+  var w="", count=S.drivers.length;
+  if(count>6) w+='<div class="out" style="border-left-color:var(--warn)"><b>'+count+' piloti</b>: oltre 6 all\'update perdi <b>−5 affiatamento</b> e <b>−1</b> livello ricerca talent scout.</div>';
+  var exp1=S.drivers.filter(function(x){return x.con===1;}).length;
+  if(exp1>0) w+='<div class="out" style="border-left-color:var(--warn);margin-top:8px"><b>'+exp1+'</b> pilota/i con contratto a <b>1 stagione</b>: rinnova prima della settimana 11 o verrà rimosso.</div>';
+  el("drvWarn").innerHTML=w; refreshDash(); if(el("planDiag")) renderPlan();
+}
+
+/* ---------- Magazzino ---------- */
+function whCalc(){
+  var lvl=+el("whLvl").value, tyre=el("whType").value==="tyre", base=tyre?10:6, cap=base;
+  if(lvl>=12) cap=base+2; else if(lvl>=4) cap=base+1;
+  el("whOut").innerHTML='<div class="out"><div class="kpi">'+
+    '<div class="b"><div class="v">'+cap+'</div><div class="l">tetto pezzi senza penale</div></div>'+
+    '<div class="b"><div class="v">'+eur(15000)+'</div><div class="l">penale/giorno per pezzo extra</div></div>'+
+    '</div><p class="note" style="margin:8px 0 0">Tetto base '+base+'; +1 con ricerca ≥ <b>insufficiente</b>, +2 con ricerca ≥ <b>stupefacente</b>. Oltre il tetto anche −1 livello ricerca. <span class="tag">VERIFICATO</span></p></div>';
+}
+
+/* ---------- Circuito ---------- */
+function calcSeats(){
+  var curs=document.querySelectorAll(".seatCur"), adds=document.querySelectorAll(".seatAdd");
+  var totCap=0, addCost=0, revFull=0, rows="";
+  for(var i=0;i<SEATS.length;i++){
+    var cur=+curs[i].value||0, add=+adds[i].value||0, nt=cur+add;
+    totCap+=nt; addCost+=add*SEATS[i][2]; revFull+=nt*SEATS[i][3];
+    rows+='<tr><td>'+SEATS[i][1]+'</td><td class="right">'+nt.toLocaleString("it-IT")+'</td><td class="right">'+eur(add*SEATS[i][2])+'</td><td class="right">'+eur(nt*SEATS[i][3])+'</td></tr>';
+  }
+  var merchCap = totCap>=60000?"insuperabile / insuperable":(totCap>=40000?"immenso / immense":(totCap>=20000?"grandioso / magnificent":(totCap>=10000?"ottimo / very good":"mediocre")));
+  el("seatOut").innerHTML='<div class="out"><div class="kpi">'+
+    '<div class="b"><div class="v">'+totCap.toLocaleString("it-IT")+'</div><div class="l">capienza totale</div></div>'+
+    '<div class="b"><div class="v">'+eur(addCost)+'</div><div class="l">costo ampliamento</div></div>'+
+    '<div class="b"><div class="v">'+eur(revFull)+'</div><div class="l">incasso/GP a pieno</div></div>'+
+    '</div><table style="margin-top:10px"><thead><tr><th>Settore</th><th class="right">Nuovi posti</th><th class="right">Costo</th><th class="right">Incasso pieno</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<p class="note" style="margin:8px 0 0">Con questa capienza, il merchandising è limitato al livello <b>'+merchCap+'</b>. <span class="tag">VERIFICATO</span></p></div>';
+}
+function calcCircuit(){
+  var db=Math.abs((+el("cB1").value||0)-(+el("cB0").value||0));
+  var di=Math.abs((+el("cI1").value||0)-(+el("cI0").value||0));
+  var dl=Math.abs((+el("cL1").value||0)-(+el("cL0").value||0));
+  var dp=Math.abs((+el("cP1").value||0)-(+el("cP0").value||0));
+  var cost=1000*db+1000*di+40*dl+200*dp;
+  el("circOut").innerHTML='<div class="out"><div class="big">'+eur(cost)+'</div>'+
+    '<table style="margin-top:8px"><tbody>'+
+    '<tr><td>Curve ('+db+'% diff)</td><td class="right">'+eur(1000*db)+'</td></tr>'+
+    '<tr><td>Dislivelli ('+di+'% diff)</td><td class="right">'+eur(1000*di)+'</td></tr>'+
+    '<tr><td>Lunghezza ('+dl+' m diff)</td><td class="right">'+eur(40*dl)+'</td></tr>'+
+    '<tr><td>Pitlane ('+dp+' m diff)</td><td class="right">'+eur(200*dp)+'</td></tr>'+
+    '</tbody></table>'+
+    '<p class="note" style="margin:8px 0 0">Max 2 modifiche di tracciato a stagione; vietate da 5 giorni prima di una gara in casa; bloccate se la disponibilità scende sotto −200.000 €. <span class="tag">VERIFICATO</span></p></div>';
+}
+
+/* ---------- Merchandising ---------- */
+function calcMerch(){
+  var inv=+el("mInvest").value, seats=+el("mSeats").value||0;
+  var invCap=INVEST[inv][3];
+  var seatCap = seats>=60000?19:(seats>=40000?15:(seats>=20000?11:(seats>=10000?7:3)));
+  var eff=Math.min(invCap,seatCap), limiter = invCap<=seatCap? "investimento":"capienza impianto";
+  el("merchOut").innerHTML='<div class="out"><div class="kpi">'+
+    '<div class="b"><div class="v" style="font-size:15px">'+lvlBi(eff)+'</div><div class="l">livello effettivo</div></div>'+
+    '<div class="b"><div class="v">Classe '+MCLASS[eff]+'</div><div class="l">gadget max producibili</div></div>'+
+    '</div><p class="note" style="margin:8px 0 0">Fattore limitante: <b>'+limiter+'</b>. Cap investimento: '+lvlBi(invCap)+' · cap capienza: '+lvlBi(seatCap)+'. <span class="tag">VERIFICATO</span></p></div>';
+}
+function calcMerchProfit(){
+  var cost=+el("mpCost").value||0, mk=+el("mpMk").value||2, qty=+el("mpQty").value||0;
+  var prodCost=cost*qty, revenue=cost*mk*qty, profit=revenue-prodCost;
+  el("merchProfitOut").innerHTML='<div class="out"><div class="kpi">'+
+    '<div class="b"><div class="v">'+eur(prodCost)+'</div><div class="l">costo produzione</div></div>'+
+    '<div class="b"><div class="v" style="color:#56d364">'+eur(revenue)+'</div><div class="l">ricavo se venduto tutto</div></div>'+
+    '<div class="b"><div class="v">'+eur(profit)+'</div><div class="l">profitto lordo max</div></div></div></div>';
+}
+
+/* ---------- Mercato ---------- */
+function capGainPct(days){ if(days<=7)return 100; if(days<=14)return 85; if(days<=21)return 65; if(days<=28)return 50; if(days<=35)return 30; if(days<=42)return 15; return 0; }
+function calcCapGain(){
+  var buy=+el("mkBuy").value||0, sell=+el("mkSell").value||0, days=+el("mkDays").value||0;
+  var gain=Math.max(0, sell-buy), pct=capGainPct(days), fine=Math.round(gain*pct/100), net=sell-fine;
+  el("capGainOut").innerHTML='<div class="out"><div class="kpi">'+
+    '<div class="b"><div class="v">'+eur(gain)+'</div><div class="l">plusvalenza</div></div>'+
+    '<div class="b"><div class="v">'+pct+'%</div><div class="l">multa applicata</div></div>'+
+    '<div class="b"><div class="v" style="color:#ff7b72">'+eur(fine)+'</div><div class="l">multa €</div></div>'+
+    '<div class="b"><div class="v" style="color:#56d364">'+eur(net)+'</div><div class="l">incasso netto*</div></div>'+
+    '</div><p class="note" style="margin:8px 0 0">*Al lordo di eventuali trattenute per risoluzione anticipata del contratto o riparazione del pezzo. <span class="tag">VERIFICATO</span></p></div>';
+}
+function calcMinRaise(){
+  var cur=+el("mkCur").value||0, raise=cur<=50000?1000:Math.round(cur*0.02), next=cur+raise;
+  el("minRaiseOut").innerHTML='<div class="out"><div class="kpi">'+
+    '<div class="b"><div class="v">'+eur(raise)+'</div><div class="l">rilancio minimo</div></div>'+
+    '<div class="b"><div class="v">'+eur(next)+'</div><div class="l">offerta minima da inserire</div></div></div></div>';
+}
+
+/* ---------- Dashboard ---------- */
+function refreshDash(){
+  var cash=S.team.cash||0, bank=S.team.bank||0;
+  var avail=(S.team.avail!=null)? S.team.avail : (cash+bank);
+  el("kCash").textContent=eur(cash); el("kBank").textContent=eur(bank); el("kAvail").textContent=eur(avail);
+  el("kDrv").textContent=S.drivers.length;
+  var tot=0; for(var i=0;i<S.season.length;i++){ tot+=racePoints(S.season[i].p1)+racePoints(S.season[i].p2)+(S.season[i].pole?1:0); }
+  el("kPts").textContent=tot;
+  var st;
+  if(avail< -350000) st='<span class="pill p-bad">Sotto −350k: rischio fallimento</span>';
+  else if(avail< -200000) st='<span class="pill p-warn">Sotto −200k: spese bloccate</span>';
+  else if(avail< -100000) st='<span class="pill p-warn">Sotto −100k: niente offerte</span>';
+  else if(avail<0) st='<span class="pill p-warn">Disponibilità negativa</span>';
+  else st='<span class="pill p-ok">Conti in regola</span>';
+  el("dashFin").innerHTML='<div style="margin-bottom:8px">'+st+'</div><table><tbody>'+
+    '<tr><td>Cassa</td><td class="right">'+eur(cash)+'</td></tr>'+
+    '<tr><td>Banca (bloccata)</td><td class="right">'+eur(bank)+'</td></tr>'+
+    '<tr><td><b>Disponibilità prevista</b></td><td class="right"><b>'+eur(avail)+'</b></td></tr></tbody></table>';
+}
+
+/* ---------- Navigazione & bind ---------- */
+function initTabs(){
+  var btns=el("tabs").querySelectorAll("button");
+  for(var i=0;i<btns.length;i++){
+    btns[i].onclick=function(){
+      for(var j=0;j<btns.length;j++){ btns[j].classList.remove("active"); }
+      this.classList.add("active");
+      var views=document.querySelectorAll(".view");
+      for(var k=0;k<views.length;k++){ views[k].classList.remove("active"); }
+      el("v-"+this.getAttribute("data-v")).classList.add("active");
+    };
+  }
+}
+function resetAll(){ if(confirm("Cancellare tutti i dati e tornare vuoto?")){ S=def(); save(); boot(); } }
+function loadReal(){ if(confirm("Caricare i dati reali del Bronte Racing Team (snapshot 25-06-2026)? Sovrascrive i dati attuali.")){ S=clone(REAL_SNAPSHOT); save(); boot(); } }
+function exportData(){ if(el("ioBox")) el("ioBox").value=JSON.stringify(S,null,2); }
+function copyIO(){ var t=el("ioBox"); if(!t)return; t.focus(); t.select(); try{ document.execCommand("copy"); }catch(e){} }
+function downloadData(){ var blob=new Blob([JSON.stringify(S)],{type:"application/json"}); var url=URL.createObjectURL(blob); var a=document.createElement("a"); a.href=url; a.download="mygpteam-dati.json"; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function(){ URL.revokeObjectURL(url); },1000); }
+function importData(){ var t=el("ioBox"); if(!t)return; var txt=(t.value||"").trim(); if(!txt){ alert("Incolla prima i dati nel riquadro."); return; } var obj; try{ obj=JSON.parse(txt); }catch(e){ alert("Dati non validi (JSON errato)."); return; } if(!obj||!obj.team){ alert("Formato non riconosciuto."); return; } if(confirm("Importare questi dati? Sovrascrive i dati attuali del dispositivo.")){ S=Object.assign(def(),obj); save(); boot(); alert("Dati importati."); } }
+
+function boot(){
+  fillSkillSelects(); buildOrders(); buildResearch(); buildSeats(); buildRefs();
+  renderSeason(); renderDrivers(); refreshDash(); renderPlan();
+  el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
+  if(S.team.cash!=null) el("bCash").value=S.team.cash;
+  if(S.team.bank!=null) el("bBank").value=S.team.bank;
+  var bg=S.budget||{}, bk=["iSpon","iTv","iPub","iPrize","iMerch","eDrv","eEng","eRes","eOth"];
+  for(var i=0;i<bk.length;i++){ if(bg[bk[i]]!=null) el(bk[i]).value=bg[bk[i]]; }
+  el("whLvl").innerHTML=optBi(SKILLS_IT,SKILLS,5); el("whLvl").onchange=whCalc; el("whType").onchange=whCalc; whCalc();
+  var mi=""; for(var j=0;j<INVEST.length;j++){ mi+='<option value="'+j+'">'+eur(INVEST[j][0])+'</option>'; } el("mInvest").innerHTML=mi;
+  if(el("cDrv")){ var dv="",luiIdx=0; for(var x=0;x<S.drivers.length;x++){ dv+='<option value="'+x+'">'+S.drivers[x].name+'</option>'; if(S.drivers[x].name.indexOf("Luis")>=0)luiIdx=x; } el("cDrv").innerHTML=dv; el("cDrv").value=luiIdx; el("cDrv").onchange=genSetup; genSetup(); }
+  el("bankAmt").oninput=calcBank; if(S.team.bank!=null) el("bankAmt").value=S.team.bank; calcBank();
+  if(S.budget && S.budget.iSpon!=null) calcBudget();
+  el("teamName").oninput=function(){ S.team.name=this.value; save(); };
+  el("teamFormula").onchange=function(){ S.team.formula=this.value; save(); };
+}
+document.addEventListener("DOMContentLoaded", function(){ initTabs(); boot(); });
+</script>
+</body>
+</html>
