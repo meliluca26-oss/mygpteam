@@ -110,6 +110,17 @@
     .out .big{font-size:22px}
     h2{line-height:1.25}
   }
+  .chatlog{max-height:300px;overflow-y:auto;background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:10px;margin:10px 0;display:flex;flex-direction:column;gap:8px}
+  .chatmsg{max-width:92%}
+  .chat-u{align-self:flex-end}
+  .chat-a{align-self:flex-start}
+  .chat-who{font-size:10px;color:var(--mut);margin-bottom:2px}
+  .chat-txt{padding:8px 10px;border-radius:10px;font-size:13px;line-height:1.45}
+  .chat-u .chat-txt{background:var(--red);color:#fff}
+  .chat-a .chat-txt{background:var(--bg2);border:1px solid var(--line)}
+  .chatrow{display:flex;gap:8px}
+  .chatrow input{flex:1}
+  .chatquick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2px}
 </style>
 </head>
 <body>
@@ -253,6 +264,16 @@
 
 <!-- ============ CONSIGLIO DI DIREZIONE ============ -->
 <section class="view" id="v-board">
+  <div class="card">
+    <h2><span class="dot"></span>🤖 Parla col Consiglio</h2>
+    <p class="hint">Chatta coi direttori (Sportivo, Economico, Tecnico) per una visione d'insieme. Configura l'AI nel riquadro qui sotto.</p>
+    <div class="chatquick">
+      <button class="ghost sm" onclick="agentSend('board','Qual è la priorità numero uno della squadra adesso?')">Priorità #1</button>
+      <button class="ghost sm" onclick="agentSend('board','Dammi un piano per le prossime 3 settimane')">Piano 3 settimane</button>
+    </div>
+    <div class="chatlog" id="chatLog_board"></div>
+    <div class="chatrow"><input id="chatIn_board" placeholder="Scrivi al Consiglio…" onkeydown="if(event.key==='Enter')agentSend('board')"><button onclick="agentSend('board')">Invia</button></div>
+  </div>
   <div class="banner warn"><span>I "direttori" danno consigli <b>basati su regole</b> sui tuoi dati. Con la <b>configurazione AI (BYOK)</b> qui sotto puoi farli <b>ragionare dal vivo</b> con la TUA chiave API. <span class="tag inf">INFERITO</span></span></div>
   <div class="card">
     <h2><span class="dot"></span>⚙️ Configurazione AI (BYOK — la tua chiave)</h2>
@@ -298,6 +319,23 @@
 <!-- ============ STRATEGIA ============ -->
 <section class="view" id="v-strat">
   <div class="card">
+    <h2><span class="dot"></span>🤖 Agente Stratega gara</h2>
+    <p class="hint">Chiedi assetto, gomme, pit e ordini per la gara/contest in corso. Usa l'AI configurata in Consiglio direzione (consuma credito per messaggio).</p>
+    <div class="chatquick">
+      <button class="ghost sm" onclick="agentSend('strategist','Dammi il setup migliore per la prossima gara con numeri e perché')">Setup gara</button>
+      <button class="ghost sm" onclick="agentSend('strategist','Qual è la strategia pit ottimale per questa gara?')">Strategia pit</button>
+      <button class="ghost sm" onclick="agentSend('strategist','Che ordini dare ai piloti nelle 5 fasi e perché?')">Ordini piloti</button>
+    </div>
+    <div class="chatlog" id="chatLog_strategist"></div>
+    <div class="chatrow"><input id="chatIn_strategist" placeholder="Scrivi allo stratega…" onkeydown="if(event.key==='Enter')agentSend('strategist')"><button onclick="agentSend('strategist')">Invia</button></div>
+  </div>
+  <div class="card">
+    <h2><span class="dot"></span>🧠 Agente Strategia gara (AI)</h2>
+    <p class="hint">Analisi ragionata dal vivo (usa la tua chiave AI): regolazioni, strategia e comportamento per la gara/evento impostato qui sotto.</p>
+    <button onclick="aiStrategy()">Chiedi all'agente</button>
+    <div id="aiStrategyOut"></div>
+  </div>
+  <div class="card">
     <h2><span class="dot"></span>Setup auto — pronto da ricopiare</h2>
     <p class="hint">Pre-caricato con la prossima gara reale (Paesello Racing Autodrome, sab/dom). Genera i <b>6 valori esatti del gioco</b> per qualifica e gara + gomme, carburante e ordini. Solo la coppia ha formula ufficiale; il resto sono stime di partenza da affinare con le prove. <span class="tag inf">INFERITO</span></p>
     <div class="row">
@@ -340,6 +378,23 @@
 <!-- ============ SVILUPPO & RICERCA ============ -->
 <section class="view" id="v-dev">
   <div class="card">
+    <h2><span class="dot"></span>🤖 Agente Direttore Tecnico</h2>
+    <p class="hint">Budget per laboratori, strutture e circuito; valutazione ingegneri. Usa l'AI configurata in Consiglio direzione.</p>
+    <div class="chatquick">
+      <button class="ghost sm" onclick="agentSend('technical','Come distribuisco il budget tra i laboratori questa settimana?')">Budget lab</button>
+      <button class="ghost sm" onclick="agentSend('technical','I miei ingegneri vanno bene o ne sostituisco qualcuno?')">Ingegneri</button>
+      <button class="ghost sm" onclick="agentSend('technical','Conviene investire in strutture o circuito ora?')">Strutture/circuito</button>
+    </div>
+    <div class="chatlog" id="chatLog_technical"></div>
+    <div class="chatrow"><input id="chatIn_technical" placeholder="Scrivi al direttore tecnico…" onkeydown="if(event.key==='Enter')agentSend('technical')"><button onclick="agentSend('technical')">Invia</button></div>
+  </div>
+  <div class="card">
+    <h2><span class="dot"></span>🧠 Agente Sviluppo &amp; ricerca (AI)</h2>
+    <p class="hint">Suggerisce gli investimenti in laboratori, strutture e circuito, e se gli ingegneri vanno bene o sostituiti.</p>
+    <button onclick="aiDev()">Chiedi all'agente</button>
+    <div id="aiDevOut"></div>
+  </div>
+  <div class="card">
     <h2><span class="dot"></span>Pianificatore ricerca &amp; investimenti</h2>
     <p class="hint">Pre-caricato col tuo laboratorio reale: 5.000 €/componente (tetto "ottimo") e 1.000 € talent scout.</p>
     <div class="scrollx"><table>
@@ -373,6 +428,23 @@
 
 <!-- ============ BILANCIO ============ -->
 <section class="view" id="v-eco">
+  <div class="card">
+    <h2><span class="dot"></span>🤖 Agente Direttore Generale</h2>
+    <p class="hint">Bilancio, contratti piloti e sponsor, staff e merchandising. Usa l'AI configurata in Consiglio direzione.</p>
+    <div class="chatquick">
+      <button class="ghost sm" onclick="agentSend('manager','Come sistemo il bilancio settimanale in perdita?')">Bilancio</button>
+      <button class="ghost sm" onclick="agentSend('manager','Quali contratti piloti rinnovo prima della settimana 11?')">Contratti piloti</button>
+      <button class="ghost sm" onclick="agentSend('manager','Come miglioro sponsor e merchandising?')">Sponsor/merch</button>
+    </div>
+    <div class="chatlog" id="chatLog_manager"></div>
+    <div class="chatrow"><input id="chatIn_manager" placeholder="Scrivi al direttore generale…" onkeydown="if(event.key==='Enter')agentSend('manager')"><button onclick="agentSend('manager')">Invia</button></div>
+  </div>
+  <div class="card">
+    <h2><span class="dot"></span>🧠 Agente Bilancio &amp; stagione (AI)</h2>
+    <p class="hint">Si occupa di bilancio, contratti piloti e sponsor, staff e merchandising.</p>
+    <button onclick="aiBudget()">Chiedi all'agente</button>
+    <div id="aiBudgetOut"></div>
+  </div>
   <div class="grid g2">
     <div class="card">
       <h2><span class="dot"></span>Bilancio settimanale</h2>
@@ -925,7 +997,7 @@ async function callLLM(sys,usr){
   var c=loadAI(); if(!c.key) throw new Error("Nessuna chiave API: configurala sopra e premi Salva.");
   var model=c.model||defModel(c.provider), r, j;
   if(c.provider==="anthropic"){
-    r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":c.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:model,max_tokens:1024,system:sys,messages:[{role:"user",content:usr}]})});
+    r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":c.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:model,max_tokens:2048,system:sys,messages:[{role:"user",content:usr}]})});
     j=await r.json(); if(!r.ok) throw new Error((j.error&&j.error.message)||("HTTP "+r.status)); return j.content[0].text;
   }
   if(c.provider==="gemini"){
@@ -943,6 +1015,97 @@ async function aiDirector(domain){
   try{ var txt=await callLLM(sys, teamContext()+"\n\nDammi l'analisi del tuo reparto."); out.innerHTML='<div class="out"><div class="small" style="white-space:pre-wrap">'+esc(txt)+'</div></div>'; }
   catch(e){ out.innerHTML='<div class="out" style="border-left-color:var(--bad)"><span class="small">Errore: '+esc(e.message)+'</span><div class="note" style="margin-top:6px">Controlla chiave/modello. Se è CORS o rete, prova un altro provider.</div></div>'; }
 }
+
+/* ---------- Agenti AI per scheda (BYOK) ---------- */
+async function runAgent(outId, sys, usr){
+  var out=el(outId); if(!out) return;
+  out.innerHTML='<div class="out"><span class="small">L\'agente sta ragionando…</span></div>';
+  try{ var txt=await callLLM(sys, usr); out.innerHTML='<div class="out"><div class="small" style="white-space:pre-wrap">'+esc(txt)+'</div></div>'; }
+  catch(e){ out.innerHTML='<div class="out" style="border-left-color:var(--bad)"><span class="small">Errore: '+esc(e.message)+'</span><div class="note" style="margin-top:6px">Imposta la chiave in "Consiglio direzione → Configurazione AI". Se è CORS/rete, prova un altro provider.</div></div>'; }
+}
+function aiStrategy(){
+  var di=+((el("cDrv")||{}).value||0), d=(S.drivers||[])[di]||(S.drivers||[])[0]||{};
+  var g=function(id){ return el(id)?el(id).value:"?"; };
+  var ctx=teamContext()+"\n\nGara/evento in corso — circuito "+g("cName")+": curve "+g("cCurve")+"%, dislivelli "+g("cDisl")+"%, "+g("cLaps")+" giri, pitlane "+g("cPit")+" m, condizioni "+g("cCond")+"%, "+((el("cUrban")&&el("cUrban").value==="1")?"urbano":"campagna")+". Meteo qualifica "+g("cWxQ")+", gara "+g("cWxR")+". Pilota di riferimento: "+(d.name||"?")+".";
+  var sys="Sei lo stratega di gara di una scuderia su MyGPTeam (manager di Formula 1). Per la gara/evento in corso suggerisci, con numeri concreti: 1) le regolazioni per QUALIFICA e GARA (coppia 0-3000, freni %, cambio 0-3000, sospensioni %, aero 0-3000, pressione 0-3000, gomme); 2) la strategia pit/carburante (n. soste e giri); 3) il comportamento dei piloti nelle 5 fasi (Normale/Calmo/Aggressivo); 4) la strategia complessiva migliore. Solo la coppia ha formula ufficiale (curve%×30); il resto sono stime da affinare nelle prove. Italiano, conciso e operativo.";
+  runAgent("aiStrategyOut", sys, ctx);
+}
+function aiDev(){
+  var labs=(S.labs||[]).map(function(l){return "- "+l[0]+": ingegnere "+l[1]+", livello "+l[3]+"/20, investimento attuale "+l[2]+" EUR/sett";}).join("\n");
+  var ctx=teamContext()+"\n\nLaboratori e ingegneri:\n"+labs+"\n\nScala investimento→livello massimo: 0→catastrofico, 1.000→mediocre, 5.000→ottimo, 15.000→grandioso, 25.000→immenso, 50.000→insuperabile.";
+  var sys="Sei il direttore tecnico di una scuderia su MyGPTeam. Suggerisci, con cifre: 1) quanto investire in ricerca per OGNI laboratorio (0/1.000/5.000/15.000/25.000/50.000), con priorità ai più indietro e ai componenti chiave; 2) se conviene investire ora in strutture e nel circuito; 3) per ogni ingegnere, se va bene o andrebbe sostituito (giudica dal livello del suo laboratorio rispetto all'investimento). Tieni conto del budget disponibile. Italiano, conciso, con priorità chiare.";
+  runAgent("aiDevOut", sys, ctx);
+}
+function aiBudget(){
+  var b=S.budget||{};
+  var drv=(S.drivers||[]).map(function(d){return d.name+" (contratto "+d.con+" stag., stip "+d.sal+"/sett)";}).join("; ");
+  var ctx=teamContext()+"\n\nContratti piloti: "+drv+"\nBilancio/sett — entrate: sponsor "+(b.iSpon||0)+", TV "+(b.iTv||0)+", pubblico "+(b.iPub||0)+", premi "+(b.iPrize||0)+", merch "+(b.iMerch||0)+"; uscite: stipendi "+(b.eDrv||0)+", staff "+(b.eEng||0)+", ricerca "+(b.eRes||0)+", strutture/merch/altro "+(b.eOth||0)+".";
+  var sys="Sei il direttore generale e finanziario di una scuderia su MyGPTeam. Occupati di: 1) bilancio scuderia (come riportarlo in pari, quali voci tagliare e di quanto); 2) contratti piloti (chi rinnovare entro la settimana 11 e per quante stagioni, chi cedere); 3) contratti sponsor (se accettare/rinegoziare per più entrate); 4) gestione staff; 5) merchandising (se aumentare l'investimento). Italiano, conciso e operativo, con priorità e cifre.";
+  runAgent("aiBudgetOut", sys, ctx);
+}
+
+/* ---------- Agenti AI interattivi (chat multi-turno, BYOK) ---------- */
+var CHATS={};
+var AGENTS={
+  strategist:{title:"Stratega gara", sys:"Sei lo Stratega di gara della scuderia su MyGPTeam (manager di Formula 1). Ti occupi di assetto/regolazioni (coppia, freni %, cambio, sospensioni %, aero, pressione su scala 0-3000), scelta gomme, carburante e pit-stop, ordini ai piloti nelle 5 fasi e la strategia migliore per la gara/qualifica/contest in corso. Dai numeri concreti quando puoi e una riga di perche. Solo la coppia ha formula ufficiale (curve% per 30); il resto sono stime da affinare con le prove private."},
+  technical:{title:"Direttore Tecnico", sys:"Sei il Direttore Tecnico/R&S della scuderia su MyGPTeam. Consigli quanto budget investire in ciascun laboratorio, nelle strutture e nel circuito, e valuti se gli ingegneri vanno bene o vanno sostituiti. Dai priorita e cifre. Hai i livelli attuali dei lab e i nomi degli ingegneri ma non tutte le loro statistiche individuali: sulle sostituzioni ragiona con cautela e indica cosa servirebbe verificare."},
+  manager:{title:"Direttore Generale", sys:"Sei il Direttore Generale/CFO della scuderia su MyGPTeam. Ti occupi di bilancio, contratti piloti (rinnovi/cessioni, scadenza a settimana 11), contratti sponsor, staff e merchandising. Segnala le soglie finanziarie (-100k offerte, -200k spese, -350k fallimento) e dai indicazioni concrete e prioritarie."},
+  board:{title:"Consiglio di direzione", sys:"Sei il Consiglio di direzione (Direttore Sportivo, Economico e Tecnico) della scuderia su MyGPTeam. Rispondi con una visione d'insieme coordinata; se l'utente chiede un'area specifica, rispondi col taglio del direttore competente. Concreto e prioritizzato."}
+};
+function fullContext(){
+  var b=S.budget||{};
+  var drivers=(S.drivers||[]).map(function(d){return "- "+d.name+": eta "+d.age+", contratto "+d.con+" stag, stip "+d.sal+", carattere "+COURAGE_IT[d.cour]+"/"+JUDG_IT[d.judg]+"/"+COOL_IT[d.cool]+", primarie Fr"+(d.brake+1)+"/Ca"+(d.gear+1)+"/Ac"+(d.accel+1)+"/Tr"+(d.traj+1)+"/20, exp "+d.exp+"/20";}).join("\n");
+  var labs=(S.labs||[]).map(function(l){return "- "+l[0]+": liv "+l[3]+"/20, invest "+l[2]+" EUR/sett, ing. "+l[1];}).join("\n");
+  var research=SECTORS.map(function(s){var t=S.research[s[0]]||0; return s[1]+" "+INVEST[t][0];}).join(", ");
+  var circ="";
+  if(el("cCurve")) circ="\nPROSSIMA GARA (dal setup): "+el("cName").value+", curve "+el("cCurve").value+"%, dislivelli "+el("cDisl").value+"%, "+el("cLaps").value+" giri, pitlane "+el("cPit").value+"m, condizioni "+el("cCond").value+"%, meteo quali "+el("cWxQ").value+", meteo gara "+el("cWxR").value+".";
+  return "SQUADRA "+(S.team.name||"?")+" — Formula "+(S.team.formula||"?")+"\nFINANZE: cassa "+(S.team.cash||0)+", banca "+(S.team.bank||0)+" (bloccata), disponibilita prevista "+(S.team.avail!=null?S.team.avail:"?")+" EUR.\nBILANCIO/sett entrate: sponsor "+(b.iSpon||0)+", merch "+(b.iMerch||0)+", TV "+(b.iTv||0)+", pubblico "+(b.iPub||0)+", premi "+(b.iPrize||0)+". Uscite: stipendi "+(b.eDrv||0)+", staff "+(b.eEng||0)+", ricerca "+(b.eRes||0)+", strutture/merch/altro "+(b.eOth||0)+".\nPILOTI (i contratti a 1 stagione scadono a settimana 11):\n"+drivers+"\nLABORATORI:\n"+labs+"\nINVESTIMENTI RICERCA/sett: "+research+"."+circ;
+}
+async function callLLMChat(sys, messages){
+  var c=loadAI(); if(!c.key) throw new Error("Nessuna chiave API: configurala in Consiglio direzione → Configurazione AI.");
+  var model=c.model||defModel(c.provider), r, j;
+  if(c.provider==="anthropic"){
+    r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":c.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:model,max_tokens:1024,system:sys,messages:messages})});
+    j=await r.json(); if(!r.ok) throw new Error((j.error&&j.error.message)||("HTTP "+r.status)); return j.content[0].text;
+  }
+  if(c.provider==="gemini"){
+    var contents=messages.map(function(m){return {role:(m.role==="assistant"?"model":"user"), parts:[{text:m.content}]};});
+    r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+model+":generateContent?key="+encodeURIComponent(c.key),{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({systemInstruction:{parts:[{text:sys}]},contents:contents})});
+    j=await r.json(); if(!r.ok) throw new Error((j.error&&j.error.message)||("HTTP "+r.status)); return j.candidates[0].content.parts[0].text;
+  }
+  var oa=[{role:"system",content:sys}].concat(messages);
+  r=await fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+c.key},body:JSON.stringify({model:model,messages:oa})});
+  j=await r.json(); if(!r.ok) throw new Error((j.error&&j.error.message)||("HTTP "+r.status)); return j.choices[0].message.content;
+}
+function renderChat(id){
+  var box=el("chatLog_"+id); if(!box) return;
+  var msgs=CHATS[id]||[];
+  if(!msgs.length){ box.innerHTML='<div class="small">Fai una domanda all\'agente…</div>'; return; }
+  var h="";
+  for(var i=0;i<msgs.length;i++){
+    var m=msgs[i], who=m.role==="user"?"Tu":(AGENTS[id]?AGENTS[id].title:"Agente"), cls=m.role==="user"?"chat-u":"chat-a";
+    h+='<div class="chatmsg '+cls+'"><div class="chat-who">'+who+'</div><div class="chat-txt">'+esc(m.content).replace(/\n/g,"<br>")+'</div></div>';
+  }
+  box.innerHTML=h; box.scrollTop=box.scrollHeight;
+}
+async function agentSend(id, preset){
+  var inp=el("chatIn_"+id), msg=preset||(inp?inp.value.trim():""); if(!msg) return;
+  if(inp && !preset) inp.value="";
+  if(!CHATS[id]) CHATS[id]=[];
+  CHATS[id].push({role:"user", content:msg});
+  CHATS[id].push({role:"assistant", content:"…", pending:true});
+  renderChat(id);
+  var a=AGENTS[id], sys=a.sys+"\n\nDATI ATTUALI DELLA SCUDERIA:\n"+fullContext()+"\n\nRispondi in italiano, conciso e concreto.";
+  var hist=CHATS[id].filter(function(m){return !m.pending;}).map(function(m){return {role:m.role, content:m.content};});
+  try{
+    var reply=await callLLMChat(sys, hist);
+    CHATS[id].pop(); CHATS[id].push({role:"assistant", content:reply});
+  }catch(e){
+    CHATS[id].pop(); CHATS[id].push({role:"assistant", content:"⚠️ Errore: "+e.message});
+  }
+  renderChat(id);
+}
+function initChats(){ for(var k in AGENTS){ renderChat(k); } }
 
 /* ---------- Calcolatori strategia ---------- */
 function band(v,lo,hi){ return Math.max(lo,Math.min(hi,Math.round(v))); }
@@ -1257,7 +1420,7 @@ function importData(){ var t=el("ioBox"); if(!t)return; var txt=(t.value||"").tr
 
 function boot(){
   fillSkillSelects(); buildOrders(); buildResearch(); buildSeats(); buildRefs();
-  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI();
+  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats();
   el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
   if(S.team.cash!=null) el("bCash").value=S.team.cash;
   if(S.team.bank!=null) el("bBank").value=S.team.bank;
