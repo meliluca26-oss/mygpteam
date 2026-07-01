@@ -1118,15 +1118,15 @@ function initChats(){ for(var k in AGENTS){ renderChat(k); } }
 async function syncRemote(){
   try{
     var r=await fetch("data.json?t="+Date.now(),{cache:"no-store"}); if(!r.ok) return;
-    var d=await r.json(); if(!d||!d.pushedAt||(S.dataVersion||0)>=d.pushedAt) return;
+    var d=await r.json(); var v=(d&&(d.stamp||d.pushedAt)); if(!d||!v||(S.stamp||0)>=v) return;
     if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season;
     if(d.engineers)ENGINEERS=d.engineers; if(d.staff)STAFF=d.staff; if(d.facilities)FACILITIES=d.facilities;
-    S.dataVersion=d.pushedAt; save();
+    S.stamp=v; S.dataVersion=v; save();
     el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
     if(S.team.cash!=null)el("bCash").value=S.team.cash; if(S.team.bank!=null){el("bBank").value=S.team.bank; el("bankAmt").value=S.team.bank;}
     var bg=S.budget||{},bk=["iSpon","iTv","iPub","iPrize","iMerch","eDrv","eEng","eRes","eOth"]; for(var i=0;i<bk.length;i++){ if(bg[bk[i]]!=null) el(bk[i]).value=bg[bk[i]]; }
     buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup();
-    if(el("realBanner")) el("realBanner").insertAdjacentHTML("beforeend",' <span class="pill p-ok">↻ sync dal PC '+new Date(d.pushedAt).toLocaleDateString("it-IT")+'</span>');
+    if(el("realBanner")) el("realBanner").insertAdjacentHTML("beforeend",' <span class="pill p-ok">↻ sync dal PC '+new Date(v).toLocaleDateString("it-IT")+'</span>');
   }catch(e){}
 }
 
@@ -1459,11 +1459,11 @@ async function syncNow(){
   try{
     var r=await fetch("data.json?t="+Date.now(),{cache:"no-store"});
     if(!r.ok){ alert("data.json non raggiungibile (sei online? l'app deve girare dal sito, non da file locale)."); return; }
-    var d=await r.json(); if(!d||!d.pushedAt){ alert("data.json non valido."); return; }
+    var d=await r.json(); var v=(d&&(d.stamp||d.pushedAt)); if(!d||!v){ alert("data.json non valido."); return; }
     if(d.engineers)ENGINEERS=d.engineers; if(d.staff)STAFF=d.staff; if(d.facilities)FACILITIES=d.facilities;
     if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season;
-    S.dataVersion=d.pushedAt; save(); boot();
-    alert("Sincronizzato. Dati aggiornati al "+new Date(d.pushedAt).toLocaleString("it-IT"));
+    S.stamp=v; S.dataVersion=v; save(); boot();
+    alert("Sincronizzato. Dati aggiornati al "+new Date(v).toLocaleString("it-IT"));
   }catch(e){ alert("Errore sync: "+e.message); }
 }
 function importData(){ var t=el("ioBox"); if(!t)return; var txt=(t.value||"").trim(); if(!txt){ alert("Incolla prima i dati nel riquadro."); return; } var obj; try{ obj=JSON.parse(txt); }catch(e){ alert("Dati non validi (JSON errato)."); return; } if(!obj||!obj.team){ alert("Formato non riconosciuto."); return; } if(confirm("Importare questi dati? Sovrascrive i dati attuali del dispositivo.")){ S=Object.assign(def(),obj); save(); boot(); alert("Dati importati."); } }

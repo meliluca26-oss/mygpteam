@@ -1,5 +1,6 @@
 {
-  "pushedAt": 1783200000000,
+  "stamp": 1782896494679,
+  "pushedAt": 1782896494679,
   "team": {"name":"Bronte Racing Team","formula":"F4","cash":2795,"bank":413557,"avail":-29848},
   "drivers": [
     {"name":"Anders Malmstrom","age":22,"exp":5,"cour":1,"judg":3,"cool":1,"con":1,"sal":759,"brake":5,"gear":3,"accel":4,"traj":4},
