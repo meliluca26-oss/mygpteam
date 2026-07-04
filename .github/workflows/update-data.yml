@@ -1,0 +1,48 @@
+name: Aggiorna data.json (MyGPTeam)
+
+on:
+  schedule:
+    # ogni giorno alle 08:00 UTC (~10:00 in Italia, ora legale). Modificabile.
+    - cron: "0 8 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installa dipendenze
+        run: pip install requests
+
+      - name: Aggiorna data.json dal gioco
+        env:
+          MYGP_USER: ${{ secrets.MYGP_USER }}
+          MYGP_PASS: ${{ secrets.MYGP_PASS }}
+        run: python update_data.py
+
+      - name: Commit se ci sono modifiche
+        run: |
+          git config user.name "mygpteam-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data.json)" ]; then
+            git add data.json
+            git commit -m "Aggiornamento automatico data.json ($(date -u +%Y-%m-%d))"
+            git push
+            echo "data.json aggiornato e committato."
+          else
+            echo "Nessuna modifica: data.json gia' aggiornato."
+          fi
