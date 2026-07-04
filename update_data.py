@@ -190,10 +190,10 @@ def build(session, prev):
         research["scout"] = funding_tier(i(ts, "TalentScoutFunding"))
         data["research"] = research
 
-    # ---- timestamp ----
-    stamp = int(time.time() * 1000)
-    data["stamp"] = stamp
-    data["pushedAt"] = stamp
+    # lo stamp NON va qui: viene aggiunto in main() solo se i dati sono cambiati,
+    # cosi' un semplice ricontrollo orario non genera un commit inutile.
+    data.pop("stamp", None)
+    data.pop("pushedAt", None)
     return data
 
 
@@ -203,9 +203,10 @@ def parse_availability(session):
         r = session.get(HOME_URL, timeout=30)
         txt = r.content.decode("iso-8859-1", "replace")
         txt = html.unescape(txt)
-        m = re.search(r"[Dd]isponibilit[\w\W]{0,40}?(-?\d[\d\.\s]*)\s*", txt)
+        # es. "Disponibilita prevista -59.547 &euro;" -> cattura -59.547 fino al simbolo euro
+        m = re.search(r"[Dd]isponibilit[^\d\-€]{0,40}?(-?[\d\.]+)\s*€", txt)
         if m:
-            num = m.group(1).replace(".", "").replace(" ", "").strip()
+            num = m.group(1).replace(".", "").strip()
             return int(num)
     except Exception as ex:
         print("avail: impossibile leggerla (%s), mantengo la precedente." % ex)
@@ -226,14 +227,22 @@ def main():
     login(s)
     data = build(s, prev)
 
-    with open("data.json", "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    # confronto solo sui dati "veri" (escluso lo stamp): se identici, non riscrivo
+    prev_core = {k: v for k, v in prev.items() if k not in ("stamp", "pushedAt")}
+    if data == prev_core:
+        print("Nessuna variazione nei dati: data.json invariato, nessun commit.")
+        return
 
-    d0 = data.get("drivers", [{}])[0] if data.get("drivers") else {}
-    print("OK: data.json aggiornato. stamp=%s cash=%s bank=%s avail=%s piloti=%d" % (
-        data.get("stamp"), data.get("team", {}).get("cash"),
-        data.get("team", {}).get("bank"), data.get("team", {}).get("avail"),
-        len(data.get("drivers", [])),
+    stamp = int(time.time() * 1000)
+    out = {"stamp": stamp, "pushedAt": stamp}
+    out.update(data)
+    with open("data.json", "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+
+    print("Dati CAMBIATI: data.json aggiornato. stamp=%s cash=%s bank=%s avail=%s piloti=%d" % (
+        stamp, out.get("team", {}).get("cash"),
+        out.get("team", {}).get("bank"), out.get("team", {}).get("avail"),
+        len(out.get("drivers", [])),
     ))
 
 
