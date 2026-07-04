@@ -19,7 +19,13 @@ import requests
 BASE = "https://www.mygpteam.com"
 LOGIN_URL = BASE + "/includes/login_ajax.php"
 HOME_URL = BASE + "/default.php"
-UA = "Mozilla/5.0 (compatible; MyGPTeam-updater/1.0)"
+UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+      "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
+BROWSER_HEADERS = {
+    "User-Agent": UA,
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7",
+}
 
 USER = os.environ.get("MYGP_USER", "").strip()
 PASS = os.environ.get("MYGP_PASS", "")
@@ -40,16 +46,27 @@ def login(session):
     payload = {"usr": USER, "pwd": PASS, "statuslg": "Log in"}
     r = session.post(
         LOGIN_URL, data=payload, timeout=30,
-        headers={"X-Requested-With": "XMLHttpRequest", "Referer": BASE + "/"},
+        headers={
+            "X-Requested-With": "XMLHttpRequest",
+            "Referer": BASE + "/",
+            "Origin": BASE,
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
     )
-    # non stampiamo il corpo (potrebbe contenere dati sensibili); solo lo stato
-    print("Login HTTP %s (%d byte di risposta)" % (r.status_code, len(r.text or "")))
+    # la RISPOSTA non contiene la password (quella e' nella richiesta): stampiamo
+    # stato + un breve estratto solo per diagnostica.
+    body = (r.text or "").strip().replace("\n", " ")
+    print("Login HTTP %s | server=%s | risposta[:120]=%r" % (
+        r.status_code, r.headers.get("Server", "?"), body[:120]))
 
 
 def get_xml(session, path):
-    r = session.get(BASE + path, timeout=30)
+    r = session.get(BASE + path, timeout=30,
+                    headers={"Accept": "application/xml, text/xml, */*",
+                             "Referer": HOME_URL})
     if r.status_code != 200:
-        die("feed %s -> HTTP %s (login fallito o sessione scaduta?)" % (path, r.status_code))
+        die("feed %s -> HTTP %s | server=%s (login fallito o WAF?)" % (
+            path, r.status_code, r.headers.get("Server", "?")))
     txt = r.content.decode("iso-8859-1", "replace")
     if "<F1Project" not in txt:
         die("feed %s non valido: la risposta non e' XML (probabile login fallito)." % path)
@@ -205,7 +222,7 @@ def main():
             print("data.json esistente non leggibile (%s), riparto pulito." % ex)
 
     s = requests.Session()
-    s.headers.update({"User-Agent": UA})
+    s.headers.update(BROWSER_HEADERS)
     login(s)
     data = build(s, prev)
 
