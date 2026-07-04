@@ -2,8 +2,8 @@ name: Aggiorna data.json (MyGPTeam)
 
 on:
   schedule:
-    # ogni giorno alle 08:00 UTC (~10:00 in Italia, ora legale). Modificabile.
-    - cron: "0 8 * * *"
+    # ogni ora, al minuto 0. Modificabile.
+    - cron: "0 * * * *"
   workflow_dispatch: {}
 
 permissions:
@@ -40,7 +40,7 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           if [ -n "$(git status --porcelain data.json)" ]; then
             git add data.json
-            git commit -m "Aggiornamento automatico data.json ($(date -u +%Y-%m-%d))"
+            git commit -m "Aggiornamento automatico data.json ($(date -u +%Y-%m-%dT%H:%M))"
             git push
             echo "data.json aggiornato e committato."
           else
