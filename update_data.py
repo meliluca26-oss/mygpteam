@@ -100,6 +100,74 @@ def funding_tier(euro):
     return tiers.index(euro) if euro in tiers else 0
 
 
+def get_xml_url(session, url):
+    r = session.get(url, timeout=30,
+                    headers={"Accept": "application/xml, text/xml, */*", "Referer": HOME_URL})
+    if r.status_code != 200:
+        return None
+    txt = r.content.decode("iso-8859-1", "replace")
+    if "<F1Project" not in txt or "<Error>" in txt:
+        return None
+    return ET.fromstring(txt.encode("iso-8859-1", "replace"))
+
+
+def fetch_last_race(session, team_name):
+    """Legge l'ultima gara disputata (griglia = qualifica, classifica, vincitore, giro veloce)."""
+    try:
+        home = session.get(HOME_URL, timeout=30).content.decode("iso-8859-1", "replace")
+    except Exception as ex:
+        print("gara: home non leggibile (%s)" % ex)
+        return None
+    m = re.search(r"Ultima gara.{0,1200}?(?:viewRace\.php\?id=|ID:\s*)(\d+)", home, re.S)
+    if not m:
+        print("gara: id ultima gara non trovato nella home.")
+        return None
+    rid = m.group(1)
+    root = get_xml_url(session, BASE + "/xml/gara.php?lingua=1&idgara=" + rid)
+    race = root.find(".//Race") if root is not None else None
+    if race is None:
+        print("gara: feed gara %s non disponibile." % rid)
+        return None
+
+    grid = []
+    grid_el = race.find("StartingGrid")
+    if grid_el is not None:
+        for idx, car in enumerate(grid_el.findall("Car")):
+            grid.append({"pos": idx + 1, "driver": t(car, "Driver"), "team": t(car, "Team")})
+    grid_pos = {(g["driver"] or ""): g["pos"] for g in grid}
+
+    winner, best, classification = {}, {}, []
+    fin = race.find("Finish")
+    if fin is not None:
+        w, b, pos = fin.find("Winner"), fin.find("BestLap"), fin.find("Positions")
+        if w is not None:
+            winner = {"driver": t(w, "Driver"), "time": t(w, "RaceTime")}
+        if b is not None:
+            best = {"driver": t(b, "Driver"), "time": t(b, "LapTime")}
+        if pos is not None:
+            for idx, car in enumerate(pos.findall("Car")):
+                drv = t(car, "Driver")
+                classification.append({
+                    "pos": idx + 1, "driver": drv, "team": t(car, "Team"),
+                    "grid": grid_pos.get(drv or "", None),
+                    "gap": t(car, "GapTime"), "pit": i(car, "NumPitStop"),
+                })
+
+    finished = {c["driver"] for c in classification}
+    mine = [dict(c) for c in classification if (c["team"] or "") == team_name]
+    for g in grid:  # nostri piloti ritirati: in griglia ma non a punti
+        if (g["team"] or "") == team_name and g["driver"] not in finished:
+            mine.append({"pos": None, "driver": g["driver"], "team": g["team"],
+                         "grid": g["pos"], "gap": None, "pit": None})
+
+    return {
+        "id": rid, "name": t(race, "RaceName"), "track": t(race, "TrackName"),
+        "laps": i(race, "Laps"), "date": t(race, "RaceDate"),
+        "winner": winner, "bestLap": best,
+        "classification": classification, "mine": mine,
+    }
+
+
 def build(session, prev):
     piloti = get_xml(session, "/xml/piloti.php")
     eco = get_xml(session, "/xml/economia.php")
@@ -189,6 +257,12 @@ def build(session, prev):
         research = dict(data.get("research", {}))
         research["scout"] = funding_tier(i(ts, "TalentScoutFunding"))
         data["research"] = research
+
+    # ---- ultima gara disputata (griglia/qualifica + classifica) ----
+    team_name = data.get("team", {}).get("name", "Bronte Racing Team")
+    race = fetch_last_race(session, team_name)
+    if race:
+        data["lastRace"] = race
 
     # lo stamp NON va qui: viene aggiunto in main() solo se i dati sono cambiati,
     # cosi' un semplice ricontrollo orario non genera un commit inutile.

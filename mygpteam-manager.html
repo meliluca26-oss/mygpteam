@@ -143,6 +143,7 @@
   <button data-v="plan">Sviluppo scuderia</button>
   <button data-v="board">Consiglio direzione</button>
   <button data-v="strat">Strategia gara</button>
+  <button data-v="race">Analisi gara</button>
   <button data-v="dev">Sviluppo &amp; ricerca</button>
   <button data-v="eco">Bilancio &amp; stagione</button>
   <button data-v="drv">Piloti &amp; contratti</button>
@@ -153,6 +154,11 @@
 </nav>
 
 <main>
+
+<!-- ============ ANALISI GARA ============ -->
+<section class="view" id="v-race">
+  <div id="raceOut"></div>
+</section>
 
 <!-- ============ DASHBOARD ============ -->
 <section class="view active" id="v-dash">
@@ -1124,13 +1130,13 @@ function updateLastUpdate(){ var e=el("lastUpdate"); if(!e)return; var v=S&&S.st
 async function syncRemote(){
   try{
     var d=await fetchNewest(); var v=(d&&(d.stamp||d.pushedAt)); if(!d||!v||(S.stamp||0)>=v) return;
-    if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season;
+    if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season; if(d.lastRace)S.lastRace=d.lastRace;
     if(d.engineers)ENGINEERS=d.engineers; if(d.staff)STAFF=d.staff; if(d.facilities)FACILITIES=d.facilities;
     S.stamp=v; S.dataVersion=v; save();
     el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
     if(S.team.cash!=null)el("bCash").value=S.team.cash; if(S.team.bank!=null){el("bBank").value=S.team.bank; el("bankAmt").value=S.team.bank;}
     var bg=S.budget||{},bk=["iSpon","iTv","iPub","iPrize","iMerch","eDrv","eEng","eRes","eOth"]; for(var i=0;i<bk.length;i++){ if(bg[bk[i]]!=null) el(bk[i]).value=bg[bk[i]]; }
-    buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup();
+    buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup(); renderRace();
     if(el("realBanner")) el("realBanner").insertAdjacentHTML("beforeend",' <span class="pill p-ok">↻ sync dal PC '+new Date(v).toLocaleDateString("it-IT")+'</span>');
     updateLastUpdate();
   }catch(e){}
@@ -1427,6 +1433,42 @@ function refreshDash(){
     '<tr><td><b>Disponibilità prevista</b></td><td class="right"><b>'+eur(avail)+'</b></td></tr></tbody></table>';
 }
 
+/* ---------- Analisi gara ---------- */
+function fmtGap(g){ return g? String(g) : "—"; }
+function renderRace(){
+  var host=el("raceOut"); if(!host) return;
+  var r=S.lastRace;
+  if(!r){ host.innerHTML='<div class="banner">Nessuna gara ancora disponibile qui. Comparirà in automatico dopo la prossima gara disputata (al successivo aggiornamento del job).</div>'; return; }
+  var mine=r.mine||[]; var myTeam=(S.team&&S.team.name)||"Bronte Racing Team";
+  var h='<div class="banner"><span>🏁 <b>'+esc(r.name||"Gara")+'</b> — '+esc(r.track||"")+' · '+(r.laps||"?")+' giri · '+esc(String(r.date||"").slice(0,10))+'</span></div>';
+  var cards='<div class="kpi" style="margin-bottom:12px">';
+  for(var i=0;i<mine.length;i++){ var m=mine[i];
+    var fin=m.pos? ("P"+m.pos) : "Ritirato";
+    var delta="";
+    if(m.pos&&m.grid){ var dv=m.grid-m.pos; delta=dv>0?(' <span style="color:var(--good)">▲+'+dv+'</span>'):(dv<0?(' <span style="color:var(--bad)">▼'+dv+'</span>'):' ='); }
+    cards+='<div class="b" style="min-width:190px"><div class="v" style="font-size:19px">'+esc(m.driver||"?")+'</div>'+
+      '<div class="l">Griglia P'+(m.grid||"?")+' → <b>'+fin+'</b>'+delta+'</div>'+
+      '<div class="l">Distacco '+fmtGap(m.gap)+' · '+(m.pit!=null?m.pit+' soste':'—')+'</div></div>';
+  }
+  cards+='</div>';
+  var wl='<div class="small" style="margin:4px 0 10px">🏆 Vincitore: <b>'+esc((r.winner&&r.winner.driver)||"?")+'</b> ('+esc((r.winner&&r.winner.time)||"")+') &nbsp;·&nbsp; ⏱️ Giro veloce: <b>'+esc((r.bestLap&&r.bestLap.driver)||"?")+'</b> ('+esc((r.bestLap&&r.bestLap.time)||"")+')</div>';
+  var cl=r.classification||[]; var rows='';
+  for(var k=0;k<cl.length;k++){ var c=cl[k]; var mineRow=((c.team||"")===myTeam);
+    rows+='<tr'+(mineRow?' style="background:rgba(11,122,59,.15);font-weight:600"':'')+'><td>'+c.pos+'</td><td>'+esc(c.driver||"")+'</td><td class="small">'+esc(c.team||"")+'</td><td class="center">'+(c.grid||"—")+'</td><td class="center">'+fmtGap(c.gap)+'</td><td class="center">'+(c.pit!=null?c.pit:"—")+'</td></tr>';
+  }
+  var table=cl.length? ('<table><thead><tr><th>Pos</th><th>Pilota</th><th>Team</th><th class="center">Griglia</th><th class="center">Distacco</th><th class="center">Soste</th></tr></thead><tbody>'+rows+'</tbody></table>') : '<div class="small">Classifica non disponibile per questa gara.</div>';
+  var aiBtn='<div style="margin:14px 0 6px"><button onclick="aiRace()">🤖 Genera analisi AI (rendimento, setup/strategia, avversari, consigli)</button></div><div id="raceAiOut"></div>';
+  host.innerHTML=h+'<h3 style="margin:6px 0">I tuoi piloti — griglia → arrivo</h3>'+cards+wl+'<h3 style="margin:10px 0 6px">Classifica &amp; confronto avversari</h3>'+table+aiBtn;
+}
+function aiRace(){
+  var r=S.lastRace; if(!r) return;
+  var mine=(r.mine||[]).map(function(m){return "- "+m.driver+": griglia P"+(m.grid||"?")+", arrivo "+(m.pos?("P"+m.pos):"ritirato")+", distacco "+(m.gap||"—")+", "+(m.pit!=null?m.pit+" soste":"—");}).join("\n");
+  var cl=(r.classification||[]).slice(0,10).map(function(c){return c.pos+". "+c.driver+" ("+(c.team||"")+") griglia "+(c.grid||"?")+" dist "+(c.gap||"")+" "+(c.pit!=null?c.pit+" soste":"");}).join("\n");
+  var usr=fullContext()+"\n\n=== ULTIMA GARA: "+(r.name||"?")+" — "+(r.track||"?")+", "+(r.laps||"?")+" giri ===\nVincitore: "+((r.winner&&r.winner.driver)||"?")+" ("+((r.winner&&r.winner.time)||"")+"); giro veloce: "+((r.bestLap&&r.bestLap.driver)||"?")+".\nI NOSTRI PILOTI:\n"+mine+"\nTOP 10:\n"+cl;
+  var sys="Sei l'analista gara della scuderia su MyGPTeam (manager di Formula 1). Analizza l'ULTIMA gara e rispondi in italiano, conciso e concreto, in 4 blocchi: 1) RENDIMENTO piloti nostri (griglia vs arrivo, posizioni guadagnate/perse, distacchi, soste); 2) EFFICACIA setup e strategia (numero di soste rispetto ai rivali, gestione gomme/carburante deducibile da soste e distacchi: cosa ha funzionato e cosa no); 3) CONFRONTO con gli avversari diretti (chi ci ha battuto e perché, chi abbiamo battuto); 4) 3 CONSIGLI concreti per la prossima gara (regolazioni, numero soste, ordini piloti nelle 5 fasi). Usa solo i dati forniti; se un dato manca, dillo. Nessun fronzolo.";
+  runAgent("raceAiOut", sys, usr);
+}
+
 /* ---------- Navigazione & bind ---------- */
 function initTabs(){
   var btns=el("tabs").querySelectorAll("button");
@@ -1467,7 +1509,7 @@ async function syncNow(){
     if(!d){ alert("data.json non raggiungibile (sei online?)."); return; }
     var v=(d&&(d.stamp||d.pushedAt)); if(!v){ alert("data.json non valido."); return; }
     if(d.engineers)ENGINEERS=d.engineers; if(d.staff)STAFF=d.staff; if(d.facilities)FACILITIES=d.facilities;
-    if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season;
+    if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season; if(d.lastRace)S.lastRace=d.lastRace;
     S.stamp=v; S.dataVersion=v; save(); boot();
     alert("Sincronizzato. Dati aggiornati al "+new Date(v).toLocaleString("it-IT"));
   }catch(e){ alert("Errore sync: "+e.message); }
@@ -1476,7 +1518,7 @@ function importData(){ var t=el("ioBox"); if(!t)return; var txt=(t.value||"").tr
 
 function boot(){
   fillSkillSelects(); buildOrders(); buildResearch(); buildSeats(); buildRefs();
-  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats(); updateLastUpdate(); syncRemote();
+  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats(); renderRace(); updateLastUpdate(); syncRemote();
   el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
   if(S.team.cash!=null) el("bCash").value=S.team.cash;
   if(S.team.bank!=null) el("bBank").value=S.team.bank;
