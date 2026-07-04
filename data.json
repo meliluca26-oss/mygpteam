@@ -1,12 +1,12 @@
 {
-  "stamp": 1783011761783,
-  "pushedAt": 1783011761783,
-  "team": {"name":"Bronte Racing Team","formula":"F4","cash":-28231,"bank":423896,"avail":-62979},
+  "stamp": 1783179041601,
+  "pushedAt": 1783179041601,
+  "team": {"name":"Bronte Racing Team","formula":"F4","cash":-28231,"bank":423896,"avail":-59547},
   "drivers": [
-    {"name":"Anders Malmstrom","age":22,"exp":5,"cour":1,"judg":3,"cool":1,"con":1,"sal":759,"brake":5,"gear":3,"accel":4,"traj":4},
-    {"name":"Luis Poppmeier","age":18,"exp":4,"cour":4,"judg":2,"cool":0,"con":1,"sal":2152,"brake":9,"gear":2,"accel":4,"traj":4}
+    {"name":"Anders Malmstrom","age":22,"exp":5,"cour":1,"judg":3,"cool":1,"con":2,"sal":1577,"brake":5,"gear":3,"accel":4,"traj":4},
+    {"name":"Luis Poppmeier","age":18,"exp":4,"cour":4,"judg":2,"cool":0,"con":4,"sal":3411,"brake":9,"gear":2,"accel":4,"traj":4}
   ],
-  "budget": {"iSpon":55281,"iTv":0,"iPub":0,"iPrize":0,"iMerch":0,"eDrv":15618,"eEng":21000,"eRes":31000,"eOth":22411},
+  "budget": {"iSpon":55281,"iTv":0,"iPub":0,"iPrize":0,"iMerch":3432,"eDrv":15618,"eEng":21000,"eRes":31000,"eOth":22411},
   "labs": [
     ["Motore","Francisco Russo",0,4],
     ["Freni","Cipta Amin",5000,4],
@@ -26,7 +26,7 @@
     {"name":"Kevin Donnelly","age":55,"comp":"Elettronica","brav":6,"mecc":4,"innov":4},
     {"name":"Jhonatan Owen","age":34,"comp":"Gomme","brav":6,"mecc":9,"innov":4}
   ],
-  "staff": {"lavoroGruppo":"eccezionale [9]","meccanici":6,"tecnici":5,"pubblicitari":2,"osservatori":2,"preparatori":3,"manutentori":3},
+  "staff": {"lavoroGruppo":"fantastico [10]","meccanici":6,"tecnici":5,"pubblicitari":2,"osservatori":2,"preparatori":3,"manutentori":3},
   "facilities": [
     {"name":"Strutture tifosi","level":0},
     {"name":"Progettazione/CAD","level":6},
