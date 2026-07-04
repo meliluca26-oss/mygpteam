@@ -1116,10 +1116,11 @@ async function agentSend(id, preset){
 }
 function initChats(){ for(var k in AGENTS){ renderChat(k); } }
 var DATA_URL="https://raw.githubusercontent.com/meliluca26-oss/mygpteam/main/data.json";
+async function fetchOne(u){ try{ var r=await fetch(u+"?t="+Date.now(),{cache:"no-store"}); if(!r.ok) return null; return await r.json(); }catch(e){ return null; } }
+async function fetchNewest(){ var res=await Promise.all([fetchOne("data.json"),fetchOne(DATA_URL)]); var best=null,bv=0; for(var i=0;i<res.length;i++){ var d=res[i]; var v=d&&(d.stamp||d.pushedAt)||0; if(v>bv){ bv=v; best=d; } } return best; }
 async function syncRemote(){
   try{
-    var r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"}); if(!r.ok) return;
-    var d=await r.json(); var v=(d&&(d.stamp||d.pushedAt)); if(!d||!v||(S.stamp||0)>=v) return;
+    var d=await fetchNewest(); var v=(d&&(d.stamp||d.pushedAt)); if(!d||!v||(S.stamp||0)>=v) return;
     if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season;
     if(d.engineers)ENGINEERS=d.engineers; if(d.staff)STAFF=d.staff; if(d.facilities)FACILITIES=d.facilities;
     S.stamp=v; S.dataVersion=v; save();
@@ -1458,9 +1459,9 @@ function importFile(inp){
 }
 async function syncNow(){
   try{
-    var r=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
-    if(!r.ok){ alert("data.json non raggiungibile (sei online? l'app deve girare dal sito, non da file locale)."); return; }
-    var d=await r.json(); var v=(d&&(d.stamp||d.pushedAt)); if(!d||!v){ alert("data.json non valido."); return; }
+    var d=await fetchNewest();
+    if(!d){ alert("data.json non raggiungibile (sei online?)."); return; }
+    var v=(d&&(d.stamp||d.pushedAt)); if(!v){ alert("data.json non valido."); return; }
     if(d.engineers)ENGINEERS=d.engineers; if(d.staff)STAFF=d.staff; if(d.facilities)FACILITIES=d.facilities;
     if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season;
     S.stamp=v; S.dataVersion=v; save(); boot();
