@@ -1,6 +1,6 @@
 {
-  "stamp": 1783327741294,
-  "pushedAt": 1783327741294,
+  "stamp": 1783328126287,
+  "pushedAt": 1783328126287,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -356,37 +356,27 @@
       "curve": 98,
       "disl": 61,
       "meteoQuali": "sole",
-      "meteoGara": "pioggia lieve"
+      "meteoGara": "pioggia lieve",
+      "meteoQualiVal": 0,
+      "meteoGaraVal": 200
     },
     "drivers": [
       {
         "name": "Anders Malmstrom",
-        "quali": {
-          "coppia": 2902,
-          "cambio": 88,
-          "aero": 2552,
-          "pressione": 1094
-        },
-        "gara": {
-          "coppia": 2902,
-          "cambio": 88,
-          "aero": 2752,
-          "pressione": 1294
+        "inputs": {
+          "frenata": 53,
+          "cambio": 32,
+          "accelerazione": 42,
+          "traiettorie": 42
         }
       },
       {
         "name": "Luis Poppmeier",
-        "quali": {
-          "coppia": 2902,
-          "cambio": 77,
-          "aero": 2552,
-          "pressione": 1094
-        },
-        "gara": {
-          "coppia": 2902,
-          "cambio": 77,
-          "aero": 2752,
-          "pressione": 1294
+        "inputs": {
+          "frenata": 95,
+          "cambio": 21,
+          "accelerazione": 42,
+          "traiettorie": 42
         }
       }
     ]
