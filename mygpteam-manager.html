@@ -163,10 +163,10 @@
 <!-- ============ DASHBOARD ============ -->
 <section class="view active" id="v-dash">
   <div class="banner" id="realBanner">
-    <span>✓ Dati reali del <b>Bronte Racing Team</b> caricati — snapshot 25-06-2026 (Formula 4, Girone 19). Tutti i piloti e i laboratori letti dal vivo.</span>
-    <button class="sm" onclick="loadReal()">Ricarica dati reali</button>
+    <span id="realBannerTxt">Dati del Bronte Racing Team.</span>
+    <button class="sm" onclick="syncNow()">↻ Aggiorna adesso</button>
   </div>
-  <div class="banner warn">⏰ <b>Urgente:</b> i 4 piloti hanno tutti contratto a <b>1 stagione</b> e Gerard ha già disputato 10 GP. Al rinnovo di <b>settimana 11</b> chi non è rinnovato lascia la squadra — Luis compreso. Vai alla scheda <b>Sviluppo scuderia</b>.</div>
+  <div class="banner warn" id="dashWarn" style="display:none"></div>
   <div class="kpi" style="margin-bottom:14px">
     <div class="b"><div class="v" id="kCash">€0</div><div class="l">Cassa</div></div>
     <div class="b"><div class="v" id="kBank">€0</div><div class="l">Banca (bloccata)</div></div>
@@ -1140,7 +1140,7 @@ async function syncRemote(){
     el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
     if(S.team.cash!=null)el("bCash").value=S.team.cash; if(S.team.bank!=null){el("bBank").value=S.team.bank; el("bankAmt").value=S.team.bank;}
     var bg=S.budget||{},bk=["iSpon","iTv","iPub","iPrize","iMerch","eDrv","eEng","eRes","eOth"]; for(var i=0;i<bk.length;i++){ if(bg[bk[i]]!=null) el(bk[i]).value=bg[bk[i]]; }
-    buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup(); renderRace(); renderOfficialSetup(); renderSetupLab();
+    buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup(); renderRace(); renderOfficialSetup(); renderSetupLab(); renderDashBanner();
     if(el("realBanner")) el("realBanner").insertAdjacentHTML("beforeend",' <span class="pill p-ok">↻ sync dal PC '+new Date(v).toLocaleDateString("it-IT")+'</span>');
     updateLastUpdate();
   }catch(e){}
@@ -1530,6 +1530,13 @@ function renderOfficialSetup(){
     '<p class="note" style="margin-top:8px">Coppia, cambio, aero e pressione sono calcolati con le <b>formule lineari del gioco</b> (ricostruite dal tool "Setup your car" e verificate: riproducono esattamente i suoi valori), su curve, dislivelli, meteo e skill di ogni pilota. Si aggiornano da soli a ogni gara, anche su iPhone. <b>Freni e sospensioni</b> non fanno parte del calcolatore lineare, e <b>numero di soste e ordini piloti</b> sono scelte tattiche (nessun calcolatore ufficiale): affinale nelle prove private.</p></div>';
 }
 
+/* ---------- Banner Cruscotto (dinamici) ---------- */
+function renderDashBanner(){
+  var t=el("realBannerTxt");
+  if(t){ var n=(S.drivers||[]).length; var when=(S&&S.stamp)? fmtStamp(S.stamp):"—"; t.innerHTML='✓ <b>'+esc((S.team&&S.team.name)||"Bronte Racing Team")+'</b> · Formula '+esc((S.team&&S.team.formula)||"?")+' · '+n+' piloti · aggiornato <b>'+when+'</b> (in automatico ogni ora).'; }
+  var w=el("dashWarn");
+  if(w){ var exp=(S.drivers||[]).filter(function(d){return (d.con||0)<=1;}); if(exp.length){ w.style.display='block'; w.innerHTML='⏰ <b>Contratti in scadenza:</b> '+exp.map(function(d){return esc(d.name)+' (1 stagione)';}).join(", ")+' — rinnova o cedi entro la scadenza.'; } else { w.style.display='none'; w.innerHTML=''; } }
+}
 /* ---------- Ottimizzatore setup (prove private reali) ---------- */
 function labKey(){ var r=(S.nextSetup&&S.nextSetup.race)||{}; return (r.track||"gara")+"|"+r.curve+"|"+r.disl; }
 function parseLapTime(s){ s=(s||"").trim(); if(!s) return null; var p=s.split(/[:.\s]+/).filter(Boolean).map(function(x){return parseInt(x,10);}); if(!p.length||p.some(function(n){return isNaN(n);})) return null; if(p.length>=3) return p[0]*60000+p[1]*1000+p[2]; if(p.length===2) return p[0]*60000+p[1]*1000; return p[0]*1000; }
@@ -1628,7 +1635,7 @@ function importData(){ var t=el("ioBox"); if(!t)return; var txt=(t.value||"").tr
 
 function boot(){
   fillSkillSelects(); buildOrders(); buildResearch(); buildSeats(); buildRefs();
-  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats(); renderRace(); renderOfficialSetup(); renderSetupLab(); updateLastUpdate(); syncRemote();
+  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats(); renderRace(); renderOfficialSetup(); renderSetupLab(); renderDashBanner(); updateLastUpdate(); syncRemote();
   el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
   if(S.team.cash!=null) el("bCash").value=S.team.cash;
   if(S.team.bank!=null) el("bBank").value=S.team.bank;

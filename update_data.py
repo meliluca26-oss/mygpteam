@@ -267,6 +267,36 @@ def fetch_next_setup(session, drivers):
     }
 
 
+def fetch_facilities(session, prev_fac):
+    """Legge i livelli delle strutture da facilities.php (server-rendered)."""
+    try:
+        html = session.get(BASE + "/facilities.php", timeout=30).content.decode("iso-8859-1", "replace")
+    except Exception:
+        return None
+    txt = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html))
+    mapping = [
+        ("Strutture tifosi", "Tifosi"), ("Progettazione/CAD", "Progettazione"),
+        ("Simulatori avanzati", "Simulatori avanzati"), ("Banche dati", "Banche dati"),
+        ("Banco prova motori", "Banco prova motori"), ("Carboceramiche (freni)", "Carboceramiche"),
+        ("Titanio (trasmissione)", "Titanio"), ("Banco prova sospensioni", "Banco prova sospensioni"),
+        ("Galleria del vento (aero)", "Galleria del vento"), ("Nanotecnologie (elettronica)", "Nanotecnologie"),
+        ("Tracciato test (gomme)", "Tracciato test"),
+    ]
+    prevmap = {}
+    if isinstance(prev_fac, list):
+        for f in prev_fac:
+            prevmap[f.get("name")] = f.get("level")
+    out, found = [], False
+    for app_name, game_name in mapping:
+        m = re.search(re.escape(game_name) + r"\s*\(\s*(\d+)\s*\)", txt)
+        if m:
+            found = True
+            out.append({"name": app_name, "level": int(m.group(1))})
+        else:
+            out.append({"name": app_name, "level": prevmap.get(app_name)})
+    return out if found else None
+
+
 def build(session, prev):
     piloti = get_xml(session, "/xml/piloti.php")
     eco = get_xml(session, "/xml/economia.php")
@@ -367,6 +397,11 @@ def build(session, prev):
     ns = fetch_next_setup(session, data.get("drivers", []))
     if ns:
         data["nextSetup"] = ns
+
+    # ---- strutture (livelli) letti dal gioco ----
+    fac = fetch_facilities(session, data.get("facilities"))
+    if fac:
+        data["facilities"] = fac
 
     # lo stamp NON va qui: viene aggiunto in main() solo se i dati sono cambiati,
     # cosi' un semplice ricontrollo orario non genera un commit inutile.
