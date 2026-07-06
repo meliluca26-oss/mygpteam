@@ -329,6 +329,7 @@
 <!-- ============ STRATEGIA ============ -->
 <section class="view" id="v-strat">
   <div id="officialSetup"></div>
+  <div id="setupLab"></div>
   <div class="card">
     <h2><span class="dot"></span>🤖 Agente Stratega gara</h2>
     <p class="hint">Chiedi assetto, gomme, pit e ordini per la gara/contest in corso. Usa l'AI configurata in Consiglio direzione (consuma credito per messaggio).</p>
@@ -1139,7 +1140,7 @@ async function syncRemote(){
     el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
     if(S.team.cash!=null)el("bCash").value=S.team.cash; if(S.team.bank!=null){el("bBank").value=S.team.bank; el("bankAmt").value=S.team.bank;}
     var bg=S.budget||{},bk=["iSpon","iTv","iPub","iPrize","iMerch","eDrv","eEng","eRes","eOth"]; for(var i=0;i<bk.length;i++){ if(bg[bk[i]]!=null) el(bk[i]).value=bg[bk[i]]; }
-    buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup(); renderRace(); renderOfficialSetup();
+    buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup(); renderRace(); renderOfficialSetup(); renderSetupLab();
     if(el("realBanner")) el("realBanner").insertAdjacentHTML("beforeend",' <span class="pill p-ok">↻ sync dal PC '+new Date(v).toLocaleDateString("it-IT")+'</span>');
     updateLastUpdate();
   }catch(e){}
@@ -1524,6 +1525,55 @@ function renderOfficialSetup(){
     '<p class="note" style="margin-top:8px">Coppia, cambio, aero e pressione sono calcolati con le <b>formule lineari del gioco</b> (ricostruite dal tool "Setup your car" e verificate: riproducono esattamente i suoi valori), su curve, dislivelli, meteo e skill di ogni pilota. Si aggiornano da soli a ogni gara, anche su iPhone. <b>Freni e sospensioni</b> non fanno parte del calcolatore lineare, e <b>numero di soste e ordini piloti</b> sono scelte tattiche (nessun calcolatore ufficiale): affinale nelle prove private.</p></div>';
 }
 
+/* ---------- Ottimizzatore setup (prove private reali) ---------- */
+function labKey(){ var r=(S.nextSetup&&S.nextSetup.race)||{}; return (r.track||"gara")+"|"+r.curve+"|"+r.disl; }
+function parseLapTime(s){ s=(s||"").trim(); if(!s) return null; var p=s.split(/[:.\s]+/).filter(Boolean).map(function(x){return parseInt(x,10);}); if(!p.length||p.some(function(n){return isNaN(n);})) return null; if(p.length>=3) return p[0]*60000+p[1]*1000+p[2]; if(p.length===2) return p[0]*60000+p[1]*1000; return p[0]*1000; }
+function fmtLap(ms){ if(ms==null) return "—"; function z(n,l){n=String(n);while(n.length<l)n="0"+n;return n;} var m=Math.floor(ms/60000), s=Math.floor((ms%60000)/1000), x=ms%1000; return m+":"+z(s,2)+":"+z(x,3); }
+function setupPlan(b){ var st=200; function cl(x){return Math.max(0,Math.min(3000,x));}
+  return [
+   {label:"Base", s:{coppia:b.coppia,cambio:b.cambio,aero:b.aero,pressione:b.pressione}},
+   {label:"Coppia −200", s:{coppia:cl(b.coppia-st),cambio:b.cambio,aero:b.aero,pressione:b.pressione}},
+   {label:"Coppia +200", s:{coppia:cl(b.coppia+st),cambio:b.cambio,aero:b.aero,pressione:b.pressione}},
+   {label:"Cambio −200", s:{coppia:b.coppia,cambio:cl(b.cambio-st),aero:b.aero,pressione:b.pressione}},
+   {label:"Cambio +200", s:{coppia:b.coppia,cambio:cl(b.cambio+st),aero:b.aero,pressione:b.pressione}},
+   {label:"Aero −200", s:{coppia:b.coppia,cambio:b.cambio,aero:cl(b.aero-st),pressione:b.pressione}},
+   {label:"Aero +200", s:{coppia:b.coppia,cambio:b.cambio,aero:cl(b.aero+st),pressione:b.pressione}},
+   {label:"Pressione −200", s:{coppia:b.coppia,cambio:b.cambio,aero:b.aero,pressione:cl(b.pressione-st)}},
+   {label:"Pressione +200", s:{coppia:b.coppia,cambio:b.cambio,aero:b.aero,pressione:cl(b.pressione+st)}}
+  ];
+}
+function labStore(){ if(!S.setupLab) S.setupLab={}; var k=labKey(); if(!S.setupLab[k]) S.setupLab[k]={}; return S.setupLab[k]; }
+function saveLabTime(driver,label,val){ var st=labStore(); if(!st[driver]) st[driver]={}; var ms=parseLapTime(val); if(ms==null){ delete st[driver][label]; } else { st[driver][label]=ms; } save(); renderSetupLab(); }
+function renderSetupLab(){
+  var host=el("setupLab"); if(!host) return;
+  var ns=S.nextSetup;
+  if(!ns||!ns.drivers||!ns.drivers.length){ host.innerHTML=''; return; }
+  var r=ns.race||{}, mG=r.meteoGaraVal||0;
+  var sel=host.getAttribute("data-drv")||ns.drivers[0].name;
+  var d=ns.drivers.filter(function(x){return x.name===sel;})[0]||ns.drivers[0];
+  var base=officialCalc(r.curve,r.disl,mG,d.inputs||{});
+  var plan=setupPlan(base);
+  var store=(labStore()[d.name]||{});
+  var opts=ns.drivers.map(function(x){return '<option value="'+esc(x.name)+'"'+(x.name===d.name?' selected':'')+'>'+esc(x.name)+'</option>';}).join("");
+  var bestMs=null,bestLabel=null;
+  plan.forEach(function(p){ var ms=store[p.label]; if(ms!=null&&(bestMs==null||ms<bestMs)){bestMs=ms;bestLabel=p.label;} });
+  var dn=esc(d.name).replace(/'/g,"\\'");
+  var rows=plan.map(function(p){ var ms=store[p.label]; var hl=(ms!=null&&ms===bestMs);
+    return '<tr'+(hl?' style="background:rgba(11,122,59,.15);font-weight:600"':'')+'><td>'+p.label+'</td><td class="center">'+p.s.coppia+'</td><td class="center">'+p.s.cambio+'</td><td class="center">'+p.s.aero+'</td><td class="center">'+p.s.pressione+'</td><td><input style="width:92px" placeholder="1:23:456" value="'+(ms!=null?fmtLap(ms):"")+'" onchange="saveLabTime(\''+dn+'\',\''+p.label+'\',this.value)"></td></tr>';
+  }).join("");
+  function axisBest(minus,plus,field){ var cand=[["Base",store["Base"]],[minus,store[minus]],[plus,store[plus]]].filter(function(c){return c[1]!=null;}); if(!cand.length) return base[field]; cand.sort(function(a,b){return a[1]-b[1];}); var pobj=plan.filter(function(p){return p.label===cand[0][0];})[0]; return pobj?pobj.s[field]:base[field]; }
+  var sug=null;
+  if(store["Base"]!=null){ sug={coppia:axisBest("Coppia −200","Coppia +200","coppia"),cambio:axisBest("Cambio −200","Cambio +200","cambio"),aero:axisBest("Aero −200","Aero +200","aero"),pressione:axisBest("Pressione −200","Pressione +200","pressione")}; }
+  var bestHtml=bestMs!=null?('<p class="small">⏱️ Miglior tempo finora: <b>'+fmtLap(bestMs)+'</b> ('+bestLabel+').</p>'):'';
+  var sugHtml=sug?('<p class="small" style="margin-top:6px">🎯 <b>Combinazione migliore dai tuoi tempi</b> — provala per confermare: coppia <b>'+sug.coppia+'</b> · cambio <b>'+sug.cambio+'</b> · aero <b>'+sug.aero+'</b> · pressione <b>'+sug.pressione+'</b>.</p>'):'<p class="small" style="margin-top:6px">Inserisci prima il tempo della prova <b>Base</b>, poi le varianti: l\'app calcola la combinazione migliore.</p>';
+  host.innerHTML='<div class="card"><h2><span class="dot"></span>🔬 Ottimizzatore setup — prove private</h2>'+
+    '<p class="hint">Nel gioco: <b>Test → Prove private</b>. Imposta un test alla volta con questi settaggi e riporta qui il <b>tempo sul giro</b>. L\'app tiene la combinazione migliore. È l\'unico modo davvero attendibile: il giudice è il motore del gioco, non una stima.</p>'+
+    '<div style="margin:6px 0"><label>Pilota </label><select onchange="el(\'setupLab\').setAttribute(\'data-drv\',this.value);renderSetupLab();">'+opts+'</select> &nbsp;·&nbsp; assetto gara (meteo '+esc(r.meteoGara||"?")+')</div>'+
+    '<table><thead><tr><th>Prova</th><th class="center">Coppia</th><th class="center">Cambio</th><th class="center">Aero</th><th class="center">Pressione</th><th>Tempo giro</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    bestHtml+sugHtml+
+    '<p class="note" style="margin-top:6px">Come funziona: parte dai settaggi lineari (Base), poi cambia <b>una regolazione alla volta</b> di ±200. Provale nel gioco, segna i tempi: l\'app prende per ogni asse il valore col tempo migliore e te ne propone la combinazione. I tempi restano salvati per questa gara.</p></div>';
+}
+
 /* ---------- Navigazione & bind ---------- */
 function initTabs(){
   var btns=el("tabs").querySelectorAll("button");
@@ -1573,7 +1623,7 @@ function importData(){ var t=el("ioBox"); if(!t)return; var txt=(t.value||"").tr
 
 function boot(){
   fillSkillSelects(); buildOrders(); buildResearch(); buildSeats(); buildRefs();
-  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats(); renderRace(); renderOfficialSetup(); updateLastUpdate(); syncRemote();
+  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats(); renderRace(); renderOfficialSetup(); renderSetupLab(); updateLastUpdate(); syncRemote();
   el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
   if(S.team.cash!=null) el("bCash").value=S.team.cash;
   if(S.team.bank!=null) el("bBank").value=S.team.bank;
