@@ -250,13 +250,19 @@ def fetch_next_setup(session, drivers):
     for d in drivers:
         out.append({
             "name": d.get("name"),
-            "quali": official_setup(session, curve, disl, codeQ, d),
-            "gara": official_setup(session, curve, disl, codeG, d),
+            "inputs": {
+                "frenata": skill_optval(d.get("brake", 0)),
+                "cambio": skill_optval(d.get("gear", 0)),
+                "accelerazione": skill_optval(d.get("accel", 0)),
+                "traiettorie": skill_optval(d.get("traj", 0)),
+            },
         })
     return {
         "race": {"name": t(race, "RaceName"), "track": t(race, "TrackName"),
                  "laps": i(race, "Laps"), "date": t(race, "RaceDate"),
-                 "curve": curve, "disl": disl, "meteoQuali": labQ, "meteoGara": labG},
+                 "curve": curve, "disl": disl,
+                 "meteoQuali": labQ, "meteoGara": labG,
+                 "meteoQualiVal": codeQ, "meteoGaraVal": codeG},
         "drivers": out,
     }
 
