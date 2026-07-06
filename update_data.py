@@ -442,7 +442,22 @@ def main():
 
     s = requests.Session()
     s.headers.update(BROWSER_HEADERS)
-    login(s)
+    ok = False
+    for attempt in range(4):
+        login(s)
+        try:
+            chk = s.get(BASE + "/xml/staff.php", timeout=30)
+            if chk.status_code == 200 and "<F1Project" in chk.content.decode("iso-8859-1", "replace"):
+                ok = True
+                break
+        except Exception:
+            pass
+        print("Login non confermato (tentativo %d/4): il WAF del gioco ha respinto. Riprovo tra 6s..." % (attempt + 1))
+        time.sleep(6)
+        s = requests.Session()
+        s.headers.update(BROWSER_HEADERS)
+    if not ok:
+        die("login non riuscito dopo 4 tentativi (WAF del gioco). Riprovera' al prossimo giro orario.")
     data = build(s, prev)
 
     # confronto solo sui dati "veri" (escluso lo stamp): se identici, non riscrivo
