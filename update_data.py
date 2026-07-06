@@ -198,7 +198,9 @@ def official_setup(session, curve, disl, meteo_val, d):
     try:
         r = session.post(BASE + "/setupYourCar.php", data=body, timeout=30,
                          headers={"Referer": BASE + "/setupYourCar.php"})
-        txt = re.sub(r"[ \t\r\n]+", " ", r.content.decode("iso-8859-1", "replace"))
+        raw = r.content.decode("iso-8859-1", "replace")
+        raw = re.sub(r"<[^>]+>", " ", raw)            # via i tag: come il textContent del browser
+        txt = re.sub(r"[ \t\r\n]+", " ", raw)
     except Exception as ex:
         print("setup: POST fallita (%s)" % ex)
         return None
