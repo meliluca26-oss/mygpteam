@@ -270,10 +270,15 @@ def fetch_next_setup(session, drivers):
 def fetch_facilities(session, prev_fac):
     """Legge i livelli delle strutture da facilities.php (server-rendered)."""
     try:
-        html = session.get(BASE + "/facilities.php", timeout=30).content.decode("iso-8859-1", "replace")
-    except Exception:
+        rr = session.get(BASE + "/facilities.php", timeout=30,
+                        headers={"Referer": BASE + "/default.php"})
+        html = rr.content.decode("iso-8859-1", "replace")
+    except Exception as ex:
+        print("facilities: GET fallita (%s)" % ex)
         return None
     txt = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html))
+    print("facilities: HTTP %s len=%d haTifosi=%s haProgettazione=%s" % (
+        rr.status_code, len(html), ("Tifosi" in txt), ("Progettazione" in txt)))
     mapping = [
         ("Strutture tifosi", "Tifosi"), ("Progettazione/CAD", "Progettazione"),
         ("Simulatori avanzati", "Simulatori avanzati"), ("Banche dati", "Banche dati"),
