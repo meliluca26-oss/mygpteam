@@ -1457,16 +1457,39 @@ function renderRace(){
     rows+='<tr'+(mineRow?' style="background:rgba(11,122,59,.15);font-weight:600"':'')+'><td>'+c.pos+'</td><td>'+esc(c.driver||"")+'</td><td class="small">'+esc(c.team||"")+'</td><td class="center">'+(c.grid||"—")+'</td><td class="center">'+fmtGap(c.gap)+'</td><td class="center">'+(c.pit!=null?c.pit:"—")+'</td></tr>';
   }
   var table=cl.length? ('<table><thead><tr><th>Pos</th><th>Pilota</th><th>Team</th><th class="center">Griglia</th><th class="center">Distacco</th><th class="center">Soste</th></tr></thead><tbody>'+rows+'</tbody></table>') : '<div class="small">Classifica non disponibile per questa gara.</div>';
-  var aiBtn='<div style="margin:14px 0 6px"><button onclick="aiRace()">🤖 Genera analisi AI (rendimento, setup/strategia, avversari, consigli)</button></div><div id="raceAiOut"></div>';
+  var aiBtn='<div style="margin:14px 0 6px"><button onclick="aiRace()">🤖 Rigenera analisi AI</button> <span class="small">— si genera da sola dopo ogni gara nuova</span></div><div id="raceAiOut"></div>';
   host.innerHTML=h+'<h3 style="margin:6px 0">I tuoi piloti — griglia → arrivo</h3>'+cards+wl+'<h3 style="margin:10px 0 6px">Classifica &amp; confronto avversari</h3>'+table+aiBtn;
+  var cachedTxt=raceAiCached(r.id);
+  if(cachedTxt){
+    el("raceAiOut").innerHTML='<div class="out"><div class="small" style="white-space:pre-wrap">'+esc(cachedTxt)+'</div><div class="note" style="margin-top:6px">Analisi generata automaticamente dopo la gara. Usa il pulsante per rigenerarla.</div></div>';
+  } else {
+    var cfg=loadAI();
+    if(cfg&&cfg.key){ aiRace(true); }
+    else { el("raceAiOut").innerHTML='<div class="note">Configura la chiave AI (in "Consiglio direzione → Configurazione AI") e l\'analisi partirà da sola dopo ogni gara.</div>'; }
+  }
 }
-function aiRace(){
+var RACE_AI_KEY="mygpteam_raceai_v1";
+var raceAiBusy=false;
+function raceAiCached(id){ try{ var c=JSON.parse(localStorage.getItem(RACE_AI_KEY)); return (c&&c.id===id&&c.text)? c.text : null; }catch(e){ return null; } }
+function aiRace(auto){
   var r=S.lastRace; if(!r) return;
+  if(auto && raceAiBusy) return;
+  var out=el("raceAiOut"); if(!out) return;
+  raceAiBusy=true;
   var mine=(r.mine||[]).map(function(m){return "- "+m.driver+": griglia P"+(m.grid||"?")+", arrivo "+(m.pos?("P"+m.pos):"ritirato")+", distacco "+(m.gap||"—")+", "+(m.pit!=null?m.pit+" soste":"—");}).join("\n");
   var cl=(r.classification||[]).slice(0,10).map(function(c){return c.pos+". "+c.driver+" ("+(c.team||"")+") griglia "+(c.grid||"?")+" dist "+(c.gap||"")+" "+(c.pit!=null?c.pit+" soste":"");}).join("\n");
   var usr=fullContext()+"\n\n=== ULTIMA GARA: "+(r.name||"?")+" — "+(r.track||"?")+", "+(r.laps||"?")+" giri ===\nVincitore: "+((r.winner&&r.winner.driver)||"?")+" ("+((r.winner&&r.winner.time)||"")+"); giro veloce: "+((r.bestLap&&r.bestLap.driver)||"?")+".\nI NOSTRI PILOTI:\n"+mine+"\nTOP 10:\n"+cl;
   var sys="Sei l'analista gara della scuderia su MyGPTeam (manager di Formula 1). Analizza l'ULTIMA gara e rispondi in italiano, conciso e concreto, in 4 blocchi: 1) RENDIMENTO piloti nostri (griglia vs arrivo, posizioni guadagnate/perse, distacchi, soste); 2) EFFICACIA setup e strategia (numero di soste rispetto ai rivali, gestione gomme/carburante deducibile da soste e distacchi: cosa ha funzionato e cosa no); 3) CONFRONTO con gli avversari diretti (chi ci ha battuto e perché, chi abbiamo battuto); 4) 3 CONSIGLI concreti per la prossima gara (regolazioni, numero soste, ordini piloti nelle 5 fasi). Usa solo i dati forniti; se un dato manca, dillo. Nessun fronzolo.";
-  runAgent("raceAiOut", sys, usr);
+  out.innerHTML='<div class="out"><span class="small">🤖 L\'analista sta analizzando la gara…</span></div>';
+  callLLM(sys, usr).then(function(txt){
+    out.innerHTML='<div class="out"><div class="small" style="white-space:pre-wrap">'+esc(txt)+'</div><div class="note" style="margin-top:6px">Analisi generata automaticamente dopo la gara. Usa il pulsante per rigenerarla.</div></div>';
+    try{ localStorage.setItem(RACE_AI_KEY, JSON.stringify({id:r.id, text:txt})); }catch(e){}
+    raceAiBusy=false;
+  }).catch(function(e){
+    raceAiBusy=false;
+    if(auto){ out.innerHTML='<div class="note">Analisi automatica non riuscita ('+esc(e.message)+'). Premi il pulsante per riprovare o configura la chiave in "Consiglio direzione → Configurazione AI".</div>'; }
+    else { out.innerHTML='<div class="out" style="border-left-color:var(--bad)"><span class="small">Errore: '+esc(e.message)+'</span><div class="note" style="margin-top:6px">Imposta la chiave in "Consiglio direzione → Configurazione AI".</div></div>'; }
+  });
 }
 
 /* ---------- Navigazione & bind ---------- */
