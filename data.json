@@ -1,6 +1,6 @@
 {
-  "stamp": 1783328126287,
-  "pushedAt": 1783328126287,
+  "stamp": 1783333658930,
+  "pushedAt": 1783333658930,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -177,7 +177,7 @@
     },
     {
       "name": "Progettazione/CAD",
-      "level": 6
+      "level": 5
     },
     {
       "name": "Simulatori avanzati",
@@ -185,7 +185,7 @@
     },
     {
       "name": "Banche dati",
-      "level": 3
+      "level": 2
     },
     {
       "name": "Banco prova motori",
@@ -193,7 +193,7 @@
     },
     {
       "name": "Carboceramiche (freni)",
-      "level": 2
+      "level": 3
     },
     {
       "name": "Titanio (trasmissione)",
@@ -201,7 +201,7 @@
     },
     {
       "name": "Banco prova sospensioni",
-      "level": 1
+      "level": 2
     },
     {
       "name": "Galleria del vento (aero)",
@@ -209,11 +209,11 @@
     },
     {
       "name": "Nanotecnologie (elettronica)",
-      "level": 1
+      "level": 2
     },
     {
       "name": "Tracciato test (gomme)",
-      "level": 4
+      "level": 5
     }
   ],
   "lastRace": {
