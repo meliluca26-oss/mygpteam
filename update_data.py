@@ -168,6 +168,97 @@ def fetch_last_race(session, team_name):
     }
 
 
+def skill_optval(stored):
+    """Skill nostra (0-based) -> valore per il tool ufficiale Setup your car (0-200)."""
+    try:
+        return int(round(int(stored) * 200.0 / 19.0))
+    except (TypeError, ValueError):
+        return 0
+
+
+def meteo_code(alt):
+    a = (alt or "").lower()
+    if "pioggia" in a and ("lieve" in a or "debole" in a):
+        return 200, "pioggia lieve"
+    if "pioggia" in a:
+        return 400, "pioggia"
+    return 0, "sole"
+
+
+def official_setup(session, curve, disl, meteo_val, d):
+    """Interroga il calcolatore UFFICIALE del gioco: ritorna i 4 settaggi lineari."""
+    body = {
+        "dislivelli": str(disl), "curve": str(curve), "meteo": str(meteo_val),
+        "frenare": str(skill_optval(d.get("brake", 0))),
+        "cambio": str(skill_optval(d.get("gear", 0))),
+        "accelerare": str(skill_optval(d.get("accel", 0))),
+        "traiettorie": str(skill_optval(d.get("traj", 0))),
+        "_Next": "1",
+    }
+    try:
+        r = session.post(BASE + "/setupYourCar.php", data=body, timeout=30,
+                         headers={"Referer": BASE + "/setupYourCar.php"})
+        txt = re.sub(r"[ \t\r\n]+", " ", r.content.decode("iso-8859-1", "replace"))
+    except Exception as ex:
+        print("setup: POST fallita (%s)" % ex)
+        return None
+
+    def g(term):
+        m = re.search(term + r"\s*[:=]?\s*(\d{1,4})", txt)
+        return int(m.group(1)) if m else None
+
+    return {"coppia": g("Coppia"), "cambio": g("Rapporti"),
+            "aero": g("Aerodinamica"), "pressione": g("Pressione")}
+
+
+def fetch_next_setup(session, drivers):
+    """Setup ufficiale (Coppia/Cambio/Aero/Pressione) per la prossima gara, per ogni pilota."""
+    if not drivers:
+        return None
+    try:
+        home = session.get(HOME_URL, timeout=30).content.decode("iso-8859-1", "replace")
+    except Exception:
+        return None
+    m = re.search(r"Prossima gara.{0,1500}?viewRace\.php\?id=(\d+)", home, re.S)
+    if not m:
+        print("nextSetup: prossima gara non trovata nella home.")
+        return None
+    root = get_xml_url(session, BASE + "/xml/gara.php?lingua=1&idgara=" + m.group(1))
+    race = root.find(".//Race") if root is not None else None
+    if race is None:
+        print("nextSetup: feed gara futura non disponibile.")
+        return None
+    trackid = i(race, "IdTrack")
+    try:
+        th = session.get(BASE + "/viewTrack.php?id=" + str(trackid), timeout=30).content.decode("iso-8859-1", "replace")
+    except Exception:
+        return None
+    cm = re.search(r"curve[^\d]{0,80}(\d+)\s*%", th, re.S)
+    dm = re.search(r"dislivelli[^\d]{0,80}(\d+)\s*%", th, re.S)
+    if not cm or not dm:
+        print("nextSetup: curve/dislivelli non letti dal circuito.")
+        return None
+    curve, disl = int(cm.group(1)), int(dm.group(1))
+    qm = re.search(r"Meteo qualifica.{0,200}?alt=\"([^\"]+)\"", th, re.S)
+    gm = re.search(r"Meteo gara.{0,200}?alt=\"([^\"]+)\"", th, re.S)
+    codeQ, labQ = meteo_code(qm.group(1) if qm else "")
+    codeG, labG = meteo_code(gm.group(1) if gm else "")
+
+    out = []
+    for d in drivers:
+        out.append({
+            "name": d.get("name"),
+            "quali": official_setup(session, curve, disl, codeQ, d),
+            "gara": official_setup(session, curve, disl, codeG, d),
+        })
+    return {
+        "race": {"name": t(race, "RaceName"), "track": t(race, "TrackName"),
+                 "laps": i(race, "Laps"), "date": t(race, "RaceDate"),
+                 "curve": curve, "disl": disl, "meteoQuali": labQ, "meteoGara": labG},
+        "drivers": out,
+    }
+
+
 def build(session, prev):
     piloti = get_xml(session, "/xml/piloti.php")
     eco = get_xml(session, "/xml/economia.php")
@@ -263,6 +354,11 @@ def build(session, prev):
     race = fetch_last_race(session, team_name)
     if race:
         data["lastRace"] = race
+
+    # ---- setup UFFICIALE (dal tool del gioco) per la prossima gara ----
+    ns = fetch_next_setup(session, data.get("drivers", []))
+    if ns:
+        data["nextSetup"] = ns
 
     # lo stamp NON va qui: viene aggiunto in main() solo se i dati sono cambiati,
     # cosi' un semplice ricontrollo orario non genera un commit inutile.

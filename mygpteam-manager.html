@@ -328,6 +328,7 @@
 
 <!-- ============ STRATEGIA ============ -->
 <section class="view" id="v-strat">
+  <div id="officialSetup"></div>
   <div class="card">
     <h2><span class="dot"></span>🤖 Agente Stratega gara</h2>
     <p class="hint">Chiedi assetto, gomme, pit e ordini per la gara/contest in corso. Usa l'AI configurata in Consiglio direzione (consuma credito per messaggio).</p>
@@ -1075,7 +1076,9 @@ function fullContext(){
   var research=SECTORS.map(function(s){var t=S.research[s[0]]||0; return s[1]+" "+INVEST[t][0];}).join(", ");
   var circ="";
   if(el("cCurve")) circ="\nPROSSIMA GARA (dal setup): "+el("cName").value+", curve "+el("cCurve").value+"%, dislivelli "+el("cDisl").value+"%, "+el("cLaps").value+" giri, pitlane "+el("cPit").value+"m, condizioni "+el("cCond").value+"%, meteo quali "+el("cWxQ").value+", meteo gara "+el("cWxR").value+".";
-  return "SQUADRA "+(S.team.name||"?")+" — Formula "+(S.team.formula||"?")+"\nFINANZE: cassa "+(S.team.cash||0)+", banca "+(S.team.bank||0)+" (bloccata), disponibilita prevista "+(S.team.avail!=null?S.team.avail:"?")+" EUR.\nBILANCIO/sett entrate: sponsor "+(b.iSpon||0)+", merch "+(b.iMerch||0)+", TV "+(b.iTv||0)+", pubblico "+(b.iPub||0)+", premi "+(b.iPrize||0)+". Uscite: stipendi "+(b.eDrv||0)+", staff "+(b.eEng||0)+", ricerca "+(b.eRes||0)+", strutture/merch/altro "+(b.eOth||0)+".\nPILOTI (i contratti a 1 stagione scadono a settimana 11):\n"+drivers+"\nLABORATORI:\n"+labs+"\nINVESTIMENTI RICERCA/sett: "+research+"."+circ+"\nINGEGNERI (bravura/meccanica/innovazione su 20; meccanica alza la qualita del pezzo, innovazione alza la velocita di ricerca):\n"+ENGINEERS.map(function(e){return "- "+e.name+" ("+e.age+"a, "+e.comp+"): "+e.brav+"/"+e.mecc+"/"+e.innov;}).join("\n")+"\nSTAFF: affiatamento "+STAFF.lavoroGruppo+"; meccanici "+STAFF.meccanici+", tecnici "+STAFF.tecnici+", pubblicitari "+STAFF.pubblicitari+", osservatori "+STAFF.osservatori+", preparatori "+STAFF.preparatori+", manutentori "+STAFF.manutentori+". (pubblicitari incidono su sponsor e tifosi; osservatori sul vivaio; manutentori su merchandising e usura circuito; preparatori sul peso piloti).\nSTRUTTURE (livello su 20): "+FACILITIES.map(function(f){return f.name+" "+f.level;}).join(", ")+". Investimento strutture-laboratorio a 6 fasce come i lab (0/1.000/5.000/15.000/25.000/50.000 EUR = max catastrofico/mediocre/molto buono/grandioso/immenso/insuperabile). Strutture tifosi: upgrade 100k a livello fino al 4, poi 200k (4-8), 300k (8-12), 400k (12-16), 500k (16-20); +65 al limite fanclub per livello.";
+  var offi="";
+  if(S.nextSetup&&S.nextSetup.drivers&&S.nextSetup.drivers.length){ var rns=S.nextSetup.race||{}; offi="\nSETTAGGI UFFICIALI del gioco per la prossima gara "+(rns.name||"")+" ("+(rns.track||"")+", curve "+rns.curve+"%, dislivelli "+rns.disl+"%, meteo quali "+rns.meteoQuali+"/gara "+rns.meteoGara+"): "+S.nextSetup.drivers.map(function(d){var q=d.quali||{},g=d.gara||{};return d.name+" — QUALI coppia "+q.coppia+"/cambio "+q.cambio+"/aero "+q.aero+"/pressione "+q.pressione+"; GARA coppia "+g.coppia+"/cambio "+g.cambio+"/aero "+g.aero+"/pressione "+g.pressione;}).join(" | ")+". Questi 4 valori (coppia/cambio/aero/pressione) e le gomme sono UFFICIALI e vanno usati come sono; freni, sospensioni, numero soste e ordini piloti NON hanno un calcolatore ufficiale nel gioco: proponili come stime tattiche.";}
+  return "SQUADRA "+(S.team.name||"?")+" — Formula "+(S.team.formula||"?")+"\nFINANZE: cassa "+(S.team.cash||0)+", banca "+(S.team.bank||0)+" (bloccata), disponibilita prevista "+(S.team.avail!=null?S.team.avail:"?")+" EUR.\nBILANCIO/sett entrate: sponsor "+(b.iSpon||0)+", merch "+(b.iMerch||0)+", TV "+(b.iTv||0)+", pubblico "+(b.iPub||0)+", premi "+(b.iPrize||0)+". Uscite: stipendi "+(b.eDrv||0)+", staff "+(b.eEng||0)+", ricerca "+(b.eRes||0)+", strutture/merch/altro "+(b.eOth||0)+".\nPILOTI (i contratti a 1 stagione scadono a settimana 11):\n"+drivers+"\nLABORATORI:\n"+labs+"\nINVESTIMENTI RICERCA/sett: "+research+"."+circ+"\nINGEGNERI (bravura/meccanica/innovazione su 20; meccanica alza la qualita del pezzo, innovazione alza la velocita di ricerca):\n"+ENGINEERS.map(function(e){return "- "+e.name+" ("+e.age+"a, "+e.comp+"): "+e.brav+"/"+e.mecc+"/"+e.innov;}).join("\n")+"\nSTAFF: affiatamento "+STAFF.lavoroGruppo+"; meccanici "+STAFF.meccanici+", tecnici "+STAFF.tecnici+", pubblicitari "+STAFF.pubblicitari+", osservatori "+STAFF.osservatori+", preparatori "+STAFF.preparatori+", manutentori "+STAFF.manutentori+". (pubblicitari incidono su sponsor e tifosi; osservatori sul vivaio; manutentori su merchandising e usura circuito; preparatori sul peso piloti).\nSTRUTTURE (livello su 20): "+FACILITIES.map(function(f){return f.name+" "+f.level;}).join(", ")+". Investimento strutture-laboratorio a 6 fasce come i lab (0/1.000/5.000/15.000/25.000/50.000 EUR = max catastrofico/mediocre/molto buono/grandioso/immenso/insuperabile). Strutture tifosi: upgrade 100k a livello fino al 4, poi 200k (4-8), 300k (8-12), 400k (12-16), 500k (16-20); +65 al limite fanclub per livello."+offi;
 }
 async function callLLMChat(sys, messages){
   var c=loadAI(); if(!c.key) throw new Error("Nessuna chiave API: configurala in Consiglio direzione → Configurazione AI.");
@@ -1130,13 +1133,13 @@ function updateLastUpdate(){ var e=el("lastUpdate"); if(!e)return; var v=S&&S.st
 async function syncRemote(){
   try{
     var d=await fetchNewest(); var v=(d&&(d.stamp||d.pushedAt)); if(!d||!v||(S.stamp||0)>=v) return;
-    if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season; if(d.lastRace)S.lastRace=d.lastRace;
+    if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season; if(d.lastRace)S.lastRace=d.lastRace; if(d.nextSetup)S.nextSetup=d.nextSetup;
     if(d.engineers)ENGINEERS=d.engineers; if(d.staff)STAFF=d.staff; if(d.facilities)FACILITIES=d.facilities;
     S.stamp=v; S.dataVersion=v; save();
     el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
     if(S.team.cash!=null)el("bCash").value=S.team.cash; if(S.team.bank!=null){el("bBank").value=S.team.bank; el("bankAmt").value=S.team.bank;}
     var bg=S.budget||{},bk=["iSpon","iTv","iPub","iPrize","iMerch","eDrv","eEng","eRes","eOth"]; for(var i=0;i<bk.length;i++){ if(bg[bk[i]]!=null) el(bk[i]).value=bg[bk[i]]; }
-    buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup(); renderRace();
+    buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup(); renderRace(); renderOfficialSetup();
     if(el("realBanner")) el("realBanner").insertAdjacentHTML("beforeend",' <span class="pill p-ok">↻ sync dal PC '+new Date(v).toLocaleDateString("it-IT")+'</span>');
     updateLastUpdate();
   }catch(e){}
@@ -1492,6 +1495,25 @@ function aiRace(auto){
   });
 }
 
+/* ---------- Settaggi ufficiali (dal tool del gioco) ---------- */
+function gommaMeteo(m){ m=(m||"").toLowerCase(); return /pioggia lieve/.test(m)?"Intermedie":(/pioggia/.test(m)?"Wet":"Slick"); }
+function renderOfficialSetup(){
+  var host=el("officialSetup"); if(!host) return;
+  var ns=S.nextSetup;
+  if(!ns||!ns.drivers||!ns.drivers.length){ host.innerHTML=''; return; }
+  var r=ns.race||{};
+  var h='<div class="banner"><span>🏁 Prossima gara: <b>'+esc(r.name||"")+'</b> — '+esc(r.track||"")+' · '+(r.laps||"?")+' giri · curve '+r.curve+'% · dislivelli '+r.disl+'% · meteo quali '+esc(r.meteoQuali||"?")+', gara '+esc(r.meteoGara||"?")+'</span></div>';
+  var rows='';
+  for(var i=0;i<ns.drivers.length;i++){ var d=ns.drivers[i]; var q=d.quali||{}, g=d.gara||{};
+    function C(x){ return x!=null? x : "—"; }
+    rows+='<tr><td rowspan="2"><b>'+esc(d.name||"")+'</b></td><td>Qualifica</td><td class="center">'+C(q.coppia)+'</td><td class="center">'+C(q.cambio)+'</td><td class="center">'+C(q.aero)+'</td><td class="center">'+C(q.pressione)+'</td><td class="center">'+gommaMeteo(r.meteoQuali)+'</td></tr>';
+    rows+='<tr><td>Gara</td><td class="center">'+C(g.coppia)+'</td><td class="center">'+C(g.cambio)+'</td><td class="center">'+C(g.aero)+'</td><td class="center">'+C(g.pressione)+'</td><td class="center">'+gommaMeteo(r.meteoGara)+'</td></tr>';
+  }
+  host.innerHTML='<div class="card"><h2><span class="dot"></span>⚙️ Settaggi UFFICIALI del gioco <span class="tag">VERIFICATO</span></h2>'+h+
+    '<table><thead><tr><th>Pilota</th><th>Sessione</th><th class="center">Coppia</th><th class="center">Cambio</th><th class="center">Aero</th><th class="center">Pressione</th><th class="center">Gomme</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<p class="note" style="margin-top:8px">Coppia, cambio, aero, pressione e gomme vengono dal calcolatore <b>ufficiale del gioco</b> ("Setup your car"), calcolati sulle skill di ciascun pilota e sul meteo previsto. <b>Freni, sospensioni, numero di soste e ordini piloti</b> non hanno un calcolatore ufficiale nel gioco: restano scelte tattiche da affinare nelle prove private.</p></div>';
+}
+
 /* ---------- Navigazione & bind ---------- */
 function initTabs(){
   var btns=el("tabs").querySelectorAll("button");
@@ -1532,7 +1554,7 @@ async function syncNow(){
     if(!d){ alert("data.json non raggiungibile (sei online?)."); return; }
     var v=(d&&(d.stamp||d.pushedAt)); if(!v){ alert("data.json non valido."); return; }
     if(d.engineers)ENGINEERS=d.engineers; if(d.staff)STAFF=d.staff; if(d.facilities)FACILITIES=d.facilities;
-    if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season; if(d.lastRace)S.lastRace=d.lastRace;
+    if(d.team)S.team=d.team; if(d.drivers)S.drivers=d.drivers; if(d.budget)S.budget=d.budget; if(d.labs)S.labs=d.labs; if(d.research)S.research=d.research; if(d.season)S.season=d.season; if(d.lastRace)S.lastRace=d.lastRace; if(d.nextSetup)S.nextSetup=d.nextSetup;
     S.stamp=v; S.dataVersion=v; save(); boot();
     alert("Sincronizzato. Dati aggiornati al "+new Date(v).toLocaleString("it-IT"));
   }catch(e){ alert("Errore sync: "+e.message); }
@@ -1541,7 +1563,7 @@ function importData(){ var t=el("ioBox"); if(!t)return; var txt=(t.value||"").tr
 
 function boot(){
   fillSkillSelects(); buildOrders(); buildResearch(); buildSeats(); buildRefs();
-  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats(); renderRace(); updateLastUpdate(); syncRemote();
+  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats(); renderRace(); renderOfficialSetup(); updateLastUpdate(); syncRemote();
   el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
   if(S.team.cash!=null) el("bCash").value=S.team.cash;
   if(S.team.bank!=null) el("bBank").value=S.team.bank;
