@@ -144,6 +144,7 @@
   <button data-v="board">Consiglio direzione</button>
   <button data-v="strat">Strategia gara</button>
   <button data-v="race">Analisi gara</button>
+  <button data-v="contest">Contest</button>
   <button data-v="dev">Sviluppo &amp; ricerca</button>
   <button data-v="eco">Bilancio &amp; stagione</button>
   <button data-v="drv">Piloti &amp; contratti</button>
@@ -158,6 +159,30 @@
 <!-- ============ ANALISI GARA ============ -->
 <section class="view" id="v-race">
   <div id="raceOut"></div>
+</section>
+
+<!-- ============ CONTEST ============ -->
+<section class="view" id="v-contest">
+  <div class="card">
+    <h2><span class="dot"></span>🏆 Contest settimanali — setup &amp; requisiti</h2>
+    <p class="hint">Usa lo <b>stesso motore delle gare</b>: imposta la pista del contest (curve, dislivelli, meteo — li vedi nel gioco alla voce Contest/Eventi) e ottieni gli stessi settaggi ufficiali + gomme. Nota: la lista contest live non è leggibile in automatico (il gioco blocca quelle pagine), quindi i parametri pista li imposti tu.</p>
+    <div class="team" style="gap:10px;flex-wrap:wrap">
+      <div><label>Curve %</label><input id="ctCurve" type="number" value="50" style="width:80px" oninput="renderContest()"></div>
+      <div><label>Dislivelli %</label><input id="ctDisl" type="number" value="30" style="width:80px" oninput="renderContest()"></div>
+      <div><label>Meteo</label><select id="ctMeteo" onchange="renderContest()"><option value="0">Sole</option><option value="200">Pioggia lieve</option><option value="400">Pioggia</option></select></div>
+      <div><label>Giri</label><input id="ctLaps" type="number" value="20" style="width:70px" oninput="renderContest()"></div>
+    </div>
+    <div id="contestSetup" style="margin-top:10px"></div>
+  </div>
+  <div class="card">
+    <h2><span class="dot"></span>✅ Requisiti di partecipazione</h2>
+    <p class="hint">Inserisci i GP totali della tua squadra (li vedi nella Panoramica scuderia). L'app verifica per quali tipi di contest sei idoneo.</p>
+    <div class="team" style="gap:10px">
+      <div><label>GP totali squadra</label><input id="ctTeamGP" type="number" placeholder="es. 78" style="width:100px" oninput="saveTeamGP(this.value);renderContestReq()"></div>
+      <div><label>Formula</label><input id="ctFormula" readonly style="width:70px"></div>
+    </div>
+    <div id="contestReq" style="margin-top:10px"></div>
+  </div>
 </section>
 
 <!-- ============ DASHBOARD ============ -->
@@ -1140,7 +1165,7 @@ async function syncRemote(){
     el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
     if(S.team.cash!=null)el("bCash").value=S.team.cash; if(S.team.bank!=null){el("bBank").value=S.team.bank; el("bankAmt").value=S.team.bank;}
     var bg=S.budget||{},bk=["iSpon","iTv","iPub","iPrize","iMerch","eDrv","eEng","eRes","eOth"]; for(var i=0;i<bk.length;i++){ if(bg[bk[i]]!=null) el(bk[i]).value=bg[bk[i]]; }
-    buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup(); renderRace(); renderOfficialSetup(); renderSetupLab(); renderDashBanner();
+    buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup(); renderRace(); renderOfficialSetup(); renderSetupLab(); renderDashBanner(); initContest();
     if(el("realBanner")) el("realBanner").insertAdjacentHTML("beforeend",' <span class="pill p-ok">↻ sync dal PC '+new Date(v).toLocaleDateString("it-IT")+'</span>');
     updateLastUpdate();
   }catch(e){}
@@ -1537,6 +1562,39 @@ function renderDashBanner(){
   var w=el("dashWarn");
   if(w){ var exp=(S.drivers||[]).filter(function(d){return (d.con||0)<=1;}); if(exp.length){ w.style.display='block'; w.innerHTML='⏰ <b>Contratti in scadenza:</b> '+exp.map(function(d){return esc(d.name)+' (1 stagione)';}).join(", ")+' — rinnova o cedi entro la scadenza.'; } else { w.style.display='none'; w.innerHTML=''; } }
 }
+/* ---------- Contest settimanali ---------- */
+function driverOptInputs(){
+  return (S.drivers||[]).map(function(d){ return {name:d.name, inputs:{accelerazione:Math.round((d.accel||0)*200/19), cambio:Math.round((d.gear||0)*200/19), traiettorie:Math.round((d.traj||0)*200/19)}}; });
+}
+function renderContest(){
+  var host=el("contestSetup"); if(!host) return;
+  var curve=+((el("ctCurve")||{}).value||0), disl=+((el("ctDisl")||{}).value||0), meteo=+((el("ctMeteo")||{}).value||0), laps=+((el("ctLaps")||{}).value||0);
+  var meteoLbl = meteo===400?"pioggia":(meteo===200?"pioggia lieve":"sole");
+  var drv=driverOptInputs();
+  if(!drv.length){ host.innerHTML='<div class="small">Nessun pilota nei dati.</div>'; return; }
+  var rows=drv.map(function(d){ var s=officialCalc(curve,disl,meteo,d.inputs); return '<tr><td><b>'+esc(d.name)+'</b></td><td class="center">'+s.coppia+'</td><td class="center">'+s.cambio+'</td><td class="center">'+s.aero+'</td><td class="center">'+s.pressione+'</td><td class="center">'+gommaMeteo(meteoLbl)+'</td></tr>'; }).join("");
+  var maxStint=Math.max(1,Math.floor(0.57*laps)), stops=Math.max(0,Math.ceil(laps/maxStint)-1);
+  host.innerHTML='<table><thead><tr><th>Pilota</th><th class="center">Coppia</th><th class="center">Cambio</th><th class="center">Aero</th><th class="center">Pressione</th><th class="center">Gomme</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<p class="small" style="margin-top:8px">Settaggi con la <b>stessa formula ufficiale delle gare</b>. Strategia base: ~<b>'+stops+' sosta/e</b> ('+laps+' giri, un pieno copre ~'+maxStint+' giri), gomme <b>'+gommaMeteo(meteoLbl)+'</b>. Per soste esatte e ordini piloti usa lo Stratega AI o l\'ottimizzatore in <b>Strategia gara</b>: valgono uguali per i contest.</p>';
+}
+function saveTeamGP(v){ var n=parseInt(v,10); S.teamGP=isNaN(n)?null:n; save(); }
+function renderContestReq(){
+  var host=el("contestReq"); if(!host) return;
+  var f=(S.team&&S.team.formula)||"?"; if(el("ctFormula")) el("ctFormula").value=f;
+  var gp=S.teamGP;
+  var items=[
+    {name:"Rookie / Baby (team giovane)", ok:(gp!=null? (gp<82) : null), req:"Team con meno di ~82 GP disputati"},
+    {name:"Monobrand", ok:null, req:"Componenti vettura tutti della stessa marca — verifica in Magazzino"},
+    {name:"Open / a tutti", ok:true, req:"Nessun requisito particolare"},
+    {name:"Per formula ("+esc(f)+")", ok:true, req:"Riservato alla tua formula: "+esc(f)}
+  ];
+  var rows=items.map(function(it){ var badge = it.ok===null? '<span class="pill p-warn">da verificare</span>' : (it.ok? '<span class="pill p-ok">idoneo</span>' : '<span class="pill p-warn">non idoneo</span>'); return '<tr><td>'+esc(it.name)+'</td><td class="small">'+it.req+'</td><td>'+badge+'</td></tr>'; }).join("");
+  host.innerHTML='<table><thead><tr><th>Tipo contest</th><th>Requisito</th><th>Stato</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    (gp==null?'<p class="small" style="margin-top:6px">Inserisci i GP totali squadra per verificare i contest "Rookie/Baby".</p>':'')+
+    '<p class="note" style="margin-top:6px">Monobrand e i requisiti su componenti si verificano nel gioco (Magazzino): l\'app non li legge in automatico. Il tipo di contest della settimana e i suoi requisiti esatti li trovi in <b>Eventi settimanali / Contest</b> nel gioco.</p>';
+}
+function initContest(){ if(el("ctTeamGP")&&S.teamGP!=null) el("ctTeamGP").value=S.teamGP; renderContest(); renderContestReq(); }
+
 /* ---------- Ottimizzatore setup (prove private reali) ---------- */
 function labKey(){ var r=(S.nextSetup&&S.nextSetup.race)||{}; return (r.track||"gara")+"|"+r.curve+"|"+r.disl; }
 function parseLapTime(s){ s=(s||"").trim(); if(!s) return null; var p=s.split(/[:.\s]+/).filter(Boolean).map(function(x){return parseInt(x,10);}); if(!p.length||p.some(function(n){return isNaN(n);})) return null; if(p.length>=3) return p[0]*60000+p[1]*1000+p[2]; if(p.length===2) return p[0]*60000+p[1]*1000; return p[0]*1000; }
@@ -1635,7 +1693,7 @@ function importData(){ var t=el("ioBox"); if(!t)return; var txt=(t.value||"").tr
 
 function boot(){
   fillSkillSelects(); buildOrders(); buildResearch(); buildSeats(); buildRefs();
-  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats(); renderRace(); renderOfficialSetup(); renderSetupLab(); renderDashBanner(); updateLastUpdate(); syncRemote();
+  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats(); renderRace(); renderOfficialSetup(); renderSetupLab(); renderDashBanner(); initContest(); updateLastUpdate(); syncRemote();
   el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
   if(S.team.cash!=null) el("bCash").value=S.team.cash;
   if(S.team.bank!=null) el("bBank").value=S.team.bank;
