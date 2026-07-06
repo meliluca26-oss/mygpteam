@@ -1,6 +1,6 @@
 {
-  "stamp": 1783311543792,
-  "pushedAt": 1783311543792,
+  "stamp": 1783327582351,
+  "pushedAt": 1783327582351,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -344,6 +344,50 @@
         "grid": 1,
         "gap": null,
         "pit": 1
+      }
+    ]
+  },
+  "nextSetup": {
+    "race": {
+      "name": "Botown",
+      "track": "Formula racing Autodrome",
+      "laps": 84,
+      "date": "2026-07-12 18:00:00",
+      "curve": 98,
+      "disl": 61,
+      "meteoQuali": "sole",
+      "meteoGara": "pioggia lieve"
+    },
+    "drivers": [
+      {
+        "name": "Anders Malmstrom",
+        "quali": {
+          "coppia": null,
+          "cambio": null,
+          "aero": null,
+          "pressione": null
+        },
+        "gara": {
+          "coppia": null,
+          "cambio": null,
+          "aero": null,
+          "pressione": null
+        }
+      },
+      {
+        "name": "Luis Poppmeier",
+        "quali": {
+          "coppia": null,
+          "cambio": null,
+          "aero": null,
+          "pressione": null
+        },
+        "gara": {
+          "coppia": null,
+          "cambio": null,
+          "aero": null,
+          "pressione": null
+        }
       }
     ]
   }
