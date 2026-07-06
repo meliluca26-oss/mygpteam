@@ -1498,6 +1498,7 @@ function aiRace(auto){
 
 /* ---------- Settaggi ufficiali (dal tool del gioco) ---------- */
 function gommaMeteo(m){ m=(m||"").toLowerCase(); return /pioggia lieve/.test(m)?"Intermedie":(/pioggia/.test(m)?"Wet":"Slick"); }
+function weatherFinal(dateStr){ if(!dateStr) return true; var rd=new Date(String(dateStr).replace(" ","T")); if(isNaN(rd.getTime())) return true; var wed=new Date(rd); wed.setHours(0,0,0,0); var guard=0; while(wed.getDay()!==3 && guard<10){ wed.setDate(wed.getDate()-1); guard++; } return Date.now()>=wed.getTime(); }
 function officialCalc(curve,disl,meteo,inp){
   function cl(x){ return Math.max(0, Math.min(3000, Math.round(x))); }
   return {
@@ -1513,6 +1514,10 @@ function renderOfficialSetup(){
   if(!ns||!ns.drivers||!ns.drivers.length){ host.innerHTML=''; return; }
   var r=ns.race||{}; var mQ=r.meteoQualiVal||0, mG=r.meteoGaraVal||0;
   var h='<div class="banner"><span>🏁 Prossima gara: <b>'+esc(r.name||"")+'</b> — '+esc(r.track||"")+' · '+(r.laps||"?")+' giri · <b>curve '+r.curve+'%</b> · <b>dislivelli '+r.disl+'%</b> · meteo quali '+esc(r.meteoQuali||"?")+', gara '+esc(r.meteoGara||"?")+'</span></div>';
+  var wf=weatherFinal(r.date);
+  var wStatus = wf
+    ? '<p class="small" style="color:var(--good);margin:4px 0 8px">✅ Meteo weekend <b>definitivo</b> (si fissa il mercoledì): questo è il setup finale.</p>'
+    : '<p class="small" style="color:#e0a44a;margin:4px 0 8px">⏳ Meteo weekend ancora <b>provvisorio</b> — diventa definitivo <b>mercoledì</b>. Il setup si aggiorna da solo (job ogni ora) quando il meteo è confermato.</p>';
   var gommaQ=gommaMeteo(r.meteoQuali), gommaG=gommaMeteo(r.meteoGara);
   var rows='';
   for(var i=0;i<ns.drivers.length;i++){ var d=ns.drivers[i]; var inp=d.inputs||{};
@@ -1520,7 +1525,7 @@ function renderOfficialSetup(){
     rows+='<tr><td rowspan="2"><b>'+esc(d.name||"")+'</b></td><td>Qualifica</td><td class="center">'+q.coppia+'</td><td class="center">'+q.cambio+'</td><td class="center">'+q.aero+'</td><td class="center">'+q.pressione+'</td><td class="center">'+gommaQ+'</td></tr>';
     rows+='<tr><td>Gara</td><td class="center">'+g.coppia+'</td><td class="center">'+g.cambio+'</td><td class="center">'+g.aero+'</td><td class="center">'+g.pressione+'</td><td class="center">'+gommaG+'</td></tr>';
   }
-  host.innerHTML='<div class="card"><h2><span class="dot"></span>⚙️ Settaggi lineari — prossima gara <span class="tag">VERIFICATO</span></h2>'+h+
+  host.innerHTML='<div class="card"><h2><span class="dot"></span>⚙️ Settaggi lineari — prossima gara <span class="tag">VERIFICATO</span></h2>'+h+wStatus+
     '<table><thead><tr><th>Pilota</th><th>Sessione</th><th class="center">Coppia</th><th class="center">Cambio</th><th class="center">Aero</th><th class="center">Pressione</th><th class="center">Gomme</th></tr></thead><tbody>'+rows+'</tbody></table>'+
     '<p class="note" style="margin-top:8px">Coppia, cambio, aero e pressione sono calcolati con le <b>formule lineari del gioco</b> (ricostruite dal tool "Setup your car" e verificate: riproducono esattamente i suoi valori), su curve, dislivelli, meteo e skill di ogni pilota. Si aggiornano da soli a ogni gara, anche su iPhone. <b>Freni e sospensioni</b> non fanno parte del calcolatore lineare, e <b>numero di soste e ordini piloti</b> sono scelte tattiche (nessun calcolatore ufficiale): affinale nelle prove private.</p></div>';
 }
