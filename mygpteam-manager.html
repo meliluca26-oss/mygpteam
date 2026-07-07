@@ -299,6 +299,24 @@
 <!-- ============ CONSIGLIO DI DIREZIONE ============ -->
 <section class="view" id="v-board">
   <div class="card">
+    <h2><span class="dot"></span>📋 Briefing di direzione</h2>
+    <p class="hint">Cosa farebbero ORA i tuoi direttori, sui dati aggiornati. Si genera da solo dopo ogni aggiornamento dati (serve la chiave AI).</p>
+    <div style="margin:6px 0"><button onclick="genBriefing(false)">🔄 Rigenera briefing</button></div>
+    <div id="briefingOut"></div>
+  </div>
+  <div class="card">
+    <h2><span class="dot"></span>🧩 Riunione di direzione</h2>
+    <p class="hint">Poni una decisione: i 3 direttori danno il loro parere e il Consiglio emette un verdetto coordinato.</p>
+    <div class="chatquick">
+      <button class="ghost sm" onclick="convocaRiunione('Investo il budget in ricerca o rinnovo/miglioro i piloti?')">Ricerca vs piloti</button>
+      <button class="ghost sm" onclick="convocaRiunione('Qual è la priorità di spesa questa settimana?')">Priorità di spesa</button>
+      <button class="ghost sm" onclick="convocaRiunione('Come imposto la prossima gara per massimizzare i punti?')">Massimizzare punti</button>
+      <button class="ghost sm" onclick="convocaRiunione('Conviene partecipare a un contest questa settimana?')">Contest sì/no</button>
+    </div>
+    <div class="chatrow"><input id="riunioneIn" placeholder="Es. taglio lo staff o riduco la ricerca per il bilancio?" onkeydown="if(event.key==='Enter')convocaRiunione()"><button onclick="convocaRiunione()">Convoca riunione</button></div>
+    <div id="riunioneOut" style="margin-top:8px"></div>
+  </div>
+  <div class="card">
     <h2><span class="dot"></span>🤖 Parla col Consiglio</h2>
     <p class="hint">Chatta coi direttori (Sportivo, Economico, Tecnico) per una visione d'insieme. Configura l'AI nel riquadro qui sotto.</p>
     <div class="chatquick">
@@ -1104,7 +1122,9 @@ function fullContext(){
   if(el("cCurve")) circ="\nPROSSIMA GARA (dal setup): "+el("cName").value+", curve "+el("cCurve").value+"%, dislivelli "+el("cDisl").value+"%, "+el("cLaps").value+" giri, pitlane "+el("cPit").value+"m, condizioni "+el("cCond").value+"%, meteo quali "+el("cWxQ").value+", meteo gara "+el("cWxR").value+".";
   var offi="";
   if(S.nextSetup&&S.nextSetup.race){ var rns=S.nextSetup.race; var mQ=rns.meteoQualiVal||0,mG=rns.meteoGaraVal||0; var sets=(S.nextSetup.drivers||[]).map(function(d){var q=officialCalc(rns.curve,rns.disl,mQ,d.inputs||{}),g=officialCalc(rns.curve,rns.disl,mG,d.inputs||{});return d.name+" — QUALI coppia "+q.coppia+"/cambio "+q.cambio+"/aero "+q.aero+"/pressione "+q.pressione+"; GARA coppia "+g.coppia+"/cambio "+g.cambio+"/aero "+g.aero+"/pressione "+g.pressione;}).join(" | "); offi="\nPROSSIMA GARA: "+(rns.name||"")+" a "+(rns.track||"")+", "+(rns.laps||"?")+" giri, curve "+rns.curve+"%, dislivelli "+rns.disl+"%, meteo qualifica "+rns.meteoQuali+", gara "+rns.meteoGara+". SETTAGGI LINEARI (formula ufficiale del gioco, valori esatti): "+sets+". Questi 4 valori (coppia/cambio/aero/pressione) e le gomme (dal meteo) sono affidabili e vanno usati come sono. Freni e sospensioni NON sono nel calcolatore lineare; numero di soste/carburante e ordini piloti nelle 5 fasi non hanno calcolatore ufficiale: proponili come stime tattiche ragionando su curve, dislivelli, meteo e skill.";}
-  return "SQUADRA "+(S.team.name||"?")+" — Formula "+(S.team.formula||"?")+"\nFINANZE: cassa "+(S.team.cash||0)+", banca "+(S.team.bank||0)+" (bloccata), disponibilita prevista "+(S.team.avail!=null?S.team.avail:"?")+" EUR.\nBILANCIO/sett entrate: sponsor "+(b.iSpon||0)+", merch "+(b.iMerch||0)+", TV "+(b.iTv||0)+", pubblico "+(b.iPub||0)+", premi "+(b.iPrize||0)+". Uscite: stipendi "+(b.eDrv||0)+", staff "+(b.eEng||0)+", ricerca "+(b.eRes||0)+", strutture/merch/altro "+(b.eOth||0)+".\nPILOTI (i contratti a 1 stagione scadono a settimana 11):\n"+drivers+"\nLABORATORI:\n"+labs+"\nINVESTIMENTI RICERCA/sett: "+research+"."+circ+"\nINGEGNERI (bravura/meccanica/innovazione su 20; meccanica alza la qualita del pezzo, innovazione alza la velocita di ricerca):\n"+ENGINEERS.map(function(e){return "- "+e.name+" ("+e.age+"a, "+e.comp+"): "+e.brav+"/"+e.mecc+"/"+e.innov;}).join("\n")+"\nSTAFF: affiatamento "+STAFF.lavoroGruppo+"; meccanici "+STAFF.meccanici+", tecnici "+STAFF.tecnici+", pubblicitari "+STAFF.pubblicitari+", osservatori "+STAFF.osservatori+", preparatori "+STAFF.preparatori+", manutentori "+STAFF.manutentori+". (pubblicitari incidono su sponsor e tifosi; osservatori sul vivaio; manutentori su merchandising e usura circuito; preparatori sul peso piloti).\nSTRUTTURE (livello su 20): "+FACILITIES.map(function(f){return f.name+" "+f.level;}).join(", ")+". Investimento strutture-laboratorio a 6 fasce come i lab (0/1.000/5.000/15.000/25.000/50.000 EUR = max catastrofico/mediocre/molto buono/grandioso/immenso/insuperabile). Strutture tifosi: upgrade 100k a livello fino al 4, poi 200k (4-8), 300k (8-12), 400k (12-16), 500k (16-20); +65 al limite fanclub per livello."+offi;
+  var lr="";
+  if(S.lastRace){ var lrr=S.lastRace; var mine=(lrr.mine||[]).map(function(m){return m.driver+" P"+(m.grid||"?")+"→"+(m.pos?("P"+m.pos):"rit")+" ("+(m.gap||"")+(m.pit!=null?", "+m.pit+" soste":"")+")";}).join("; "); lr="\nULTIMA GARA: "+(lrr.name||"")+" a "+(lrr.track||"")+" ("+(lrr.laps||"?")+" giri) — vincitore "+((lrr.winner&&lrr.winner.driver)||"?")+", giro veloce "+((lrr.bestLap&&lrr.bestLap.driver)||"?")+". Nostri: "+(mine||"n/d")+"."; }
+  return "SQUADRA "+(S.team.name||"?")+" — Formula "+(S.team.formula||"?")+"\nFINANZE: cassa "+(S.team.cash||0)+", banca "+(S.team.bank||0)+" (bloccata), disponibilita prevista "+(S.team.avail!=null?S.team.avail:"?")+" EUR.\nBILANCIO/sett entrate: sponsor "+(b.iSpon||0)+", merch "+(b.iMerch||0)+", TV "+(b.iTv||0)+", pubblico "+(b.iPub||0)+", premi "+(b.iPrize||0)+". Uscite: stipendi "+(b.eDrv||0)+", staff "+(b.eEng||0)+", ricerca "+(b.eRes||0)+", strutture/merch/altro "+(b.eOth||0)+".\nPILOTI (i contratti a 1 stagione scadono a settimana 11):\n"+drivers+"\nLABORATORI:\n"+labs+"\nINVESTIMENTI RICERCA/sett: "+research+"."+circ+"\nINGEGNERI (bravura/meccanica/innovazione su 20; meccanica alza la qualita del pezzo, innovazione alza la velocita di ricerca):\n"+ENGINEERS.map(function(e){return "- "+e.name+" ("+e.age+"a, "+e.comp+"): "+e.brav+"/"+e.mecc+"/"+e.innov;}).join("\n")+"\nSTAFF: affiatamento "+STAFF.lavoroGruppo+"; meccanici "+STAFF.meccanici+", tecnici "+STAFF.tecnici+", pubblicitari "+STAFF.pubblicitari+", osservatori "+STAFF.osservatori+", preparatori "+STAFF.preparatori+", manutentori "+STAFF.manutentori+". (pubblicitari incidono su sponsor e tifosi; osservatori sul vivaio; manutentori su merchandising e usura circuito; preparatori sul peso piloti).\nSTRUTTURE (livello su 20): "+FACILITIES.map(function(f){return f.name+" "+f.level;}).join(", ")+". Investimento strutture-laboratorio a 6 fasce come i lab (0/1.000/5.000/15.000/25.000/50.000 EUR = max catastrofico/mediocre/molto buono/grandioso/immenso/insuperabile). Strutture tifosi: upgrade 100k a livello fino al 4, poi 200k (4-8), 300k (8-12), 400k (12-16), 500k (16-20); +65 al limite fanclub per livello."+lr+offi;
 }
 async function callLLMChat(sys, messages){
   var c=loadAI(); if(!c.key) throw new Error("Nessuna chiave API: configurala in Consiglio direzione → Configurazione AI.");
@@ -1122,15 +1142,24 @@ async function callLLMChat(sys, messages){
   r=await fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+c.key},body:JSON.stringify({model:model,messages:oa})});
   j=await r.json(); if(!r.ok) throw new Error((j.error&&j.error.message)||("HTTP "+r.status)); return j.choices[0].message.content;
 }
+var FOLLOWUPS={
+  strategist:["E con la pioggia come cambia?","Qual è il rischio più grosso?","Dammi il piano B"],
+  technical:["Quanto costa in totale?","E se il budget è basso?","Priorità in una frase"],
+  manager:["Come lo finanzio?","Cosa taglio per primo?","Quali rischi finanziari?"],
+  board:["Approfondisci la priorità #1","E per la prossima gara?","Riassumi in 3 punti"]
+};
+function clearChat(id){ CHATS[id]=[]; S.chats=CHATS; save(); renderChat(id); }
 function renderChat(id){
   var box=el("chatLog_"+id); if(!box) return;
   var msgs=CHATS[id]||[];
   if(!msgs.length){ box.innerHTML='<div class="small">Fai una domanda all\'agente…</div>'; return; }
-  var h="";
+  var h='<div style="text-align:right;margin:-2px 0 4px"><a href="#" class="small" onclick="clearChat(\''+id+'\');return false;">🗑 pulisci</a></div>';
   for(var i=0;i<msgs.length;i++){
     var m=msgs[i], who=m.role==="user"?"Tu":(AGENTS[id]?AGENTS[id].title:"Agente"), cls=m.role==="user"?"chat-u":"chat-a";
     h+='<div class="chatmsg '+cls+'"><div class="chat-who">'+who+'</div><div class="chat-txt">'+esc(m.content).replace(/\n/g,"<br>")+'</div></div>';
   }
+  var last=msgs[msgs.length-1];
+  if(last && last.role==="assistant" && !last.pending){ var fu=FOLLOWUPS[id]||[]; if(fu.length){ h+='<div class="chatquick" style="margin-top:6px">'+fu.map(function(q){return '<button class="ghost sm" onclick="agentSend(\''+id+'\',\''+q.replace(/'/g,"\\'")+'\')">'+esc(q)+'</button>';}).join("")+'</div>'; } }
   box.innerHTML=h; box.scrollTop=box.scrollHeight;
 }
 async function agentSend(id, preset){
@@ -1148,9 +1177,32 @@ async function agentSend(id, preset){
   }catch(e){
     CHATS[id].pop(); CHATS[id].push({role:"assistant", content:"⚠️ Errore: "+e.message});
   }
-  renderChat(id);
+  S.chats=CHATS; save(); renderChat(id);
 }
-function initChats(){ for(var k in AGENTS){ renderChat(k); } }
+function initChats(){ CHATS=S.chats||CHATS||{}; for(var k in AGENTS){ renderChat(k); } }
+/* ---------- Riunione di direzione + Briefing proattivo ---------- */
+function fmtMd(t){ return esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\n/g,"<br>"); }
+async function convocaRiunione(preset){
+  var inp=el("riunioneIn"), q=preset||(inp?inp.value.trim():""); if(!q) return;
+  if(inp && !preset) inp.value="";
+  var out=el("riunioneOut"); if(!out) return;
+  out.innerHTML='<div class="out"><span class="small">🧩 I direttori si stanno confrontando…</span></div>';
+  var sys="Sei la sala riunioni della direzione di una scuderia su MyGPTeam. Simula una RIUNIONE sulla decisione posta. Rispondi in italiano, conciso, con QUESTA struttura:\n**Direttore Sportivo:** parere su piloti/gara/strategia (2-3 righe, con numeri)\n**Direttore Tecnico:** parere su ricerca/laboratori/strutture/ingegneri (2-3 righe, con importi)\n**Direttore Economico:** parere su bilancio/contratti/sponsor (2-3 righe, con numeri)\n**Verdetto del Consiglio:** decisione coordinata con le 2-3 azioni prioritarie e i numeri; se i direttori sono in disaccordo, scegli e spiega il compromesso. Usa solo i dati forniti; se manca un dato dillo.";
+  try{ var r=await callLLMChat(sys,[{role:"user",content:"DATI ATTUALI:\n"+fullContext()+"\n\nDECISIONE DA PRENDERE: "+q}]); out.innerHTML='<div class="out"><div class="chat-txt">'+fmtMd(r)+'</div></div>'; }
+  catch(e){ out.innerHTML='<div class="out" style="border-left-color:var(--bad)"><span class="small">Errore: '+esc(e.message)+'</span><div class="note" style="margin-top:6px">Configura la chiave in Configurazione AI.</div></div>'; }
+}
+async function genBriefing(auto){
+  var out=el("briefingOut"); if(!out) return;
+  var cached=null; try{ cached=JSON.parse(localStorage.getItem("mygpteam_briefing_v1")); }catch(e){}
+  if(cached && cached.stamp===(S.stamp||0) && cached.text){ out.innerHTML='<div class="out"><div class="chat-txt">'+fmtMd(cached.text)+'</div><div class="note" style="margin-top:6px">Briefing sui dati del '+((S.stamp)?fmtStamp(S.stamp):'—')+'. Usa "Rigenera" per aggiornarlo.</div></div>'; if(auto) return; }
+  var c=loadAI();
+  if(!c||!c.key){ if(auto){ if(!cached||!cached.text) out.innerHTML='<div class="note">Configura la chiave AI e il briefing partirà da solo dopo ogni aggiornamento dati.</div>'; return; } out.innerHTML='<div class="note">Configura prima la chiave AI qui sotto.</div>'; return; }
+  if(auto && cached && cached.stamp===(S.stamp||0)) return;
+  out.innerHTML='<div class="out"><span class="small">📋 I direttori preparano il briefing…</span></div>';
+  var sys="Sei la direzione di una scuderia MyGPTeam. Prepara un BRIEFING operativo: cosa fare ORA. Italiano, conciso, con QUESTA struttura:\n**Sportivo:** 2 azioni prioritarie (gara/piloti) con numeri.\n**Tecnico:** 2 azioni (ricerca/laboratori/strutture) con importi.\n**Economico:** 2 azioni (bilancio/contratti/sponsor) con numeri.\n**Priorità #1 della settimana:** una riga netta. Usa solo i dati forniti.";
+  try{ var r=await callLLMChat(sys,[{role:"user",content:"DATI:\n"+fullContext()}]); out.innerHTML='<div class="out"><div class="chat-txt">'+fmtMd(r)+'</div></div>'; try{ localStorage.setItem("mygpteam_briefing_v1",JSON.stringify({stamp:(S.stamp||0),text:r})); }catch(e){} }
+  catch(e){ out.innerHTML='<div class="out" style="border-left-color:var(--bad)"><span class="small">Errore: '+esc(e.message)+'</span></div>'; }
+}
 var DATA_URL="https://raw.githubusercontent.com/meliluca26-oss/mygpteam/main/data.json";
 async function fetchOne(u){ try{ var r=await fetch(u+"?t="+Date.now(),{cache:"no-store"}); if(!r.ok) return null; return await r.json(); }catch(e){ return null; } }
 async function fetchNewest(){ var res=await Promise.all([fetchOne("data.json"),fetchOne(DATA_URL)]); var best=null,bv=0; for(var i=0;i<res.length;i++){ var d=res[i]; var v=d&&(d.stamp||d.pushedAt)||0; if(v>bv){ bv=v; best=d; } } return best; }
@@ -1165,7 +1217,7 @@ async function syncRemote(){
     el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
     if(S.team.cash!=null)el("bCash").value=S.team.cash; if(S.team.bank!=null){el("bBank").value=S.team.bank; el("bankAmt").value=S.team.bank;}
     var bg=S.budget||{},bk=["iSpon","iTv","iPub","iPrize","iMerch","eDrv","eEng","eRes","eOth"]; for(var i=0;i<bk.length;i++){ if(bg[bk[i]]!=null) el(bk[i]).value=bg[bk[i]]; }
-    buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup(); renderRace(); renderOfficialSetup(); renderSetupLab(); renderDashBanner(); initContest();
+    buildResearch(); renderDrivers(); renderSeason(); refreshDash(); renderPlan(); renderBoard(); if(S.budget&&S.budget.iSpon!=null)calcBudget(); genSetup(); renderRace(); renderOfficialSetup(); renderSetupLab(); renderDashBanner(); initContest(); initChats(); genBriefing(true);
     if(el("realBanner")) el("realBanner").insertAdjacentHTML("beforeend",' <span class="pill p-ok">↻ sync dal PC '+new Date(v).toLocaleDateString("it-IT")+'</span>');
     updateLastUpdate();
   }catch(e){}
@@ -1693,7 +1745,7 @@ function importData(){ var t=el("ioBox"); if(!t)return; var txt=(t.value||"").tr
 
 function boot(){
   fillSkillSelects(); buildOrders(); buildResearch(); buildSeats(); buildRefs();
-  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats(); renderRace(); renderOfficialSetup(); renderSetupLab(); renderDashBanner(); initContest(); updateLastUpdate(); syncRemote();
+  renderSeason(); renderDrivers(); refreshDash(); renderPlan(); renderBoard(); bootAI(); initChats(); renderRace(); renderOfficialSetup(); renderSetupLab(); renderDashBanner(); initContest(); genBriefing(true); updateLastUpdate(); syncRemote();
   el("teamName").value=S.team.name||""; el("teamFormula").value=S.team.formula||"F6";
   if(S.team.cash!=null) el("bCash").value=S.team.cash;
   if(S.team.bank!=null) el("bBank").value=S.team.bank;
