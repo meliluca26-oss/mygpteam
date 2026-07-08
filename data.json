@@ -1,6 +1,6 @@
 {
-  "stamp": 1783496159444,
-  "pushedAt": 1783496159444,
+  "stamp": 1783506457860,
+  "pushedAt": 1783506457860,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -141,8 +141,8 @@
       "age": 36,
       "comp": "Sospensioni",
       "brav": 6,
-      "mecc": 5,
-      "innov": 7
+      "mecc": 4,
+      "innov": 6
     },
     {
       "name": "Kevin Donnelly",
