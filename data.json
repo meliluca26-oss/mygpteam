@@ -1,11 +1,11 @@
 {
-  "stamp": 1783569738485,
-  "pushedAt": 1783569738485,
+  "stamp": 1783586362945,
+  "pushedAt": 1783586362945,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": -28231,
-    "bank": 423896,
+    "cash": -89692,
+    "bank": 434493,
     "avail": -73218
   },
   "drivers": [
@@ -25,7 +25,7 @@
     },
     {
       "name": "Luis Poppmeier",
-      "age": 18,
+      "age": 19,
       "exp": 5,
       "cour": 4,
       "judg": 2,
@@ -39,15 +39,15 @@
     }
   ],
   "budget": {
-    "iSpon": 55281,
-    "iTv": 75718,
+    "iSpon": 57728,
+    "iTv": 0,
     "iPub": 0,
-    "iPrize": 2000,
-    "iMerch": 11721,
-    "eDrv": 15618,
+    "iPrize": 0,
+    "iMerch": 0,
+    "eDrv": 16402,
     "eEng": 21000,
     "eRes": 38000,
-    "eOth": 37411
+    "eOth": 40484
   },
   "labs": [
     [
@@ -181,7 +181,7 @@
     },
     {
       "name": "Simulatori avanzati",
-      "level": 7
+      "level": 6
     },
     {
       "name": "Banche dati",
@@ -189,15 +189,15 @@
     },
     {
       "name": "Banco prova motori",
-      "level": 5
+      "level": 4
     },
     {
       "name": "Carboceramiche (freni)",
-      "level": 3
+      "level": 4
     },
     {
       "name": "Titanio (trasmissione)",
-      "level": 2
+      "level": 4
     },
     {
       "name": "Banco prova sospensioni",
@@ -205,7 +205,7 @@
     },
     {
       "name": "Galleria del vento (aero)",
-      "level": 3
+      "level": 2
     },
     {
       "name": "Nanotecnologie (elettronica)",
