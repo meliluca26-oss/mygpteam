@@ -1,6 +1,6 @@
 {
-  "stamp": 1783863901292,
-  "pushedAt": 1783863901292,
+  "stamp": 1783883788123,
+  "pushedAt": 1783883788123,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -40,7 +40,7 @@
   ],
   "budget": {
     "iSpon": 57728,
-    "iTv": 0,
+    "iTv": 79645,
     "iPub": 0,
     "iPrize": 0,
     "iMerch": 4549,
@@ -350,15 +350,15 @@
   "nextSetup": {
     "race": {
       "name": "Botown",
-      "track": "Formula racing Autodrome",
-      "laps": 84,
-      "date": "2026-07-12 18:00:00",
-      "curve": 98,
-      "disl": 61,
-      "meteoQuali": "pioggia",
-      "meteoGara": "pioggia",
-      "meteoQualiVal": 400,
-      "meteoGaraVal": 400
+      "track": "os bros gp team Autodrome",
+      "laps": 51,
+      "date": "2026-07-19 18:00:00",
+      "curve": 9,
+      "disl": 50,
+      "meteoQuali": "pioggia lieve",
+      "meteoGara": "pioggia lieve",
+      "meteoQualiVal": 200,
+      "meteoGaraVal": 200
     },
     "drivers": [
       {
