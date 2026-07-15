@@ -1,6 +1,6 @@
 {
-  "stamp": 1784085926369,
-  "pushedAt": 1784085926369,
+  "stamp": 1784106994464,
+  "pushedAt": 1784106994464,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -21,7 +21,7 @@
       "brake": 5,
       "gear": 3,
       "accel": 4,
-      "traj": 4
+      "traj": 5
     },
     {
       "name": "Luis Poppmeier",
@@ -355,10 +355,10 @@
       "date": "2026-07-19 18:00:00",
       "curve": 9,
       "disl": 50,
-      "meteoQuali": "pioggia lieve",
-      "meteoGara": "pioggia lieve",
-      "meteoQualiVal": 200,
-      "meteoGaraVal": 200
+      "meteoQuali": "sole",
+      "meteoGara": "sole",
+      "meteoQualiVal": 0,
+      "meteoGaraVal": 0
     },
     "drivers": [
       {
@@ -367,7 +367,7 @@
           "frenata": 53,
           "cambio": 32,
           "accelerazione": 42,
-          "traiettorie": 42
+          "traiettorie": 53
         }
       },
       {
