@@ -1,11 +1,11 @@
 {
-  "stamp": 1784106994464,
-  "pushedAt": 1784106994464,
+  "stamp": 1784186827743,
+  "pushedAt": 1784186827743,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": -89692,
-    "bank": 434493,
+    "cash": 14963,
+    "bank": 445355,
     "avail": -73218
   },
   "drivers": [
@@ -39,15 +39,15 @@
     }
   ],
   "budget": {
-    "iSpon": 57728,
-    "iTv": 79645,
+    "iSpon": 43168,
+    "iTv": 0,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 10153,
+    "iMerch": 0,
     "eDrv": 16402,
     "eEng": 21000,
     "eRes": 38000,
-    "eOth": 69269
+    "eOth": 36000
   },
   "labs": [
     [
@@ -162,7 +162,7 @@
     }
   ],
   "staff": {
-    "lavoroGruppo": "fantastico [10]",
+    "lavoroGruppo": "meraviglioso [11]",
     "meccanici": 6,
     "tecnici": 5,
     "pubblicitari": 2,
@@ -177,11 +177,11 @@
     },
     {
       "name": "Progettazione/CAD",
-      "level": 5
+      "level": 4
     },
     {
       "name": "Simulatori avanzati",
-      "level": 6
+      "level": 5
     },
     {
       "name": "Banche dati",
@@ -201,7 +201,7 @@
     },
     {
       "name": "Banco prova sospensioni",
-      "level": 2
+      "level": 3
     },
     {
       "name": "Galleria del vento (aero)",
