@@ -1,6 +1,6 @@
 {
-  "stamp": 1784792356936,
-  "pushedAt": 1784792356936,
+  "stamp": 1784810669986,
+  "pushedAt": 1784810669986,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -39,7 +39,7 @@
     }
   ],
   "budget": {
-    "iSpon": 46297,
+    "iSpon": 62983,
     "iTv": 0,
     "iPub": 0,
     "iPrize": 0,
@@ -185,7 +185,7 @@
     },
     {
       "name": "Banche dati",
-      "level": 2
+      "level": 3
     },
     {
       "name": "Banco prova motori",
