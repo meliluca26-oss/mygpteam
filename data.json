@@ -1,11 +1,11 @@
 {
-  "stamp": 1784780510711,
-  "pushedAt": 1784780510711,
+  "stamp": 1784792356936,
+  "pushedAt": 1784792356936,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": 14963,
-    "bank": 445355,
+    "cash": -39465,
+    "bank": 456489,
     "avail": -73218
   },
   "drivers": [
@@ -39,15 +39,15 @@
     }
   ],
   "budget": {
-    "iSpon": 60568,
-    "iTv": 78158,
+    "iSpon": 46297,
+    "iTv": 0,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 12752,
+    "iMerch": 0,
     "eDrv": 16402,
     "eEng": 21000,
     "eRes": 38000,
-    "eOth": 61000
+    "eOth": 62973
   },
   "labs": [
     [
@@ -209,7 +209,7 @@
     },
     {
       "name": "Nanotecnologie (elettronica)",
-      "level": 2
+      "level": 3
     },
     {
       "name": "Tracciato test (gomme)",
