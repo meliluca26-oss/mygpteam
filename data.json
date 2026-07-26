@@ -1,6 +1,6 @@
 {
-  "stamp": 1785037313802,
-  "pushedAt": 1785037313802,
+  "stamp": 1785093758392,
+  "pushedAt": 1785093758392,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -40,7 +40,7 @@
   ],
   "budget": {
     "iSpon": 62983,
-    "iTv": 0,
+    "iTv": 76671,
     "iPub": 0,
     "iPrize": 6000,
     "iMerch": 5464,
@@ -350,11 +350,11 @@
   "nextSetup": {
     "race": {
       "name": "Botown",
-      "track": "Tulio Motorsport Autodrome",
-      "laps": 78,
-      "date": "2026-07-26 18:00:00",
-      "curve": 80,
-      "disl": 20,
+      "track": "FraTiRaI Motors Autodrome",
+      "laps": 59,
+      "date": "2026-08-02 18:00:00",
+      "curve": 42,
+      "disl": 28,
       "meteoQuali": "sole",
       "meteoGara": "sole",
       "meteoQualiVal": 0,
