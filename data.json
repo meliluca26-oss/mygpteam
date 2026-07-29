@@ -1,6 +1,6 @@
 {
-  "stamp": 1785295492622,
-  "pushedAt": 1785295492622,
+  "stamp": 1785307186561,
+  "pushedAt": 1785307186561,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -19,7 +19,7 @@
       "con": 2,
       "sal": 1577,
       "brake": 5,
-      "gear": 3,
+      "gear": 4,
       "accel": 4,
       "traj": 5
     },
@@ -33,7 +33,7 @@
       "con": 4,
       "sal": 3411,
       "brake": 9,
-      "gear": 2,
+      "gear": 3,
       "accel": 4,
       "traj": 4
     }
@@ -365,7 +365,7 @@
         "name": "Anders Malmstrom",
         "inputs": {
           "frenata": 53,
-          "cambio": 32,
+          "cambio": 42,
           "accelerazione": 42,
           "traiettorie": 53
         }
@@ -374,7 +374,7 @@
         "name": "Luis Poppmeier",
         "inputs": {
           "frenata": 95,
-          "cambio": 21,
+          "cambio": 32,
           "accelerazione": 42,
           "traiettorie": 42
         }
