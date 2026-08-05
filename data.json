@@ -1,6 +1,6 @@
 {
-  "stamp": 1785911769454,
-  "pushedAt": 1785911769454,
+  "stamp": 1785922932959,
+  "pushedAt": 1785922932959,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -162,12 +162,12 @@
     }
   ],
   "staff": {
-    "lavoroGruppo": "livello 12",
+    "lavoroGruppo": "meraviglioso [11]",
     "meccanici": 6,
     "tecnici": 5,
     "pubblicitari": 2,
     "osservatori": 2,
-    "preparatori": 3,
+    "preparatori": 5,
     "manutentori": 3
   },
   "facilities": [
@@ -185,7 +185,7 @@
     },
     {
       "name": "Banche dati",
-      "level": 3
+      "level": 4
     },
     {
       "name": "Banco prova motori",
