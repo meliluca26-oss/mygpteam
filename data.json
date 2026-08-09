@@ -1,6 +1,6 @@
 {
-  "stamp": 1786241948470,
-  "pushedAt": 1786241948470,
+  "stamp": 1786301544014,
+  "pushedAt": 1786301544014,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -40,7 +40,7 @@
   ],
   "budget": {
     "iSpon": 67512,
-    "iTv": 0,
+    "iTv": 73697,
     "iPub": 0,
     "iPrize": 0,
     "iMerch": 4518,
@@ -350,15 +350,15 @@
   "nextSetup": {
     "race": {
       "name": "Botown",
-      "track": "SC Maserati Autodrome",
-      "laps": 71,
-      "date": "2026-08-09 18:00:00",
-      "curve": 50,
-      "disl": 22,
+      "track": "Ford Motors Racing Autodrome",
+      "laps": 59,
+      "date": "2026-08-16 18:00:00",
+      "curve": 70,
+      "disl": 90,
       "meteoQuali": "sole",
-      "meteoGara": "sole",
+      "meteoGara": "pioggia lieve",
       "meteoQualiVal": 0,
-      "meteoGaraVal": 0
+      "meteoGaraVal": 200
     },
     "drivers": [
       {
