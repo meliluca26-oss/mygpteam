@@ -1,17 +1,17 @@
 {
-  "stamp": 1786588442824,
-  "pushedAt": 1786588442824,
+  "stamp": 1786602286241,
+  "pushedAt": 1786602286241,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": 11295,
-    "bank": 479599,
+    "cash": 75022,
+    "bank": 491589,
     "avail": -73218
   },
   "drivers": [
     {
       "name": "Anders Malmstrom",
-      "age": 22,
+      "age": 23,
       "exp": 6,
       "cour": 1,
       "judg": 3,
@@ -39,11 +39,11 @@
     }
   ],
   "budget": {
-    "iSpon": 67512,
-    "iTv": 73697,
+    "iSpon": 51257,
+    "iTv": 0,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 10920,
+    "iMerch": 0,
     "eDrv": 16402,
     "eEng": 23000,
     "eRes": 38000,
@@ -201,7 +201,7 @@
     },
     {
       "name": "Banco prova sospensioni",
-      "level": 3
+      "level": 4
     },
     {
       "name": "Galleria del vento (aero)",
@@ -209,7 +209,7 @@
     },
     {
       "name": "Nanotecnologie (elettronica)",
-      "level": 3
+      "level": 4
     },
     {
       "name": "Tracciato test (gomme)",
