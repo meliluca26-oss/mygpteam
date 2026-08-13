@@ -1,6 +1,6 @@
 {
-  "stamp": 1786602286241,
-  "pushedAt": 1786602286241,
+  "stamp": 1786616166913,
+  "pushedAt": 1786616166913,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -39,7 +39,7 @@
     }
   ],
   "budget": {
-    "iSpon": 51257,
+    "iSpon": 67634,
     "iTv": 0,
     "iPub": 0,
     "iPrize": 0,
@@ -205,7 +205,7 @@
     },
     {
       "name": "Galleria del vento (aero)",
-      "level": 3
+      "level": 4
     },
     {
       "name": "Nanotecnologie (elettronica)",
