@@ -1,11 +1,11 @@
 {
-  "stamp": 1787195049237,
-  "pushedAt": 1787195049237,
+  "stamp": 1787204249783,
+  "pushedAt": 1787204249783,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": 75022,
-    "bank": 491589,
+    "cash": -77904,
+    "bank": 503879,
     "avail": -73218
   },
   "drivers": [
@@ -40,14 +40,14 @@
   ],
   "budget": {
     "iSpon": 67634,
-    "iTv": 72209,
+    "iTv": 0,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 10878,
+    "iMerch": 0,
     "eDrv": 16402,
     "eEng": 23000,
     "eRes": 38000,
-    "eOth": 61000
+    "eOth": 64895
   },
   "labs": [
     [
@@ -162,7 +162,7 @@
     }
   ],
   "staff": {
-    "lavoroGruppo": "livello 12",
+    "lavoroGruppo": "livello 13",
     "meccanici": 6,
     "tecnici": 5,
     "pubblicitari": 2,
@@ -177,7 +177,7 @@
     },
     {
       "name": "Progettazione/CAD",
-      "level": 5
+      "level": 6
     },
     {
       "name": "Simulatori avanzati",
@@ -197,7 +197,7 @@
     },
     {
       "name": "Titanio (trasmissione)",
-      "level": 6
+      "level": 7
     },
     {
       "name": "Banco prova sospensioni",
@@ -205,7 +205,7 @@
     },
     {
       "name": "Galleria del vento (aero)",
-      "level": 4
+      "level": 5
     },
     {
       "name": "Nanotecnologie (elettronica)",
