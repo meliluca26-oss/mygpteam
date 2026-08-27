@@ -1,11 +1,11 @@
 {
-  "stamp": 1787722832476,
-  "pushedAt": 1787722832476,
+  "stamp": 1787820930700,
+  "pushedAt": 1787820930700,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": -77904,
-    "bank": 503879,
+    "cash": -14746,
+    "bank": 516476,
     "avail": -73218
   },
   "drivers": [
@@ -39,15 +39,15 @@
     }
   ],
   "budget": {
-    "iSpon": 67634,
-    "iTv": 70722,
-    "iPub": 64515,
+    "iSpon": 16377,
+    "iTv": 0,
+    "iPub": 0,
     "iPrize": 0,
-    "iMerch": 14451,
+    "iMerch": 0,
     "eDrv": 16402,
     "eEng": 23000,
     "eRes": 38000,
-    "eOth": 84895
+    "eOth": 61737
   },
   "labs": [
     [
@@ -181,7 +181,7 @@
     },
     {
       "name": "Simulatori avanzati",
-      "level": 6
+      "level": 7
     },
     {
       "name": "Banche dati",
