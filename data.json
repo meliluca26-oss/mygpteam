@@ -1,6 +1,6 @@
 {
-  "stamp": 1787820930700,
-  "pushedAt": 1787820930700,
+  "stamp": 1787860061959,
+  "pushedAt": 1787860061959,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -39,7 +39,7 @@
     }
   ],
   "budget": {
-    "iSpon": 16377,
+    "iSpon": 62352,
     "iTv": 0,
     "iPub": 0,
     "iPrize": 0,
@@ -209,7 +209,7 @@
     },
     {
       "name": "Nanotecnologie (elettronica)",
-      "level": 4
+      "level": 5
     },
     {
       "name": "Tracciato test (gomme)",
