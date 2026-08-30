@@ -1,6 +1,6 @@
 {
-  "stamp": 1788071232616,
-  "pushedAt": 1788071232616,
+  "stamp": 1788123330882,
+  "pushedAt": 1788123330882,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -40,7 +40,7 @@
   ],
   "budget": {
     "iSpon": 62352,
-    "iTv": 0,
+    "iTv": 69235,
     "iPub": 0,
     "iPrize": 0,
     "iMerch": 7233,
@@ -366,15 +366,15 @@
   "nextSetup": {
     "race": {
       "name": "Botown",
-      "track": "Nissa motorsport Autodrome",
-      "laps": 61,
-      "date": "2026-08-30 18:00:00",
-      "curve": 95,
-      "disl": 22,
-      "meteoQuali": "pioggia lieve",
-      "meteoGara": "pioggia",
-      "meteoQualiVal": 200,
-      "meteoGaraVal": 400
+      "track": "ARROGANCE RACING Autodrome",
+      "laps": 87,
+      "date": "2026-09-06 18:00:00",
+      "curve": 5,
+      "disl": 50,
+      "meteoQuali": "sole",
+      "meteoGara": "sole",
+      "meteoQualiVal": 0,
+      "meteoGaraVal": 0
     },
     "drivers": [
       {
