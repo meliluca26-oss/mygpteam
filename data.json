@@ -1,6 +1,6 @@
 {
-  "stamp": 1788153278875,
-  "pushedAt": 1788153278875,
+  "stamp": 1788182819624,
+  "pushedAt": 1788182819624,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -46,8 +46,8 @@
     "iMerch": 9690,
     "eDrv": 16402,
     "eEng": 23000,
-    "eRes": 38000,
-    "eOth": 61737
+    "eRes": 36000,
+    "eOth": 51737
   },
   "labs": [
     [
@@ -162,8 +162,8 @@
     }
   ],
   "staff": {
-    "lavoroGruppo": "livello 13",
-    "meccanici": 6,
+    "lavoroGruppo": "livello 12",
+    "meccanici": 10,
     "tecnici": 5,
     "pubblicitari": 2,
     "osservatori": 2,
