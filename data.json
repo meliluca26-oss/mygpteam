@@ -1,6 +1,6 @@
 {
-  "stamp": 1788182819624,
-  "pushedAt": 1788182819624,
+  "stamp": 1788206158316,
+  "pushedAt": 1788206158316,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -366,7 +366,7 @@
   "nextSetup": {
     "race": {
       "name": "Botown",
-      "track": "ARROGANCE RACING Autodrome",
+      "track": "joom Autodrome",
       "laps": 87,
       "date": "2026-09-06 18:00:00",
       "curve": 5,
