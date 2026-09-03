@@ -1,11 +1,11 @@
 {
-  "stamp": 1788408922545,
-  "pushedAt": 1788408922545,
+  "stamp": 1788428166883,
+  "pushedAt": 1788428166883,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": -14746,
-    "bank": 516476,
+    "cash": 56046,
+    "bank": 529388,
     "avail": -73218
   },
   "drivers": [
@@ -39,15 +39,15 @@
     }
   ],
   "budget": {
-    "iSpon": 62352,
-    "iTv": 69235,
+    "iSpon": 45975,
+    "iTv": 0,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 16800,
+    "iMerch": 0,
     "eDrv": 16402,
-    "eEng": 23000,
+    "eEng": 27000,
     "eRes": 36000,
-    "eOth": 51737
+    "eOth": 51000
   },
   "labs": [
     [
@@ -185,15 +185,15 @@
     },
     {
       "name": "Banche dati",
-      "level": 5
+      "level": 6
     },
     {
       "name": "Banco prova motori",
-      "level": 5
+      "level": 6
     },
     {
       "name": "Carboceramiche (freni)",
-      "level": 5
+      "level": 6
     },
     {
       "name": "Titanio (trasmissione)",
