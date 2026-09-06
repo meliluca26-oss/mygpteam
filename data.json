@@ -1,6 +1,6 @@
 {
-  "stamp": 1788668279177,
-  "pushedAt": 1788668279177,
+  "stamp": 1788721237563,
+  "pushedAt": 1788721237563,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -40,7 +40,7 @@
   ],
   "budget": {
     "iSpon": 59588,
-    "iTv": 0,
+    "iTv": 67748,
     "iPub": 0,
     "iPrize": 0,
     "iMerch": 6795,
@@ -365,16 +365,16 @@
   },
   "nextSetup": {
     "race": {
-      "name": "Botown",
-      "track": "joom Autodrome",
-      "laps": 87,
+      "name": "Pacífica ",
+      "track": "Martins Autódromo",
+      "laps": 60,
       "date": "2026-09-06 18:00:00",
-      "curve": 5,
-      "disl": 50,
-      "meteoQuali": "pioggia lieve",
-      "meteoGara": "sole",
-      "meteoQualiVal": 200,
-      "meteoGaraVal": 0
+      "curve": 64,
+      "disl": 89,
+      "meteoQuali": "sole",
+      "meteoGara": "pioggia",
+      "meteoQualiVal": 0,
+      "meteoGaraVal": 400
     },
     "drivers": [
       {
