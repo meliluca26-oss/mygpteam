@@ -1,6 +1,6 @@
 {
-  "stamp": 1788721237563,
-  "pushedAt": 1788721237563,
+  "stamp": 1788732222729,
+  "pushedAt": 1788732222729,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -217,149 +217,149 @@
     }
   ],
   "lastRace": {
-    "id": "1475057",
+    "id": "1475058",
     "name": "Botown",
-    "track": "Nissa motorsport Autodrome",
-    "laps": 61,
-    "date": "2026-08-30 18:00:00",
+    "track": "joom Autodrome",
+    "laps": 87,
+    "date": "2026-09-06 18:00:00",
     "winner": {
-      "driver": "Favio Isoletta",
-      "time": "161:03:975"
+      "driver": "Luis Poppmeier",
+      "time": "88:27:452"
     },
     "bestLap": {
       "driver": "Luis Poppmeier",
-      "time": "2:33:278"
+      "time": "0:59:925"
     },
     "classification": [
       {
         "pos": 1,
-        "driver": "Favio Isoletta",
-        "team": "Paesello Racing",
-        "grid": 5,
-        "gap": "161:03:975",
-        "pit": 1
+        "driver": "Luis Poppmeier",
+        "team": "Bronte Racing Team",
+        "grid": 1,
+        "gap": "88:27:452",
+        "pit": 2
       },
       {
         "pos": 2,
-        "driver": "Florestano Argelli",
-        "team": "ARROGANCE RACING",
-        "grid": 6,
-        "gap": "+10.510",
+        "driver": "Daniele Ghielmetti",
+        "team": "Tulio Motorsport",
+        "grid": 3,
+        "gap": "+12.539",
         "pit": 1
       },
       {
         "pos": 3,
         "driver": "Anders Malmstrom",
         "team": "Bronte Racing Team",
-        "grid": 4,
-        "gap": "+24.549",
-        "pit": 1
+        "grid": 2,
+        "gap": "+26.545",
+        "pit": 2
       },
       {
         "pos": 4,
-        "driver": "Cosmo Grace",
-        "team": "SC Maserati",
-        "grid": 7,
-        "gap": "+38.001",
-        "pit": 1
+        "driver": "Goran Jovanovic",
+        "team": "FraTiRaI Motors",
+        "grid": 4,
+        "gap": "+117.669",
+        "pit": 2
       },
       {
         "pos": 5,
-        "driver": "Goran Jovanovic",
-        "team": "FraTiRaI Motors",
-        "grid": 2,
-        "gap": "+40.788",
+        "driver": "Maximilian Casimirri",
+        "team": "Tulio Motorsport",
+        "grid": 8,
+        "gap": "+126.091",
         "pit": 1
       },
       {
         "pos": 6,
-        "driver": "Daniele Ghielmetti",
-        "team": "Tulio Motorsport",
-        "grid": 8,
-        "gap": "+48.993",
+        "driver": "Sukma Pattinasarani",
+        "team": "UFORacing",
+        "grid": 13,
+        "gap": "+126.360",
         "pit": 1
       },
       {
         "pos": 7,
-        "driver": "Arcibaldo Pranzo",
-        "team": "Ford Motors Racing",
-        "grid": 3,
-        "gap": "+108.032",
-        "pit": 2
-      },
-      {
-        "pos": 8,
         "driver": "Sindri Þorsteinsson",
         "team": "FraTiRaI Motors",
-        "grid": 9,
-        "gap": "+277.184",
+        "grid": 6,
+        "gap": "+141.978",
         "pit": 1
       },
       {
+        "pos": 8,
+        "driver": "Antoine Cachalia",
+        "team": "UFORacing",
+        "grid": 7,
+        "gap": null,
+        "pit": 3
+      },
+      {
         "pos": 9,
-        "driver": "Devil Priarone",
-        "team": "Paesello Racing",
-        "grid": 10,
-        "gap": "+333.291",
+        "driver": "Zhenxian Yan",
+        "team": "joom",
+        "grid": 9,
+        "gap": null,
         "pit": 1
       },
       {
         "pos": 10,
-        "driver": "Susy Mercurio",
-        "team": "SC Maserati",
-        "grid": 14,
-        "gap": "+415.004",
-        "pit": 2
+        "driver": "Melchior Yampolsky",
+        "team": "SUZUKI Spizers RACING",
+        "grid": 11,
+        "gap": null,
+        "pit": 1
       },
       {
         "pos": 11,
-        "driver": "Mchele Andolfi",
-        "team": "Ford Motors Racing",
-        "grid": 12,
-        "gap": "+440.536",
+        "driver": "Yunlong Yang",
+        "team": "Nova Motorsport",
+        "grid": 5,
+        "gap": null,
         "pit": 1
       },
       {
         "pos": 12,
-        "driver": "Maximilian Casimirri",
-        "team": "Tulio Motorsport",
-        "grid": 11,
-        "gap": "+456.115",
-        "pit": 2
+        "driver": "Nevzet Mesic",
+        "team": "SUZUKI Spizers RACING",
+        "grid": 14,
+        "gap": null,
+        "pit": 1
       },
       {
         "pos": 13,
-        "driver": "Michele Luca Flammini",
-        "team": "ARROGANCE RACING",
-        "grid": 13,
-        "gap": "+472.565",
+        "driver": "Hughes Degeest",
+        "team": "Nova Motorsport",
+        "grid": 10,
+        "gap": null,
         "pit": 1
       },
       {
         "pos": 14,
-        "driver": "Luis Poppmeier",
-        "team": "Bronte Racing Team",
-        "grid": 1,
+        "driver": "Nelson Obregon",
+        "team": "joom",
+        "grid": 12,
         "gap": null,
-        "pit": 3
+        "pit": 2
       }
     ],
     "mine": [
       {
-        "pos": 3,
-        "driver": "Anders Malmstrom",
-        "team": "Bronte Racing Team",
-        "grid": 4,
-        "gap": "+24.549",
-        "pit": 1
-      },
-      {
-        "pos": 14,
+        "pos": 1,
         "driver": "Luis Poppmeier",
         "team": "Bronte Racing Team",
         "grid": 1,
-        "gap": null,
-        "pit": 3
+        "gap": "88:27:452",
+        "pit": 2
+      },
+      {
+        "pos": 3,
+        "driver": "Anders Malmstrom",
+        "team": "Bronte Racing Team",
+        "grid": 2,
+        "gap": "+26.545",
+        "pit": 2
       }
     ]
   },
