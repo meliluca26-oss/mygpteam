@@ -1,6 +1,6 @@
 {
-  "stamp": 1788760513581,
-  "pushedAt": 1788760513581,
+  "stamp": 1788783324864,
+  "pushedAt": 1788783324864,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -162,10 +162,10 @@
     }
   ],
   "staff": {
-    "lavoroGruppo": "livello 12",
+    "lavoroGruppo": "livello 8",
     "meccanici": 10,
-    "tecnici": 5,
-    "pubblicitari": 2,
+    "tecnici": 10,
+    "pubblicitari": 14,
     "osservatori": 2,
     "preparatori": 5,
     "manutentori": 3
