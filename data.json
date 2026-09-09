@@ -1,6 +1,6 @@
 {
-  "stamp": 1788846496747,
-  "pushedAt": 1788846496747,
+  "stamp": 1788938272945,
+  "pushedAt": 1788938272945,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -12,14 +12,14 @@
     {
       "name": "Anders Malmstrom",
       "age": 23,
-      "exp": 6,
+      "exp": 7,
       "cour": 1,
       "judg": 3,
       "cool": 1,
       "con": 2,
       "sal": 1577,
       "brake": 5,
-      "gear": 4,
+      "gear": 5,
       "accel": 4,
       "traj": 5
     },
@@ -43,7 +43,7 @@
     "iTv": 67748,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 11328,
+    "iMerch": 13587,
     "eDrv": 16402,
     "eEng": 27000,
     "eRes": 36000,
