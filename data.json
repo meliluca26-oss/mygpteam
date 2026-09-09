@@ -1,6 +1,6 @@
 {
-  "stamp": 1788938272945,
-  "pushedAt": 1788938272945,
+  "stamp": 1788958439821,
+  "pushedAt": 1788958439821,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -42,7 +42,7 @@
     "iSpon": 59588,
     "iTv": 67748,
     "iPub": 0,
-    "iPrize": 0,
+    "iPrize": 3000,
     "iMerch": 13587,
     "eDrv": 16402,
     "eEng": 27000,
