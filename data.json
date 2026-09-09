@@ -1,6 +1,6 @@
 {
-  "stamp": 1788958439821,
-  "pushedAt": 1788958439821,
+  "stamp": 1788973599146,
+  "pushedAt": 1788973599146,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -46,7 +46,7 @@
     "iMerch": 13587,
     "eDrv": 16402,
     "eEng": 27000,
-    "eRes": 36000,
+    "eRes": 20000,
     "eOth": 51000
   },
   "labs": [
@@ -113,22 +113,6 @@
       "innov": 6
     },
     {
-      "name": "Francisco Russo",
-      "age": 37,
-      "comp": "Motore",
-      "brav": 6,
-      "mecc": 9,
-      "innov": 4
-    },
-    {
-      "name": "Cipta Amin",
-      "age": 37,
-      "comp": "Freni",
-      "brav": 6,
-      "mecc": 4,
-      "innov": 4
-    },
-    {
       "name": "Melik Ulusu",
       "age": 38,
       "comp": "Trasmissione",
@@ -143,22 +127,6 @@
       "brav": 6,
       "mecc": 4,
       "innov": 6
-    },
-    {
-      "name": "Kevin Donnelly",
-      "age": 55,
-      "comp": "Elettronica",
-      "brav": 6,
-      "mecc": 4,
-      "innov": 4
-    },
-    {
-      "name": "Jhonatan Owen",
-      "age": 34,
-      "comp": "Gomme",
-      "brav": 6,
-      "mecc": 9,
-      "innov": 4
     }
   ],
   "staff": {
