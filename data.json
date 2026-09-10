@@ -1,11 +1,11 @@
 {
-  "stamp": 1789014030091,
-  "pushedAt": 1789014030091,
+  "stamp": 1789032805967,
+  "pushedAt": 1789032805967,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": 56046,
-    "bank": 529388,
+    "cash": 394396,
+    "bank": 542623,
     "avail": -73218
   },
   "drivers": [
@@ -16,7 +16,7 @@
       "cour": 1,
       "judg": 3,
       "cool": 1,
-      "con": 2,
+      "con": 1,
       "sal": 1577,
       "brake": 5,
       "gear": 5,
@@ -30,7 +30,7 @@
       "cour": 4,
       "judg": 2,
       "cool": 0,
-      "con": 4,
+      "con": 3,
       "sal": 3411,
       "brake": 10,
       "gear": 4,
@@ -40,12 +40,12 @@
   ],
   "budget": {
     "iSpon": 59588,
-    "iTv": 67748,
+    "iTv": 0,
     "iPub": 0,
-    "iPrize": 3000,
-    "iMerch": 15864,
-    "eDrv": 16402,
-    "eEng": 27000,
+    "iPrize": 0,
+    "iMerch": 0,
+    "eDrv": 9511,
+    "eEng": 44000,
     "eRes": 20000,
     "eOth": 51000
   },
@@ -130,7 +130,7 @@
     }
   ],
   "staff": {
-    "lavoroGruppo": "livello 8",
+    "lavoroGruppo": "eccezionale [9]",
     "meccanici": 10,
     "tecnici": 10,
     "pubblicitari": 14,
@@ -169,11 +169,11 @@
     },
     {
       "name": "Banco prova sospensioni",
-      "level": 5
+      "level": 6
     },
     {
       "name": "Galleria del vento (aero)",
-      "level": 5
+      "level": 6
     },
     {
       "name": "Nanotecnologie (elettronica)",
@@ -181,7 +181,7 @@
     },
     {
       "name": "Tracciato test (gomme)",
-      "level": 6
+      "level": 7
     }
   ],
   "lastRace": {
