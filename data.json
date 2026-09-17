@@ -1,11 +1,11 @@
 {
-  "stamp": 1789544048801,
-  "pushedAt": 1789544048801,
+  "stamp": 1789630267918,
+  "pushedAt": 1789630267918,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": 394396,
-    "bank": 542623,
+    "cash": 328008,
+    "bank": 556189,
     "avail": -73218
   },
   "drivers": [
@@ -42,12 +42,12 @@
     "iSpon": 59588,
     "iTv": 0,
     "iPub": 0,
-    "iPrize": 9000,
-    "iMerch": 14342,
-    "eDrv": 9511,
+    "iPrize": 0,
+    "iMerch": 0,
+    "eDrv": 4988,
     "eEng": 44000,
     "eRes": 1000,
-    "eOth": 28007
+    "eOth": 11000
   },
   "labs": [
     [
@@ -149,19 +149,19 @@
     },
     {
       "name": "Simulatori avanzati",
-      "level": 7
+      "level": 6
     },
     {
       "name": "Banche dati",
-      "level": 6
+      "level": 5
     },
     {
       "name": "Banco prova motori",
-      "level": 6
+      "level": 5
     },
     {
       "name": "Carboceramiche (freni)",
-      "level": 6
+      "level": 5
     },
     {
       "name": "Titanio (trasmissione)",
@@ -169,11 +169,11 @@
     },
     {
       "name": "Banco prova sospensioni",
-      "level": 7
+      "level": 6
     },
     {
       "name": "Galleria del vento (aero)",
-      "level": 6
+      "level": 5
     },
     {
       "name": "Nanotecnologie (elettronica)",
@@ -181,7 +181,7 @@
     },
     {
       "name": "Tracciato test (gomme)",
-      "level": 7
+      "level": 6
     }
   ],
   "lastRace": {
@@ -333,23 +333,23 @@
   },
   "nextSetup": {
     "race": {
-      "name": "Pacífica ",
-      "track": "Martins Autódromo",
-      "laps": 60,
-      "date": "2026-09-06 18:00:00",
-      "curve": 64,
-      "disl": 89,
-      "meteoQuali": "sole",
-      "meteoGara": "pioggia",
-      "meteoQualiVal": 0,
-      "meteoGaraVal": 400
+      "name": "Botown",
+      "track": "Eboladrome",
+      "laps": 67,
+      "date": "2026-09-27 18:00:00",
+      "curve": 29,
+      "disl": 11,
+      "meteoQuali": "pioggia",
+      "meteoGara": "sole",
+      "meteoQualiVal": 400,
+      "meteoGaraVal": 0
     },
     "drivers": [
       {
         "name": "Anders Malmstrom",
         "inputs": {
           "frenata": 53,
-          "cambio": 42,
+          "cambio": 53,
           "accelerazione": 42,
           "traiettorie": 53
         }
@@ -359,7 +359,7 @@
         "inputs": {
           "frenata": 105,
           "cambio": 42,
-          "accelerazione": 42,
+          "accelerazione": 53,
           "traiettorie": 42
         }
       }
