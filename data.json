@@ -1,6 +1,6 @@
 {
-  "stamp": 1789651217451,
-  "pushedAt": 1789651217451,
+  "stamp": 1789693911549,
+  "pushedAt": 1789693911549,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -36,6 +36,20 @@
       "gear": 4,
       "accel": 5,
       "traj": 4
+    },
+    {
+      "name": "Johannes Dirksdr",
+      "age": 19,
+      "exp": 5,
+      "cour": 4,
+      "judg": 1,
+      "cool": 3,
+      "con": 2,
+      "sal": 3816,
+      "brake": 9,
+      "gear": 5,
+      "accel": 4,
+      "traj": 2
     }
   ],
   "budget": {
@@ -361,6 +375,15 @@
           "cambio": 42,
           "accelerazione": 53,
           "traiettorie": 42
+        }
+      },
+      {
+        "name": "Johannes Dirksdr",
+        "inputs": {
+          "frenata": 95,
+          "cambio": 53,
+          "accelerazione": 42,
+          "traiettorie": 21
         }
       }
     ]
