@@ -1,6 +1,6 @@
 {
-  "stamp": 1790051668772,
-  "pushedAt": 1790051668772,
+  "stamp": 1790142455836,
+  "pushedAt": 1790142455836,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -26,7 +26,7 @@
     {
       "name": "Luis Poppmeier",
       "age": 19,
-      "exp": 6,
+      "exp": 7,
       "cour": 4,
       "judg": 2,
       "cool": 0,
@@ -35,7 +35,7 @@
       "brake": 10,
       "gear": 4,
       "accel": 5,
-      "traj": 4
+      "traj": 5
     },
     {
       "name": "Johannes Dirksdr",
@@ -57,7 +57,7 @@
     "iTv": 0,
     "iPub": 0,
     "iPrize": 3000,
-    "iMerch": 17898,
+    "iMerch": 21510,
     "eDrv": 4988,
     "eEng": 44000,
     "eRes": 1000,
@@ -353,10 +353,10 @@
       "date": "2026-09-27 18:00:00",
       "curve": 29,
       "disl": 11,
-      "meteoQuali": "pioggia",
-      "meteoGara": "sole",
-      "meteoQualiVal": 400,
-      "meteoGaraVal": 0
+      "meteoQuali": "sole",
+      "meteoGara": "pioggia",
+      "meteoQualiVal": 0,
+      "meteoGaraVal": 400
     },
     "drivers": [
       {
@@ -374,7 +374,7 @@
           "frenata": 105,
           "cambio": 42,
           "accelerazione": 53,
-          "traiettorie": 42
+          "traiettorie": 53
         }
       },
       {
