@@ -1,6 +1,6 @@
 {
-  "stamp": 1790485439278,
-  "pushedAt": 1790485439278,
+  "stamp": 1790539265292,
+  "pushedAt": 1790539265292,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -54,7 +54,7 @@
   ],
   "budget": {
     "iSpon": 73768,
-    "iTv": 0,
+    "iTv": 82620,
     "iPub": 0,
     "iPrize": 0,
     "iMerch": 10964,
@@ -348,15 +348,15 @@
   "nextSetup": {
     "race": {
       "name": "Botown",
-      "track": "Eboladrome",
-      "laps": 67,
-      "date": "2026-09-27 18:00:00",
-      "curve": 29,
+      "track": "Nova Motorsport Autodrome",
+      "laps": 56,
+      "date": "2026-10-04 18:00:00",
+      "curve": 92,
       "disl": 11,
       "meteoQuali": "sole",
-      "meteoGara": "pioggia",
+      "meteoGara": "sole",
       "meteoQualiVal": 0,
-      "meteoGaraVal": 400
+      "meteoGaraVal": 0
     },
     "drivers": [
       {
