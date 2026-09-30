@@ -1,6 +1,6 @@
 {
-  "stamp": 1790690204911,
-  "pushedAt": 1790690204911,
+  "stamp": 1790745457030,
+  "pushedAt": 1790745457030,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -40,7 +40,7 @@
     {
       "name": "Johannes Dirksdr",
       "age": 19,
-      "exp": 5,
+      "exp": 6,
       "cour": 4,
       "judg": 1,
       "cool": 3,
@@ -57,7 +57,7 @@
     "iTv": 82620,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 18406,
+    "iMerch": 22048,
     "eDrv": 8804,
     "eEng": 45000,
     "eRes": 1000,
@@ -322,9 +322,9 @@
       "curve": 92,
       "disl": 11,
       "meteoQuali": "sole",
-      "meteoGara": "sole",
+      "meteoGara": "pioggia lieve",
       "meteoQualiVal": 0,
-      "meteoGaraVal": 0
+      "meteoGaraVal": 200
     },
     "drivers": [
       {
