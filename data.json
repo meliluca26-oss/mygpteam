@@ -1,6 +1,6 @@
 {
-  "stamp": 1791092135879,
-  "pushedAt": 1791092135879,
+  "stamp": 1791148333718,
+  "pushedAt": 1791148333718,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -54,7 +54,7 @@
   ],
   "budget": {
     "iSpon": 80975,
-    "iTv": 0,
+    "iTv": 82944,
     "iPub": 0,
     "iPrize": 1000,
     "iMerch": 10798,
@@ -199,97 +199,97 @@
     }
   ],
   "lastRace": {
-    "id": "1485908",
+    "id": "1485909",
     "name": "Botown",
-    "track": "Eboladrome",
-    "laps": 67,
-    "date": "2026-09-27 18:00:00",
+    "track": "Nova Motorsport Autodrome",
+    "laps": 56,
+    "date": "2026-10-04 18:00:00",
     "winner": {
-      "driver": "Luis Poppmeier",
-      "time": "108:59:828"
+      "driver": "Johannes Dirksdr",
+      "time": "137:22:290"
     },
     "bestLap": {
       "driver": "Luis Poppmeier",
-      "time": "1:36:779"
+      "time": "2:24:663"
     },
     "classification": [
       {
         "pos": 1,
-        "driver": "Luis Poppmeier",
+        "driver": "Johannes Dirksdr",
         "team": "Bronte Racing Team",
         "grid": 1,
-        "gap": "108:59:828",
+        "gap": "137:22:290",
         "pit": 1
       },
       {
         "pos": 2,
-        "driver": "Johannes Dirksdr",
-        "team": "Bronte Racing Team",
-        "grid": 2,
-        "gap": "+31.834",
+        "driver": "Matteo Rickard Gagliesi",
+        "team": "Ferrari",
+        "grid": 4,
+        "gap": "+102.220",
         "pit": 1
       },
       {
         "pos": 3,
         "driver": "Francy Meini",
         "team": "KNglobalGP",
-        "grid": 3,
-        "gap": "+179.901",
-        "pit": 1
-      },
-      {
-        "pos": 4,
-        "driver": "Matteo Rickard Gagliesi",
-        "team": "Ferrari",
-        "grid": 6,
-        "gap": "+195.753",
+        "grid": 5,
+        "gap": "+114.768",
         "pit": 2
       },
       {
-        "pos": 5,
+        "pos": 4,
         "driver": "Gennaro De Negri",
         "team": "Top Gear",
-        "grid": 5,
-        "gap": "+225.483",
+        "grid": 6,
+        "gap": "+121.545",
+        "pit": 1
+      },
+      {
+        "pos": 5,
+        "driver": "Attilio Mastromarino",
+        "team": "Wash Racing Team",
+        "grid": 3,
+        "gap": "+137.137",
         "pit": 1
       },
       {
         "pos": 6,
-        "driver": "Attilio Mastromarino",
-        "team": "Wash Racing Team",
-        "grid": 4,
-        "gap": "+229.012",
+        "driver": "Jean Claude Liazza",
+        "team": "Ferrari",
+        "grid": 7,
+        "gap": "+374.990",
         "pit": 1
       },
       {
         "pos": 7,
         "driver": "Candido Massimo",
         "team": "KNglobalGP",
-        "grid": 7,
-        "gap": "+381.195",
+        "grid": 10,
+        "gap": "+417.001",
         "pit": 1
       },
       {
         "pos": 8,
-        "driver": "Gianpiero De Donato",
-        "team": "Top Gear",
-        "grid": 9,
-        "gap": "+410.371",
+        "driver": "Luis Poppmeier",
+        "team": "Bronte Racing Team",
+        "grid": 2,
+        "gap": null,
         "pit": 1
       },
       {
         "pos": 9,
         "driver": "Dario Senna",
         "team": "Wash Racing Team",
-        "grid": 8,
-        "gap": "+442.994",
+        "grid": 9,
+        "gap": null,
         "pit": 1
       },
       {
         "pos": 10,
-        "driver": "Jean Claude Liazza",
-        "team": "Ferrari",
-        "grid": 10,
+        "driver": "Gianpiero De Donato",
+        "team": "Top Gear",
+        "grid": 8,
         "gap": null,
         "pit": 0
       }
@@ -297,18 +297,18 @@
     "mine": [
       {
         "pos": 1,
-        "driver": "Luis Poppmeier",
+        "driver": "Johannes Dirksdr",
         "team": "Bronte Racing Team",
         "grid": 1,
-        "gap": "108:59:828",
+        "gap": "137:22:290",
         "pit": 1
       },
       {
-        "pos": 2,
-        "driver": "Johannes Dirksdr",
+        "pos": 8,
+        "driver": "Luis Poppmeier",
         "team": "Bronte Racing Team",
         "grid": 2,
-        "gap": "+31.834",
+        "gap": null,
         "pit": 1
       }
     ]
@@ -316,15 +316,15 @@
   "nextSetup": {
     "race": {
       "name": "Botown",
-      "track": "Nova Motorsport Autodrome",
-      "laps": 56,
-      "date": "2026-10-04 18:00:00",
-      "curve": 92,
-      "disl": 11,
-      "meteoQuali": "sole",
-      "meteoGara": "pioggia lieve",
-      "meteoQualiVal": 0,
-      "meteoGaraVal": 200
+      "track": "Ferrari Autodrome",
+      "laps": 61,
+      "date": "2026-10-11 18:00:00",
+      "curve": 5,
+      "disl": 95,
+      "meteoQuali": "pioggia",
+      "meteoGara": "sole",
+      "meteoQualiVal": 400,
+      "meteoGaraVal": 0
     },
     "drivers": [
       {
