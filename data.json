@@ -1,11 +1,11 @@
 {
-  "stamp": 1791427162389,
-  "pushedAt": 1791427162389,
+  "stamp": 1791454890378,
+  "pushedAt": 1791454890378,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": 574218,
-    "bank": 584346,
+    "cash": 638337,
+    "bank": 598955,
     "avail": -73218
   },
   "drivers": [
@@ -53,15 +53,15 @@
     }
   ],
   "budget": {
-    "iSpon": 80975,
-    "iTv": 82944,
+    "iSpon": 87132,
+    "iTv": 0,
     "iPub": 0,
-    "iPrize": 1000,
-    "iMerch": 25312,
-    "eDrv": 4402,
+    "iPrize": 0,
+    "iMerch": 0,
+    "eDrv": 8804,
     "eEng": 45000,
     "eRes": 1000,
-    "eOth": 20800
+    "eOth": 71899
   },
   "labs": [
     [
@@ -144,7 +144,7 @@
     }
   ],
   "staff": {
-    "lavoroGruppo": "fantastico [10]",
+    "lavoroGruppo": "meraviglioso [11]",
     "meccanici": 10,
     "tecnici": 10,
     "pubblicitari": 14,
@@ -163,7 +163,7 @@
     },
     {
       "name": "Simulatori avanzati",
-      "level": 5
+      "level": 4
     },
     {
       "name": "Banche dati",
@@ -183,7 +183,7 @@
     },
     {
       "name": "Banco prova sospensioni",
-      "level": 5
+      "level": 4
     },
     {
       "name": "Galleria del vento (aero)",
@@ -195,7 +195,7 @@
     },
     {
       "name": "Tracciato test (gomme)",
-      "level": 5
+      "level": 4
     }
   ],
   "lastRace": {
