@@ -1,6 +1,6 @@
 {
-  "stamp": 1791744358053,
-  "pushedAt": 1791744358053,
+  "stamp": 1791758757934,
+  "pushedAt": 1791758757934,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -199,97 +199,97 @@
     }
   ],
   "lastRace": {
-    "id": "1485909",
+    "id": "1485910",
     "name": "Botown",
-    "track": "Nova Motorsport Autodrome",
-    "laps": 56,
-    "date": "2026-10-04 18:00:00",
+    "track": "Ferrari Autodrome",
+    "laps": 61,
+    "date": "2026-10-11 18:00:00",
     "winner": {
-      "driver": "Johannes Dirksdr",
-      "time": "137:22:290"
+      "driver": "Luis Poppmeier",
+      "time": "93:22:639"
     },
     "bestLap": {
       "driver": "Luis Poppmeier",
-      "time": "2:24:663"
+      "time": "1:30:892"
     },
     "classification": [
       {
         "pos": 1,
-        "driver": "Johannes Dirksdr",
+        "driver": "Luis Poppmeier",
         "team": "Bronte Racing Team",
         "grid": 1,
-        "gap": "137:22:290",
+        "gap": "93:22:639",
         "pit": 1
       },
       {
         "pos": 2,
-        "driver": "Matteo Rickard Gagliesi",
-        "team": "Ferrari",
-        "grid": 4,
-        "gap": "+102.220",
+        "driver": "Johannes Dirksdr",
+        "team": "Bronte Racing Team",
+        "grid": 2,
+        "gap": "+6.530",
         "pit": 1
       },
       {
         "pos": 3,
-        "driver": "Francy Meini",
-        "team": "KNglobalGP",
-        "grid": 5,
-        "gap": "+114.768",
-        "pit": 2
+        "driver": "Matteo Rickard Gagliesi",
+        "team": "Ferrari",
+        "grid": 3,
+        "gap": "+82.407",
+        "pit": 1
       },
       {
         "pos": 4,
-        "driver": "Gennaro De Negri",
-        "team": "Top Gear",
-        "grid": 6,
-        "gap": "+121.545",
+        "driver": "Francy Meini",
+        "team": "KNglobalGP",
+        "grid": 4,
+        "gap": "+90.333",
         "pit": 1
       },
       {
         "pos": 5,
         "driver": "Attilio Mastromarino",
         "team": "Wash Racing Team",
-        "grid": 3,
-        "gap": "+137.137",
-        "pit": 1
+        "grid": 5,
+        "gap": "+112.118",
+        "pit": 2
       },
       {
         "pos": 6,
-        "driver": "Jean Claude Liazza",
-        "team": "Ferrari",
-        "grid": 7,
-        "gap": "+374.990",
+        "driver": "Candido Massimo",
+        "team": "KNglobalGP",
+        "grid": 8,
+        "gap": "+195.659",
         "pit": 1
       },
       {
         "pos": 7,
-        "driver": "Candido Massimo",
-        "team": "KNglobalGP",
-        "grid": 10,
-        "gap": "+417.001",
+        "driver": "Dario Senna",
+        "team": "Wash Racing Team",
+        "grid": 9,
+        "gap": "+195.798",
         "pit": 1
       },
       {
         "pos": 8,
-        "driver": "Luis Poppmeier",
-        "team": "Bronte Racing Team",
-        "grid": 2,
-        "gap": null,
+        "driver": "Gianpiero De Donato",
+        "team": "Top Gear",
+        "grid": 7,
+        "gap": "+234.865",
         "pit": 1
       },
       {
         "pos": 9,
-        "driver": "Dario Senna",
-        "team": "Wash Racing Team",
-        "grid": 9,
-        "gap": null,
+        "driver": "Jean Claude Liazza",
+        "team": "Ferrari",
+        "grid": 10,
+        "gap": "+240.179",
         "pit": 1
       },
       {
         "pos": 10,
-        "driver": "Gianpiero De Donato",
+        "driver": "Gennaro De Negri",
         "team": "Top Gear",
-        "grid": 8,
+        "grid": 6,
         "gap": null,
         "pit": 0
       }
@@ -297,18 +297,18 @@
     "mine": [
       {
         "pos": 1,
-        "driver": "Johannes Dirksdr",
+        "driver": "Luis Poppmeier",
         "team": "Bronte Racing Team",
         "grid": 1,
-        "gap": "137:22:290",
+        "gap": "93:22:639",
         "pit": 1
       },
       {
-        "pos": 8,
-        "driver": "Luis Poppmeier",
+        "pos": 2,
+        "driver": "Johannes Dirksdr",
         "team": "Bronte Racing Team",
         "grid": 2,
-        "gap": null,
+        "gap": "+6.530",
         "pit": 1
       }
     ]
