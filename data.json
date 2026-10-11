@@ -1,6 +1,6 @@
 {
-  "stamp": 1791701964872,
-  "pushedAt": 1791701964872,
+  "stamp": 1791744358053,
+  "pushedAt": 1791744358053,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -54,7 +54,7 @@
   ],
   "budget": {
     "iSpon": 87132,
-    "iTv": 0,
+    "iTv": 83268,
     "iPub": 0,
     "iPrize": 0,
     "iMerch": 11064,
@@ -316,15 +316,15 @@
   "nextSetup": {
     "race": {
       "name": "Botown",
-      "track": "Ferrari Autodrome",
-      "laps": 61,
-      "date": "2026-10-11 18:00:00",
-      "curve": 5,
-      "disl": 95,
+      "track": "UFORacing Autodrome",
+      "laps": 71,
+      "date": "2026-10-18 18:00:00",
+      "curve": 50,
+      "disl": 22,
       "meteoQuali": "sole",
-      "meteoGara": "pioggia lieve",
+      "meteoGara": "sole",
       "meteoQualiVal": 0,
-      "meteoGaraVal": 200
+      "meteoGaraVal": 0
     },
     "drivers": [
       {
