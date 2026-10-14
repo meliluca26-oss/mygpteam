@@ -1,6 +1,6 @@
 {
-  "stamp": 1791952622484,
-  "pushedAt": 1791952622484,
+  "stamp": 1791972111659,
+  "pushedAt": 1791972111659,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -322,9 +322,9 @@
       "curve": 50,
       "disl": 22,
       "meteoQuali": "sole",
-      "meteoGara": "sole",
+      "meteoGara": "pioggia lieve",
       "meteoQualiVal": 0,
-      "meteoGaraVal": 0
+      "meteoGaraVal": 200
     },
     "drivers": [
       {
