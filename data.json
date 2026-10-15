@@ -1,11 +1,11 @@
 {
-  "stamp": 1792037962479,
-  "pushedAt": 1792037962479,
+  "stamp": 1792057455118,
+  "pushedAt": 1792057455118,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": 638337,
-    "bank": 598955,
+    "cash": 426147,
+    "bank": 613929,
     "avail": -73218
   },
   "drivers": [
@@ -54,14 +54,14 @@
   ],
   "budget": {
     "iSpon": 87132,
-    "iTv": 83268,
+    "iTv": 0,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 25838,
+    "iMerch": 0,
     "eDrv": 8804,
     "eEng": 45000,
     "eRes": 1000,
-    "eOth": 71899
+    "eOth": 11000
   },
   "labs": [
     [
@@ -179,7 +179,7 @@
     },
     {
       "name": "Titanio (trasmissione)",
-      "level": 5
+      "level": 4
     },
     {
       "name": "Banco prova sospensioni",
