@@ -1,6 +1,6 @@
 {
-  "stamp": 1792346321539,
-  "pushedAt": 1792346321539,
+  "stamp": 1792364261093,
+  "pushedAt": 1792364261093,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -199,18 +199,18 @@
     }
   ],
   "lastRace": {
-    "id": "1485910",
+    "id": "1485911",
     "name": "Botown",
-    "track": "Ferrari Autodrome",
-    "laps": 61,
-    "date": "2026-10-11 18:00:00",
+    "track": "UFORacing Autodrome",
+    "laps": 71,
+    "date": "2026-10-18 18:00:00",
     "winner": {
       "driver": "Luis Poppmeier",
-      "time": "93:22:639"
+      "time": "110:19:690"
     },
     "bestLap": {
       "driver": "Luis Poppmeier",
-      "time": "1:30:892"
+      "time": "1:32:195"
     },
     "classification": [
       {
@@ -218,77 +218,77 @@
         "driver": "Luis Poppmeier",
         "team": "Bronte Racing Team",
         "grid": 1,
-        "gap": "93:22:639",
+        "gap": "110:19:690",
         "pit": 1
       },
       {
         "pos": 2,
-        "driver": "Johannes Dirksdr",
-        "team": "Bronte Racing Team",
-        "grid": 2,
-        "gap": "+6.530",
+        "driver": "Attilio Mastromarino",
+        "team": "Wash Racing Team",
+        "grid": 5,
+        "gap": "+103.681",
         "pit": 1
       },
       {
         "pos": 3,
-        "driver": "Matteo Rickard Gagliesi",
-        "team": "Ferrari",
-        "grid": 3,
-        "gap": "+82.407",
+        "driver": "Gennaro De Negri",
+        "team": "Top Gear",
+        "grid": 4,
+        "gap": "+154.484",
         "pit": 1
       },
       {
         "pos": 4,
-        "driver": "Francy Meini",
-        "team": "KNglobalGP",
-        "grid": 4,
-        "gap": "+90.333",
+        "driver": "Jean Claude Liazza",
+        "team": "Ferrari",
+        "grid": 8,
+        "gap": "+327.741",
         "pit": 1
       },
       {
         "pos": 5,
-        "driver": "Attilio Mastromarino",
-        "team": "Wash Racing Team",
-        "grid": 5,
-        "gap": "+112.118",
-        "pit": 2
+        "driver": "Gianpiero De Donato",
+        "team": "Top Gear",
+        "grid": 9,
+        "gap": "+331.342",
+        "pit": 1
       },
       {
         "pos": 6,
         "driver": "Candido Massimo",
         "team": "KNglobalGP",
-        "grid": 8,
-        "gap": "+195.659",
+        "grid": 7,
+        "gap": "+369.830",
         "pit": 1
       },
       {
         "pos": 7,
         "driver": "Dario Senna",
         "team": "Wash Racing Team",
-        "grid": 9,
-        "gap": "+195.798",
+        "grid": 10,
+        "gap": null,
         "pit": 1
       },
       {
         "pos": 8,
-        "driver": "Gianpiero De Donato",
-        "team": "Top Gear",
-        "grid": 7,
-        "gap": "+234.865",
-        "pit": 1
+        "driver": "Francy Meini",
+        "team": "KNglobalGP",
+        "grid": 3,
+        "gap": null,
+        "pit": 0
       },
       {
         "pos": 9,
-        "driver": "Jean Claude Liazza",
-        "team": "Ferrari",
-        "grid": 10,
-        "gap": "+240.179",
-        "pit": 1
+        "driver": "Johannes Dirksdr",
+        "team": "Bronte Racing Team",
+        "grid": 2,
+        "gap": null,
+        "pit": 0
       },
       {
         "pos": 10,
-        "driver": "Gennaro De Negri",
-        "team": "Top Gear",
+        "driver": "Matteo Rickard Gagliesi",
+        "team": "Ferrari",
         "grid": 6,
         "gap": null,
         "pit": 0
@@ -300,16 +300,16 @@
         "driver": "Luis Poppmeier",
         "team": "Bronte Racing Team",
         "grid": 1,
-        "gap": "93:22:639",
+        "gap": "110:19:690",
         "pit": 1
       },
       {
-        "pos": 2,
+        "pos": 9,
         "driver": "Johannes Dirksdr",
         "team": "Bronte Racing Team",
         "grid": 2,
-        "gap": "+6.530",
-        "pit": 1
+        "gap": null,
+        "pit": 0
       }
     ]
   },
