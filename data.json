@@ -1,6 +1,6 @@
 {
-  "stamp": 1792302065133,
-  "pushedAt": 1792302065133,
+  "stamp": 1792346321539,
+  "pushedAt": 1792346321539,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -54,7 +54,7 @@
   ],
   "budget": {
     "iSpon": 87132,
-    "iTv": 0,
+    "iTv": 83574,
     "iPub": 0,
     "iPrize": 0,
     "iMerch": 11474,
@@ -316,15 +316,15 @@
   "nextSetup": {
     "race": {
       "name": "Botown",
-      "track": "UFORacing Autodrome",
-      "laps": 71,
-      "date": "2026-10-18 18:00:00",
-      "curve": 50,
-      "disl": 22,
+      "track": "Wash Racing Team Autodrome",
+      "laps": 67,
+      "date": "2026-10-25 18:00:00",
+      "curve": 90,
+      "disl": 60,
       "meteoQuali": "sole",
-      "meteoGara": "pioggia lieve",
+      "meteoGara": "sole",
       "meteoQualiVal": 0,
-      "meteoGaraVal": 200
+      "meteoGaraVal": 0
     },
     "drivers": [
       {
