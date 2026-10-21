@@ -1,6 +1,6 @@
 {
-  "stamp": 1792556715658,
-  "pushedAt": 1792556715658,
+  "stamp": 1792576761218,
+  "pushedAt": 1792576761218,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -321,9 +321,9 @@
       "date": "2026-10-25 18:00:00",
       "curve": 90,
       "disl": 60,
-      "meteoQuali": "sole",
+      "meteoQuali": "pioggia",
       "meteoGara": "sole",
-      "meteoQualiVal": 0,
+      "meteoQualiVal": 400,
       "meteoGaraVal": 0
     },
     "drivers": [
