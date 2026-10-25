@@ -1,6 +1,6 @@
 {
-  "stamp": 1792902172776,
-  "pushedAt": 1792902172776,
+  "stamp": 1792952357913,
+  "pushedAt": 1792952357913,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -316,14 +316,14 @@
   "nextSetup": {
     "race": {
       "name": "Botown",
-      "track": "Wash Racing Team Autodrome",
-      "laps": 67,
-      "date": "2026-10-25 18:00:00",
-      "curve": 90,
-      "disl": 60,
-      "meteoQuali": "pioggia",
+      "track": "Vortex GP Autodrome",
+      "laps": 57,
+      "date": "2026-11-01 18:00:00",
+      "curve": 50,
+      "disl": 100,
+      "meteoQuali": "sole",
       "meteoGara": "sole",
-      "meteoQualiVal": 400,
+      "meteoQualiVal": 0,
       "meteoGaraVal": 0
     },
     "drivers": [
