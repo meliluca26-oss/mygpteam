@@ -1,6 +1,6 @@
 {
-  "stamp": 1793096451658,
-  "pushedAt": 1793096451658,
+  "stamp": 1793175281957,
+  "pushedAt": 1793175281957,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -26,7 +26,7 @@
     {
       "name": "Luis Poppmeier",
       "age": 20,
-      "exp": 7,
+      "exp": 8,
       "cour": 4,
       "judg": 2,
       "cool": 0,
@@ -57,7 +57,7 @@
     "iTv": 83916,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 18864,
+    "iMerch": 22840,
     "eDrv": 8804,
     "eEng": 45000,
     "eRes": 1000,
@@ -321,9 +321,9 @@
       "date": "2026-11-01 18:00:00",
       "curve": 50,
       "disl": 100,
-      "meteoQuali": "sole",
+      "meteoQuali": "pioggia",
       "meteoGara": "sole",
-      "meteoQualiVal": 0,
+      "meteoQualiVal": 400,
       "meteoGaraVal": 0
     },
     "drivers": [
