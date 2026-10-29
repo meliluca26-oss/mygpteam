@@ -1,11 +1,11 @@
 {
-  "stamp": 1793175281957,
-  "pushedAt": 1793175281957,
+  "stamp": 1793256913720,
+  "pushedAt": 1793256913720,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": 672403,
-    "bank": 629277,
+    "cash": 840790,
+    "bank": 645009,
     "avail": -73218
   },
   "drivers": [
@@ -53,11 +53,11 @@
     }
   ],
   "budget": {
-    "iSpon": 87132,
-    "iTv": 83916,
+    "iSpon": 64440,
+    "iTv": 0,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 22840,
+    "iMerch": 0,
     "eDrv": 8804,
     "eEng": 45000,
     "eRes": 1000,
