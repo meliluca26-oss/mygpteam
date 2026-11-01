@@ -1,6 +1,6 @@
 {
-  "stamp": 1793561373060,
-  "pushedAt": 1793561373060,
+  "stamp": 1793575710493,
+  "pushedAt": 1793575710493,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -199,97 +199,97 @@
     }
   ],
   "lastRace": {
-    "id": "1485912",
+    "id": "1485913",
     "name": "Botown",
-    "track": "Wash Racing Team Autodrome",
-    "laps": 67,
-    "date": "2026-10-25 18:00:00",
+    "track": "Vortex GP Autodrome",
+    "laps": 57,
+    "date": "2026-11-01 18:00:00",
     "winner": {
-      "driver": "Johannes Dirksdr",
-      "time": "122:08:693"
+      "driver": "Luis Poppmeier",
+      "time": "100:17:725"
     },
     "bestLap": {
-      "driver": "Johannes Dirksdr",
-      "time": "1:48:323"
+      "driver": "Luis Poppmeier",
+      "time": "1:44:564"
     },
     "classification": [
       {
         "pos": 1,
-        "driver": "Johannes Dirksdr",
+        "driver": "Luis Poppmeier",
         "team": "Bronte Racing Team",
         "grid": 1,
-        "gap": "122:08:693",
+        "gap": "100:17:725",
         "pit": 1
       },
       {
         "pos": 2,
-        "driver": "Luis Poppmeier",
+        "driver": "Johannes Dirksdr",
         "team": "Bronte Racing Team",
         "grid": 2,
-        "gap": "+16.683",
+        "gap": "+29.573",
         "pit": 1
       },
       {
         "pos": 3,
         "driver": "Francy Meini",
         "team": "KNglobalGP",
-        "grid": 6,
-        "gap": "+146.433",
+        "grid": 3,
+        "gap": "+114.023",
         "pit": 1
       },
       {
         "pos": 4,
-        "driver": "Attilio Mastromarino",
-        "team": "Wash Racing Team",
+        "driver": "Matteo Rickard Gagliesi",
+        "team": "Ferrari",
         "grid": 4,
-        "gap": "+170.193",
+        "gap": "+125.059",
         "pit": 1
       },
       {
         "pos": 5,
-        "driver": "Matteo Rickard Gagliesi",
-        "team": "Ferrari",
-        "grid": 5,
-        "gap": "+189.021",
-        "pit": 2
+        "driver": "Gianpiero De Donato",
+        "team": "Top Gear",
+        "grid": 8,
+        "gap": "+329.549",
+        "pit": 1
       },
       {
         "pos": 6,
-        "driver": "Gennaro De Negri",
-        "team": "Top Gear",
-        "grid": 3,
-        "gap": "+192.238",
+        "driver": "Jean Claude Liazza",
+        "team": "Ferrari",
+        "grid": 7,
+        "gap": "+348.241",
         "pit": 1
       },
       {
         "pos": 7,
-        "driver": "Dario Senna",
-        "team": "Wash Racing Team",
-        "grid": 7,
-        "gap": "+393.582",
-        "pit": 1
+        "driver": "Candido Massimo",
+        "team": "KNglobalGP",
+        "grid": 9,
+        "gap": "+383.099",
+        "pit": 2
       },
       {
         "pos": 8,
-        "driver": "Jean Claude Liazza",
-        "team": "Ferrari",
-        "grid": 8,
-        "gap": "+433.132",
-        "pit": 2
+        "driver": "Attilio Mastromarino",
+        "team": "Wash Racing Team",
+        "grid": 5,
+        "gap": null,
+        "pit": 1
       },
       {
         "pos": 9,
-        "driver": "Candido Massimo",
-        "team": "KNglobalGP",
-        "grid": 10,
-        "gap": "+485.504",
-        "pit": 2
+        "driver": "Gennaro De Negri",
+        "team": "Top Gear",
+        "grid": 6,
+        "gap": null,
+        "pit": 0
       },
       {
         "pos": 10,
-        "driver": "Gianpiero De Donato",
-        "team": "Top Gear",
-        "grid": 9,
+        "driver": "Dario Senna",
+        "team": "Wash Racing Team",
+        "grid": 10,
         "gap": null,
         "pit": 0
       }
@@ -297,18 +297,18 @@
     "mine": [
       {
         "pos": 1,
-        "driver": "Johannes Dirksdr",
+        "driver": "Luis Poppmeier",
         "team": "Bronte Racing Team",
         "grid": 1,
-        "gap": "122:08:693",
+        "gap": "100:17:725",
         "pit": 1
       },
       {
         "pos": 2,
-        "driver": "Luis Poppmeier",
+        "driver": "Johannes Dirksdr",
         "team": "Bronte Racing Team",
         "grid": 2,
-        "gap": "+16.683",
+        "gap": "+29.573",
         "pit": 1
       }
     ]
