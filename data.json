@@ -1,6 +1,6 @@
 {
-  "stamp": 1793687028511,
-  "pushedAt": 1793687028511,
+  "stamp": 1793782535996,
+  "pushedAt": 1793782535996,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -19,7 +19,7 @@
       "con": 1,
       "sal": 1577,
       "brake": 5,
-      "gear": 5,
+      "gear": 6,
       "accel": 4,
       "traj": 5
     },
@@ -40,7 +40,7 @@
     {
       "name": "Johannes Dirksdr",
       "age": 19,
-      "exp": 6,
+      "exp": 7,
       "cour": 4,
       "judg": 1,
       "cool": 3,
@@ -57,7 +57,7 @@
     "iTv": 84240,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 19092,
+    "iMerch": 22868,
     "eDrv": 8804,
     "eEng": 45000,
     "eRes": 1000,
@@ -321,9 +321,9 @@
       "date": "2026-11-08 18:00:00",
       "curve": 70,
       "disl": 90,
-      "meteoQuali": "pioggia",
+      "meteoQuali": "pioggia lieve",
       "meteoGara": "pioggia lieve",
-      "meteoQualiVal": 400,
+      "meteoQualiVal": 200,
       "meteoGaraVal": 200
     },
     "drivers": [
@@ -331,7 +331,7 @@
         "name": "Anders Malmstrom",
         "inputs": {
           "frenata": 53,
-          "cambio": 53,
+          "cambio": 63,
           "accelerazione": 42,
           "traiettorie": 53
         }
