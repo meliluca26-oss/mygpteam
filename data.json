@@ -1,17 +1,17 @@
 {
-  "stamp": 1793782535996,
-  "pushedAt": 1793782535996,
+  "stamp": 1793859681491,
+  "pushedAt": 1793859681491,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
-    "cash": 840790,
-    "bank": 645009,
+    "cash": 1144740,
+    "bank": 661134,
     "avail": -73218
   },
   "drivers": [
     {
       "name": "Anders Malmstrom",
-      "age": 23,
+      "age": 24,
       "exp": 7,
       "cour": 1,
       "judg": 3,
@@ -53,15 +53,15 @@
     }
   ],
   "budget": {
-    "iSpon": 88430,
-    "iTv": 84240,
+    "iSpon": 23990,
+    "iTv": 0,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 22868,
+    "iMerch": 0,
     "eDrv": 8804,
     "eEng": 45000,
     "eRes": 1000,
-    "eOth": 14500
+    "eOth": 11000
   },
   "labs": [
     [
@@ -144,7 +144,7 @@
     }
   ],
   "staff": {
-    "lavoroGruppo": "livello 12",
+    "lavoroGruppo": "livello 13",
     "meccanici": 10,
     "tecnici": 10,
     "pubblicitari": 14,
