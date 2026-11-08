@@ -1,6 +1,6 @@
 {
-  "stamp": 1794121697712,
-  "pushedAt": 1794121697712,
+  "stamp": 1794166245288,
+  "pushedAt": 1794166245288,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -54,7 +54,7 @@
   ],
   "budget": {
     "iSpon": 96244,
-    "iTv": 0,
+    "iTv": 84564,
     "iPub": 0,
     "iPrize": 0,
     "iMerch": 9562,
@@ -316,15 +316,15 @@
   "nextSetup": {
     "race": {
       "name": "Botown",
-      "track": "SUZUKI Spizers RACING Autodrome",
-      "laps": 59,
-      "date": "2026-11-08 18:00:00",
-      "curve": 70,
-      "disl": 90,
-      "meteoQuali": "pioggia lieve",
-      "meteoGara": "pioggia lieve",
-      "meteoQualiVal": 200,
-      "meteoGaraVal": 200
+      "track": "Bronte Racing Team Autodrome",
+      "laps": 51,
+      "date": "2026-11-15 18:00:00",
+      "curve": 41,
+      "disl": 21,
+      "meteoQuali": "pioggia",
+      "meteoGara": "pioggia",
+      "meteoQualiVal": 400,
+      "meteoGaraVal": 400
     },
     "drivers": [
       {
