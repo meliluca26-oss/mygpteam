@@ -1,6 +1,6 @@
 {
-  "stamp": 1794298391004,
-  "pushedAt": 1794298391004,
+  "stamp": 1794393574956,
+  "pushedAt": 1794393574956,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -46,10 +46,10 @@
       "cool": 3,
       "con": 2,
       "sal": 3816,
-      "brake": 9,
-      "gear": 6,
+      "brake": 10,
+      "gear": 7,
       "accel": 4,
-      "traj": 2
+      "traj": 3
     }
   ],
   "budget": {
@@ -57,7 +57,7 @@
     "iTv": 84564,
     "iPub": 0,
     "iPrize": 0,
-    "iMerch": 16404,
+    "iMerch": 19874,
     "eDrv": 8804,
     "eEng": 45000,
     "eRes": 1000,
@@ -321,10 +321,10 @@
       "date": "2026-11-15 18:00:00",
       "curve": 41,
       "disl": 21,
-      "meteoQuali": "pioggia",
-      "meteoGara": "pioggia",
-      "meteoQualiVal": 400,
-      "meteoGaraVal": 400
+      "meteoQuali": "sole",
+      "meteoGara": "pioggia lieve",
+      "meteoQualiVal": 0,
+      "meteoGaraVal": 200
     },
     "drivers": [
       {
@@ -348,10 +348,10 @@
       {
         "name": "Johannes Dirksdr",
         "inputs": {
-          "frenata": 95,
-          "cambio": 63,
+          "frenata": 105,
+          "cambio": 74,
           "accelerazione": 42,
-          "traiettorie": 21
+          "traiettorie": 32
         }
       }
     ]
