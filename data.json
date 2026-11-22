@@ -1,6 +1,6 @@
 {
-  "stamp": 1795316474185,
-  "pushedAt": 1795316474185,
+  "stamp": 1795378536134,
+  "pushedAt": 1795378536134,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -54,7 +54,7 @@
   ],
   "budget": {
     "iSpon": 97777,
-    "iTv": 0,
+    "iTv": 85194,
     "iPub": 0,
     "iPrize": 0,
     "iMerch": 10570,
@@ -316,15 +316,15 @@
   "nextSetup": {
     "race": {
       "name": "Botown",
-      "track": "sburrevoli Autodrome",
-      "laps": 72,
-      "date": "2026-11-22 18:00:00",
-      "curve": 35,
-      "disl": 45,
-      "meteoQuali": "sole",
-      "meteoGara": "pioggia lieve",
-      "meteoQualiVal": 0,
-      "meteoGaraVal": 200
+      "track": "joom Autodrome",
+      "laps": 87,
+      "date": "2026-11-29 18:00:00",
+      "curve": 5,
+      "disl": 50,
+      "meteoQuali": "pioggia",
+      "meteoGara": "sole",
+      "meteoQualiVal": 400,
+      "meteoGaraVal": 0
     },
     "drivers": [
       {
