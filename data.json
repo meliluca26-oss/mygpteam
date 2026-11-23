@@ -1,6 +1,6 @@
 {
-  "stamp": 1795378536134,
-  "pushedAt": 1795378536134,
+  "stamp": 1795397411754,
+  "pushedAt": 1795397411754,
   "team": {
     "name": "Bronte Racing Team",
     "formula": "F4",
@@ -199,18 +199,18 @@
     }
   ],
   "lastRace": {
-    "id": "1485915",
+    "id": "1485916",
     "name": "Botown",
-    "track": "Bronte Racing Team Autodrome",
-    "laps": 51,
-    "date": "2026-11-15 18:00:00",
+    "track": "sburrevoli Autodrome",
+    "laps": 72,
+    "date": "2026-11-22 18:00:00",
     "winner": {
       "driver": "Luis Poppmeier",
-      "time": "109:03:540"
+      "time": "103:49:166"
     },
     "bestLap": {
       "driver": "Luis Poppmeier",
-      "time": "2:07:000"
+      "time": "1:25:595"
     },
     "classification": [
       {
@@ -218,7 +218,7 @@
         "driver": "Luis Poppmeier",
         "team": "Bronte Racing Team",
         "grid": 1,
-        "gap": "109:03:540",
+        "gap": "103:49:166",
         "pit": 1
       },
       {
@@ -226,72 +226,88 @@
         "driver": "Johannes Dirksdr",
         "team": "Bronte Racing Team",
         "grid": 2,
-        "gap": "+21.221",
-        "pit": 2
+        "gap": "+10.537",
+        "pit": 1
       },
       {
         "pos": 3,
-        "driver": "Dominykas altenis",
-        "team": "sburrevoli",
-        "grid": 9,
-        "gap": "+209.677",
+        "driver": "Luca Matteo Valete",
+        "team": "Vortex GP",
+        "grid": 3,
+        "gap": "+82.757",
         "pit": 1
       },
       {
         "pos": 4,
-        "driver": "Titus MacLeverty",
-        "team": "FX Evergreen F1 Team",
-        "grid": 3,
-        "gap": "+270.212",
+        "driver": "Filomeno Continisio",
+        "team": "Vortex GP",
+        "grid": 4,
+        "gap": "+297.971",
         "pit": 1
       },
       {
         "pos": 5,
-        "driver": "Mladen Starcevic",
-        "team": "FX Evergreen F1 Team",
-        "grid": 4,
-        "gap": "+274.906",
+        "driver": "Gary Mobley",
+        "team": "kronk",
+        "grid": 9,
+        "gap": "+403.865",
         "pit": 1
       },
       {
         "pos": 6,
-        "driver": "Gari Cook",
-        "team": "kronk",
-        "grid": 5,
-        "gap": "+283.666",
+        "driver": "Cosmas Vryzas",
+        "team": "sburrevoli",
+        "grid": 8,
+        "gap": "+414.566",
         "pit": 1
       },
       {
         "pos": 7,
-        "driver": "Cameron Youngmay",
-        "team": "Los piojos racing",
-        "grid": 8,
-        "gap": "+285.340",
-        "pit": 2
+        "driver": "Dominykas altenis",
+        "team": "sburrevoli",
+        "grid": 10,
+        "gap": null,
+        "pit": 1
       },
       {
         "pos": 8,
         "driver": "Kwada Matlou",
         "team": "Los piojos racing",
-        "grid": 10,
-        "gap": "+296.172",
-        "pit": 1
+        "grid": 12,
+        "gap": null,
+        "pit": 2
       },
       {
         "pos": 9,
-        "driver": "Gary Mobley",
-        "team": "kronk",
+        "driver": "Mladen Starcevic",
+        "team": "FX Evergreen F1 Team",
         "grid": 7,
         "gap": null,
-        "pit": 0
+        "pit": 1
       },
       {
         "pos": 10,
-        "driver": "Cosmas Vryzas",
-        "team": "sburrevoli",
+        "driver": "Gari Cook",
+        "team": "kronk",
         "grid": 6,
         "gap": null,
         "pit": 1
+      },
+      {
+        "pos": 11,
+        "driver": "Titus MacLeverty",
+        "team": "FX Evergreen F1 Team",
+        "grid": 5,
+        "gap": null,
+        "pit": 1
+      },
+      {
+        "pos": 12,
+        "driver": "Cameron Youngmay",
+        "team": "Los piojos racing",
+        "grid": 11,
+        "gap": null,
+        "pit": 0
       }
     ],
     "mine": [
@@ -300,7 +316,7 @@
         "driver": "Luis Poppmeier",
         "team": "Bronte Racing Team",
         "grid": 1,
-        "gap": "109:03:540",
+        "gap": "103:49:166",
         "pit": 1
       },
       {
@@ -308,8 +324,8 @@
         "driver": "Johannes Dirksdr",
         "team": "Bronte Racing Team",
         "grid": 2,
-        "gap": "+21.221",
-        "pit": 2
+        "gap": "+10.537",
+        "pit": 1
       }
     ]
   },
